@@ -67,9 +67,14 @@ app.use((err, req, res, next) => {
 
 // Initialize DB and start server
 async function startServer() {
-  await initializeDatabase();
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
+    try {
+      await initializeDatabase();
+      console.log('Database initialized successfully.');
+    } catch (err) {
+      console.error('Database initialization failed:', err);
+    }
   });
 }
 
