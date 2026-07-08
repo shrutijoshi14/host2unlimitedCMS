@@ -83,7 +83,7 @@ function AppContent() {
   useEffect(() => {
     const applySEO = async () => {
       try {
-        const response = await fetch('http://localhost:5050/api/pages/seo');
+        const response = await fetch(`${window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5050' : window.location.origin}/api/pages/seo`);
         if (response.ok) {
           const seoData = await response.json();
           let key = 'homepage';

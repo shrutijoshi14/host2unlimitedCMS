@@ -1,101 +1,237 @@
 import mysql from 'mysql2/promise';
+import pg from 'pg';
 
 let pool;
+let dbType = 'mysql';
+let pgPool;
+let mysqlPool;
+
+async function dbQuery(sql, params = []) {
+  if (dbType === 'postgres') {
+    let pgSql = sql;
+    let index = 1;
+    // Replace ? with $1, $2, $3...
+    pgSql = pgSql.replace(/\?/g, () => `$${index++}`);
+    
+    // Convert INSERT IGNORE for Postgres compatibility
+    if (pgSql.toUpperCase().includes('INSERT IGNORE INTO CMS_MODULES')) {
+      pgSql = pgSql.replace(/INSERT IGNORE INTO cms_modules/gi, 'INSERT INTO cms_modules') + ' ON CONFLICT (id) DO NOTHING';
+    } else if (pgSql.toUpperCase().includes('INSERT IGNORE INTO CMS_PAGES')) {
+      pgSql = pgSql.replace(/INSERT IGNORE INTO cms_pages/gi, 'INSERT INTO cms_pages') + ' ON CONFLICT (id) DO NOTHING';
+    } else if (pgSql.toUpperCase().includes('ON DUPLICATE KEY UPDATE')) {
+      pgSql = pgSql.replace(/ON DUPLICATE KEY UPDATE content_data\s*=\s*\$?/gi, 'ON CONFLICT (id) DO UPDATE SET content_data = EXCLUDED.content_data');
+    }
+
+    const isInsert = pgSql.trim().toUpperCase().startsWith('INSERT');
+    const isDelete = pgSql.trim().toUpperCase().startsWith('DELETE');
+    const isUpdate = pgSql.trim().toUpperCase().startsWith('UPDATE');
+
+    if (isInsert && !pgSql.toUpperCase().includes('RETURNING')) {
+      pgSql += ' RETURNING id';
+    }
+
+    const res = await pgPool.query(pgSql, params);
+
+    // Cast count results to numbers to match MySQL output
+    if (res.rows) {
+      res.rows.forEach(row => {
+        if (row.count !== undefined) {
+          row.count = Number(row.count);
+        }
+      });
+    }
+
+    if (isInsert) {
+      const insertId = res.rows && res.rows[0] ? res.rows[0].id : null;
+      return [{ insertId, affectedRows: res.rowCount }, res.fields];
+    }
+
+    if (isDelete || isUpdate) {
+      return [{ affectedRows: res.rowCount }, res.fields];
+    }
+
+    return [res.rows, res.fields];
+  } else {
+    return await mysqlPool.query(sql, params);
+  }
+}
 
 export async function initializeDatabase() {
   try {
-    // Create initial connection without database selected to guarantee database existence
-    const initConnection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'Shruti@1408',
-      port: 3306
-    });
+    const usePostgres = process.env.FORCE_LIVE_DB === 'true' || process.env.RENDER === 'true';
 
-    await initConnection.query('CREATE DATABASE IF NOT EXISTS host2unlimited');
-    await initConnection.end();
+    if (usePostgres) {
+      dbType = 'postgres';
+      const connectionString = process.env.DATABASE_URL;
+      
+      pgPool = new pg.Pool({
+        connectionString,
+        ssl: {
+          rejectUnauthorized: false
+        }
+      });
 
-    // Create the persistent connection pool
-    pool = mysql.createPool({
-      host: 'localhost',
-      user: 'root',
-      password: 'Shruti@1408',
-      database: 'host2unlimited',
-      port: 3306,
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0
-    });
+      console.log('Connected to PostgreSQL (Supabase) database.');
 
-    console.log('Connected to MySQL database: host2unlimited');
+      // Create tables for PostgreSQL
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS cms_modules (
+          id VARCHAR(50) PRIMARY KEY,
+          name VARCHAR(100) NOT NULL,
+          enabled SMALLINT DEFAULT 0,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
 
-    // 1. Create cms_modules table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS cms_modules (
-        id VARCHAR(50) PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        enabled TINYINT(1) DEFAULT 0,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `);
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS blogs (
+          id SERIAL PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          content TEXT NOT NULL,
+          category VARCHAR(100) DEFAULT 'Website Development',
+          tags VARCHAR(255) DEFAULT '',
+          image_url VARCHAR(500) DEFAULT '',
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          seo_title VARCHAR(255) DEFAULT '',
+          meta_description TEXT,
+          author VARCHAR(100) NOT NULL,
+          status VARCHAR(50) DEFAULT 'Draft',
+          read_time VARCHAR(50) DEFAULT '5 min read',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
 
-    // 2. Create blogs table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS blogs (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL,
-        category VARCHAR(100) DEFAULT 'Website Development',
-        tags VARCHAR(255) DEFAULT '',
-        image_url VARCHAR(500) DEFAULT '',
-        slug VARCHAR(255) UNIQUE NOT NULL,
-        seo_title VARCHAR(255) DEFAULT '',
-        meta_description TEXT,
-        author VARCHAR(100) NOT NULL,
-        status VARCHAR(50) DEFAULT 'Draft',
-        read_time VARCHAR(50) DEFAULT '5 min read',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `);
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS services (
+          id SERIAL PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          description TEXT NOT NULL,
+          banner_image_url VARCHAR(500) DEFAULT '',
+          features TEXT NOT NULL,
+          faqs TEXT NOT NULL,
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          seo_title VARCHAR(255) DEFAULT '',
+          meta_description TEXT,
+          icon_name VARCHAR(100) DEFAULT 'Globe',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
 
-    // 3. Create services table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS services (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        description TEXT NOT NULL,
-        banner_image_url VARCHAR(500) DEFAULT '',
-        features TEXT NOT NULL, -- JSON array of strings
-        faqs TEXT NOT NULL, -- JSON array of { question, answer }
-        slug VARCHAR(255) UNIQUE NOT NULL,
-        seo_title VARCHAR(255) DEFAULT '',
-        meta_description TEXT,
-        icon_name VARCHAR(100) DEFAULT 'Globe',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `);
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS admins (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(100) UNIQUE NOT NULL,
+          email VARCHAR(100) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
 
-    // Create admins table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS admins (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        username VARCHAR(100) UNIQUE NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL, -- SHA-256 hash
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `);
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS cms_pages (
+          id VARCHAR(50) PRIMARY KEY,
+          content_data TEXT NOT NULL,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
 
-    // Create cms_pages table
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS cms_pages (
-        id VARCHAR(50) PRIMARY KEY,
-        content_data LONGTEXT NOT NULL,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `);
+    } else {
+      dbType = 'mysql';
+      
+      const initConnection = await mysql.createConnection({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || 'Shruti@1408',
+        port: parseInt(process.env.DB_PORT || '3306')
+      });
+
+      await initConnection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || 'host2unlimited'}\``);
+      await initConnection.end();
+
+      mysqlPool = mysql.createPool({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || 'Shruti@1408',
+        database: process.env.DB_NAME || 'host2unlimited',
+        port: parseInt(process.env.DB_PORT || '3306'),
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0
+      });
+
+      console.log('Connected to MySQL database: ' + (process.env.DB_NAME || 'host2unlimited'));
+
+      // Create tables for MySQL
+      await mysqlPool.query(`
+        CREATE TABLE IF NOT EXISTS cms_modules (
+          id VARCHAR(50) PRIMARY KEY,
+          name VARCHAR(100) NOT NULL,
+          enabled TINYINT(1) DEFAULT 0,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
+
+      await mysqlPool.query(`
+        CREATE TABLE IF NOT EXISTS blogs (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          content TEXT NOT NULL,
+          category VARCHAR(100) DEFAULT 'Website Development',
+          tags VARCHAR(255) DEFAULT '',
+          image_url VARCHAR(500) DEFAULT '',
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          seo_title VARCHAR(255) DEFAULT '',
+          meta_description TEXT,
+          author VARCHAR(100) NOT NULL,
+          status VARCHAR(50) DEFAULT 'Draft',
+          read_time VARCHAR(50) DEFAULT '5 min read',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
+
+      await mysqlPool.query(`
+        CREATE TABLE IF NOT EXISTS services (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          description TEXT NOT NULL,
+          banner_image_url VARCHAR(500) DEFAULT '',
+          features TEXT NOT NULL,
+          faqs TEXT NOT NULL,
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          seo_title VARCHAR(255) DEFAULT '',
+          meta_description TEXT,
+          icon_name VARCHAR(100) DEFAULT 'Globe',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
+
+      await mysqlPool.query(`
+        CREATE TABLE IF NOT EXISTS admins (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          username VARCHAR(100) UNIQUE NOT NULL,
+          email VARCHAR(100) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
+
+      await mysqlPool.query(`
+        CREATE TABLE IF NOT EXISTS cms_pages (
+          id VARCHAR(50) PRIMARY KEY,
+          content_data LONGTEXT NOT NULL,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
+    }
+
+    // Set the global pool variable to be our query wrapper object
+    pool = {
+      query: dbQuery
+    };
 
     // 4. Seed initial modules if table is empty
     const [moduleRows] = await pool.query('SELECT COUNT(*) as count FROM cms_modules');
