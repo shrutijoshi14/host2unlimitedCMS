@@ -808,8 +808,41 @@ const AdminDashboard = () => {
   // Loading indicator for registration status check
   if (checkingAdmin) {
     return (
-      <div style={{ width: '100%', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', boxSizing: 'border-box', color: 'var(--text-muted)' }}>
-        Verifying administrator authorization protocols...
+      <div style={{ 
+        width: '100%', 
+        minHeight: '100vh', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        padding: '20px', 
+        boxSizing: 'border-box', 
+        backgroundColor: 'var(--bg-primary, #0f172a)',
+        gap: '24px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', animation: 'pulse 1.8s infinite ease-in-out' }}>
+          <svg width="60" height="52" viewBox="0 0 80 80" style={{ flexShrink: 0 }}>
+            {/* Left blue pillar */}
+            <path d="M12,38 L26,30 L26,76 L12,70 Z" fill="#38bdf8" />
+            {/* Right blue pillar */}
+            <path d="M34,22 L48,14 L48,76 L34,76 Z" fill="#0ea5e9" />
+            {/* Arrow slicing through */}
+            <path d="M5,60 L62,32" stroke="var(--text-primary, #f8fafc)" strokeWidth="8" strokeLinecap="round" />
+            <path d="M46,24 L62,32 L48,46" stroke="var(--text-primary, #f8fafc)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </svg>
+          <span style={{ fontFamily: '"Pacifico", cursive', fontSize: '32px', color: '#0ea5e9', fontWeight: 'normal' }}>
+            Host2Unlimited
+          </span>
+        </div>
+        
+        {/* Smooth Loader Ring */}
+        <div className="animate-spin" style={{ 
+          width: '28px', 
+          height: '28px', 
+          borderRadius: '50%', 
+          border: '3px solid rgba(14, 165, 233, 0.1)', 
+          borderTopColor: '#0ea5e9'
+        }}></div>
       </div>
     );
   }
