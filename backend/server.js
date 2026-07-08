@@ -19,9 +19,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for frontend development server
+// Enable CORS for frontend local development and production domains dynamically
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5174', 'http://127.0.0.1:5174'],
+  origin: (origin, callback) => {
+    // Reflect request origin back to allow any client-side calls
+    callback(null, origin || true);
+  },
   credentials: true
 }));
 
