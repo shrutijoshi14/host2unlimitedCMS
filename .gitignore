@@ -6,6 +6,8 @@ backend/node_modules/
 # Environment variables
 .env
 .env.*
+!frontend/.env.production
+!frontend/src/.env
 !.env.example
 client_secret_*.json
 
