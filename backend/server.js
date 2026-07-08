@@ -50,6 +50,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date() });
 });
 
+// Root API status endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Host2Unlimited CMS Backend API is running successfully.',
+    environment: process.env.RENDER === 'true' ? 'production' : 'development'
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Unhandled server error:', err);

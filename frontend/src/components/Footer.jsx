@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
 
-const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

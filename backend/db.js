@@ -774,6 +774,46 @@ export async function initializeDatabase() {
               description: 'Get in touch with our tech consultants today. Let us lock in a tailored blueprint and cost range for your custom software or enterprise portal.'
             }
           })
+        ],
+        [
+          'seo',
+          JSON.stringify({
+            homepage: {
+              meta_title: 'Host2Unlimited | Digital Innovation & Technology Solutions',
+              meta_desc: 'Host2Unlimited helps businesses grow with professional website development, custom software solutions, secure cloud hosting, digital marketing, SEO, and IT consulting.',
+              keywords: 'website development, custom software, cloud hosting, SEO, digital marketing, business software, Host2Unlimited, React development',
+              canonical_url: 'https://host2unlimited.com/',
+              og_image: '/assets/school_marketing_hero-CQ1svrql.png'
+            },
+            about: {
+              meta_title: 'About Us | Host2Unlimited',
+              meta_desc: 'Learn about our team, mission, and how we empower educational institutes with custom software and web solutions.',
+              keywords: 'about host2unlimited, IT team, software experts',
+              canonical_url: 'https://host2unlimited.com/about',
+              og_image: '/assets/school_marketing_hero-CQ1svrql.png'
+            },
+            services: {
+              meta_title: 'Premium Digital Services | Host2Unlimited',
+              meta_desc: 'Explore custom software development, managed cloud hosting, and result-oriented digital marketing services.',
+              keywords: 'custom software, cloud hosting, SEO services',
+              canonical_url: 'https://host2unlimited.com/services',
+              og_image: '/assets/school_marketing_hero-CQ1svrql.png'
+            },
+            careers: {
+              meta_title: 'Join Our Team | Careers at Host2Unlimited',
+              meta_desc: 'Build your career in web development, software architecture, and digital marketing.',
+              keywords: 'careers, developer jobs, host2unlimited vacancies',
+              canonical_url: 'https://host2unlimited.com/careers',
+              og_image: '/assets/school_marketing_hero-CQ1svrql.png'
+            },
+            portfolio: {
+              meta_title: 'Our Portfolio | Host2Unlimited Works',
+              meta_desc: 'View our latest completed projects, web apps, and digital systems built for educational institutes.',
+              keywords: 'portfolio, tech showcase, software showcase',
+              canonical_url: 'https://host2unlimited.com/portfolio',
+              og_image: '/assets/school_marketing_hero-CQ1svrql.png'
+            }
+          })
         ]
       ];
 

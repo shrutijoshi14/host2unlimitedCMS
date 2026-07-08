@@ -5,7 +5,7 @@ import { ArrowLeft, Calendar, User, Clock, Tag } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 
-const API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
+const API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const BlogPost = () => {
   const { slug } = useParams();

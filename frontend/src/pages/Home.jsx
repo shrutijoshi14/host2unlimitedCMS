@@ -7,7 +7,7 @@ import TestimonialSlider from '../components/TestimonialSlider';
 import SEOMeta from '../components/SEOMeta';
 import schoolHero from '../assets/school_marketing_hero.png';
 
-const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const Counter = ({ value, suffix = "" }) => {
   const count = useMotionValue(0);

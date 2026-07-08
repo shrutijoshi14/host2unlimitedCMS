@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Sun, Moon, Menu, X, ShieldAlert } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
-const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);

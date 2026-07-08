@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 
-const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 import { useLeads } from '../context/LeadContext';
 import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 

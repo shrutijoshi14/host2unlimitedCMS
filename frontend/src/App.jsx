@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -83,7 +83,8 @@ function AppContent() {
   useEffect(() => {
     const applySEO = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || window.location.origin}/api/pages/seo`);
+        const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+        const response = await fetch(`${apiBase}/api/pages/seo`);
         if (response.ok) {
           const seoData = await response.json();
           let key = 'homepage';

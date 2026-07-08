@@ -5,7 +5,7 @@ import { ArrowLeft, CheckCircle, HelpCircle, ChevronDown, ChevronUp } from 'luci
 import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 
-const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const ServiceDetail = () => {
   const { slug } = useParams();
