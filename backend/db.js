@@ -19,7 +19,7 @@ async function dbQuery(sql, params = []) {
     } else if (pgSql.toUpperCase().includes('INSERT IGNORE INTO CMS_PAGES')) {
       pgSql = pgSql.replace(/INSERT IGNORE INTO cms_pages/gi, 'INSERT INTO cms_pages') + ' ON CONFLICT (id) DO NOTHING';
     } else if (pgSql.toUpperCase().includes('ON DUPLICATE KEY UPDATE')) {
-      pgSql = pgSql.replace(/ON DUPLICATE KEY UPDATE content_data\s*=\s*\$?/gi, 'ON CONFLICT (id) DO UPDATE SET content_data = EXCLUDED.content_data');
+      pgSql = pgSql.replace(/ON DUPLICATE KEY UPDATE\s+(\w+)\s*=\s*\$\d+/gi, 'ON CONFLICT (id) DO UPDATE SET $1 = EXCLUDED.$1');
     }
 
     const isInsert = pgSql.trim().toUpperCase().startsWith('INSERT');
