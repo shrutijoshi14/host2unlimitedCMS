@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 
-const CURRENT_API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5050'
-  : window.location.origin;
+const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
 import { useLeads } from '../context/LeadContext';
 import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
 

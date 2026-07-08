@@ -10,9 +10,7 @@ import {
 } from 'lucide-react';
 import * as Icons from 'lucide-react';
 
-const ACTIVE_API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5050'
-  : window.location.origin;
+const ACTIVE_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
 
 const AdminDashboard = () => {
   const { leads, updateLeadStatus, deleteLead } = useLeads();

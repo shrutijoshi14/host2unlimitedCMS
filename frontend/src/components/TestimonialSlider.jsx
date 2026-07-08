@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote, CheckCircle } from 'lucide-react';
 
-const CURRENT_API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5050'
-  : window.location.origin;
+const CURRENT_API_BASE = import.meta.env.VITE_API_URL || window.location.origin;
 
 const staticTestimonials = [
   {
