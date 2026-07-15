@@ -97,4 +97,71 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// POST request password reset initiation (verifies email only)
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email address is required.' });
+  }
+
+  try {
+    const db = getPool();
+
+    // Check if admin exists with this email
+    const [rows] = await db.query('SELECT * FROM admins WHERE email = ?', [email.trim().toLowerCase()]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No administrator account found with that email address.' });
+    }
+
+    res.json({
+      success: true,
+      message: 'Account verified. You can now reset your password.'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST reset password (email verified, direct reset)
+router.post('/reset-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ error: 'Email and new password are required.' });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters.' });
+  }
+
+  try {
+    const db = getPool();
+
+    // Fetch user by email
+    const [rows] = await db.query('SELECT * FROM admins WHERE email = ?', [email.trim().toLowerCase()]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No administrator account found.' });
+    }
+
+    const admin = rows[0];
+
+    // Hash the new password
+    const hashedPassword = hashPassword(newPassword);
+
+    // Update password and clear reset fields
+    await db.query(
+      'UPDATE admins SET password = ?, reset_code = NULL, reset_expires = NULL WHERE id = ?',
+      [hashedPassword, admin.id]
+    );
+
+    res.json({
+      success: true,
+      message: 'Password reset successfully. You can now log in with your new credentials.'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;

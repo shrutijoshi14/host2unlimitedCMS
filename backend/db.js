@@ -233,6 +233,23 @@ export async function initializeDatabase() {
       query: dbQuery
     };
 
+    // Ensure password reset columns exist in admins table
+    try {
+      if (dbType === 'postgres') {
+        await pgPool.query('ALTER TABLE admins ADD COLUMN IF NOT EXISTS reset_code VARCHAR(10)');
+        await pgPool.query('ALTER TABLE admins ADD COLUMN IF NOT EXISTS reset_expires TIMESTAMP');
+      } else {
+        const [columns] = await mysqlPool.query("SHOW COLUMNS FROM admins LIKE 'reset_code'");
+        if (columns.length === 0) {
+          await mysqlPool.query('ALTER TABLE admins ADD COLUMN reset_code VARCHAR(10) DEFAULT NULL');
+          await mysqlPool.query('ALTER TABLE admins ADD COLUMN reset_expires DATETIME DEFAULT NULL');
+        }
+      }
+      console.log('Admin password reset columns verified/added successfully.');
+    } catch (columnErr) {
+      console.error('Error verifying/adding reset columns:', columnErr);
+    }
+
     // 4. Seed initial modules if table is empty
     const [moduleRows] = await pool.query('SELECT COUNT(*) as count FROM cms_modules');
     if (moduleRows[0].count === 0) {

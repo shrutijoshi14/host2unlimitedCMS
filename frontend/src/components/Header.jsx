@@ -50,21 +50,13 @@ const Header = () => {
 
   const otherNavLinks = [
     { name: 'Home', path: '/' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Solutions', path: '/solutions' },
-    { name: 'Pricing', path: '/pricing' },
-    { name: 'Blog', path: '/blog' },
+    { name: 'About', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Educational Institutes', path: '/educational-institutes' },
     { name: 'Case Studies', path: '/case-studies' },
+    { name: 'Careers', path: '/careers' },
+    { name: 'Blog', path: '/blog' },
     { name: 'Contact', path: '/contact' }
-  ];
-
-  const hostingLinks = [
-    { name: 'Shared NVMe Hosting', path: '/hosting/shared-hosting' },
-    { name: 'WordPress Hosting', path: '/hosting/wordpress-hosting' },
-    { name: 'KVM VPS Hosting', path: '/hosting/vps-hosting' },
-    { name: 'Dedicated Servers', path: '/hosting/dedicated-server-hosting' },
-    { name: 'Cloud Hosting', path: '/hosting/cloud-hosting' },
-    { name: 'Reseller Hosting', path: '/hosting/reseller-hosting' }
   ];
 
   return (
@@ -108,11 +100,11 @@ const Header = () => {
 
             {/* Contact details Right */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '24px', fontSize: '13.5px', color: 'var(--text-secondary)' }} className="top-bar-contacts">
-              <a href={`tel:${settings.phone}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }} className="nav-link">
-                📞 {settings.phone}
+              <a href="tel:+918104612974" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }} className="nav-link">
+                📞 +91 81046 12974
               </a>
-              <a href={`mailto:${settings.email}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }} className="nav-link">
-                ✉ {settings.email}
+              <a href="mailto:info@host2unlimited.com" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }} className="nav-link">
+                ✉ info@host2unlimited.com
               </a>
             </div>
           </div>
@@ -141,76 +133,20 @@ const Header = () => {
 
             {/* Desktop Navigation links */}
             <nav className="desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '22px' }}>
-              <Link to="/" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Home</Link>
-              <Link to="/about" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/about' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">About</Link>
-              
-              {/* Dropdown Menu for Hosting Services */}
-              <div 
-                style={{ position: 'relative' }}
-                onMouseEnter={() => setHostingDropdownOpen(true)}
-                onMouseLeave={() => setHostingDropdownOpen(false)}
-              >
-                <button
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontWeight: 600,
-                    fontSize: '14.5px',
-                    color: location.pathname.startsWith('/hosting/') ? 'var(--primary)' : 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    padding: '6px 0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
+              {otherNavLinks.map((link) => (
+                <Link 
+                  key={link.name}
+                  to={link.path} 
+                  style={{ 
+                    fontWeight: 600, 
+                    fontSize: '14px', 
+                    color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-secondary)' 
+                  }} 
                   className="nav-link"
                 >
-                  Hosting Services <span style={{ fontSize: '10px' }}>▼</span>
-                </button>
-                
-                {hostingDropdownOpen && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      backgroundColor: 'var(--bg-primary)',
-                      border: '1px solid var(--border-color)',
-                      boxShadow: 'var(--shadow-lg)',
-                      borderRadius: 'var(--radius-md)',
-                      width: '230px',
-                      padding: '12px 0',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      zIndex: 10000
-                    }}
-                  >
-                    {hostingLinks.map((link) => (
-                      <Link 
-                        key={link.name} 
-                        to={link.path} 
-                        style={{ 
-                          padding: '10px 20px', 
-                          fontSize: '14px', 
-                          textAlign: 'left', 
-                          fontWeight: 500,
-                          color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-secondary)' 
-                        }} 
-                        className="dropdown-link"
-                      >
-                        {link.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <Link to="/services" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/services' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Other Services</Link>
-              <Link to="/solutions" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/solutions' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Solutions</Link>
-              <Link to="/pricing" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/pricing' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Pricing</Link>
-              <Link to="/blog" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/blog' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Blog</Link>
-              <Link to="/case-studies" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/case-studies' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Case Studies</Link>
-              <Link to="/contact" style={{ fontWeight: 600, fontSize: '14.5px', color: location.pathname === '/contact' ? 'var(--primary)' : 'var(--text-secondary)' }} className="nav-link">Contact</Link>
+                  {link.name}
+                </Link>
+              ))}
             </nav>
 
             {/* Actions: Get Quote, Theme Toggle & Mobile Menu button */}
@@ -286,35 +222,22 @@ const Header = () => {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', textAlign: 'left' }}>
-          <Link to="/" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Home</Link>
-          <Link to="/about" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/about' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>About Us</Link>
-          
-          <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', flexDirection: 'column', gap: '10px', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
-            <span>Hosting Services</span>
-            <div style={{ paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '10px', borderLeft: '2px solid var(--border-color)' }}>
-              {hostingLinks.map((link) => (
-                <Link 
-                  key={link.name} 
-                  to={link.path} 
-                  onClick={() => setIsOpen(false)} 
-                  style={{ 
-                    fontSize: '14.5px', 
-                    fontWeight: 500, 
-                    color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-secondary)' 
-                  }}
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-          
-          <Link to="/services" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/services' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Other Services</Link>
-          <Link to="/solutions" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/solutions' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Solutions</Link>
-          <Link to="/pricing" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/pricing' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Pricing</Link>
-          <Link to="/blog" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/blog' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Blog</Link>
-          <Link to="/case-studies" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/case-studies' ? 'var(--primary)' : 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>Case Studies</Link>
-          <Link to="/contact" onClick={() => setIsOpen(false)} style={{ fontSize: '16px', fontWeight: 600, color: location.pathname === '/contact' ? 'var(--primary)' : 'var(--text-primary)', paddingBottom: '4px' }}>Contact Us</Link>
+          {otherNavLinks.map((link) => (
+            <Link 
+              key={link.name}
+              to={link.path} 
+              onClick={() => setIsOpen(false)} 
+              style={{ 
+                fontSize: '16px', 
+                fontWeight: 600, 
+                color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-primary)', 
+                borderBottom: '1px solid var(--border-color)', 
+                paddingBottom: '8px' 
+              }}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
       </div>
 

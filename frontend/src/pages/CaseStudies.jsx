@@ -9,40 +9,40 @@ const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import
 
 const staticCaseStudiesData = [
   {
-    title: 'Speed & Conversion Optimization',
-    client: 'Apex Corporate Hub',
+    title: 'Academics & Admissions Marketing',
+    client: 'PODDAR BRIO SCHOOL',
     metrics: [
-      { value: '40% Faster', label: 'Website Performance' },
-      { value: '60% Increase', label: 'Qualified Leads' }
-    ],
-    challenge: 'Apex Global was losing mobile users due to slow load speeds (exceeding 7.5 seconds) and an outdated navigation menu. Their marketing funnels failed to convert traffic because of complex consultation forms.',
-    solution: 'We rebuilt their portal from scratch using Vite React and modular Vanilla CSS. By implementing custom image compression, code splitting, and streamlined forms, we brought load speeds under 1.8 seconds.',
-    tech: ['React.js', 'Next.js', 'Framer Motion', 'Vanilla CSS'],
-    impact: 'Organic leads jumped within 60 days. Server operating costs dropped due to lightweight bundles and efficient client-side rendering.'
-  },
-  {
-    title: 'High-Scale E-Commerce Pipeline',
-    client: 'RetailPro E-Marketplace',
-    metrics: [
-      { value: '3x Growth', label: 'Online Visibility' },
-      { value: '45% Raise', label: 'Cart Completions' }
-    ],
-    challenge: 'RetailPro experienced system crashes during peak sale campaigns. Multi-vendor stock synchronization delayed orders, leading to manual customer support overloads.',
-    solution: 'We engineered a highly robust Laravel API database cluster on secure AWS virtual private instances. Integrated asynchronous background jobs to sync stock databases in under 3 seconds without blocking checkout paths.',
-    tech: ['PHP', 'Laravel', 'MySQL', 'Stripe API', 'Docker'],
-    impact: 'Uptime reached 99.98% during high-traffic holidays. Transaction processing times reduced, driving merchant registration gains.'
-  },
-  {
-    title: 'Secure Public Sector Ledger',
-    client: 'Municipal Technology Board',
-    metrics: [
-      { value: '100% Passed', label: 'Security Compliance' },
+      { value: '45% Up', label: 'Student Enrollments' },
       { value: '80% Lower', label: 'Admin Workload' }
     ],
-    challenge: 'The municipal portal was vulnerable to cross-site scripting (XSS) issues and lacked compliance with level AA accessibility guidelines, making document downloads difficult for citizens.',
-    solution: 'We implemented strict content security policies and sanitizations using PostgreSQL databases. Structured structural HTML5 tables and keyboard navigation routes to pass audits.',
-    tech: ['TypeScript', 'React.js', 'PostgreSQL', 'AWS Cloud'],
-    impact: 'Successfully passed government evaluations. Citizens can search directories and verify tax receipts securely on mobile devices.'
+    challenge: 'Poddar Brio International School needed to boost digital registrations for its Badlapur campus while streamlining parent communication and administrative lead workflows.',
+    solution: 'We executed highly targeted admissions marketing campaigns combined with smart landing pages to capture leads, while implementing Moodle and Smart School MIS platforms for automated operations.',
+    tech: ['Admissions Marketing', 'Smart School MIS', 'Google Ads', 'cPanel'],
+    impact: 'Organic student enrollments surged by 45% within one admissions cycle, while administrative processing time was cut by 80%.'
+  },
+  {
+    title: 'School Branding & Event Coverage',
+    client: 'DR. PILLAI GLOBAL ACADEMY',
+    metrics: [
+      { value: '3x Reach', label: 'Social Engagement' },
+      { value: '100% Filled', label: 'Event Attendance' }
+    ],
+    challenge: 'Highlighting international curricula (CBSE, ICSE, IB) and academic events effectively to local Mumbai parents to drive engagement and credibility.',
+    solution: 'Deployed a dedicated social media coordinator on campus for seamless live event coverage, creating powerful reels, video stories, and technical SEO updates.',
+    tech: ['Event Coverage', 'SEO', 'Video Reels', 'Instagram'],
+    impact: 'Increased monthly social media impressions by 300% and generated qualified inquiries for all major curriculum streams.'
+  },
+  {
+    title: 'Higher Education Branding & Leads',
+    client: 'ARMIET COLLEGE',
+    metrics: [
+      { value: '60% More', label: 'Direct Inquiries' },
+      { value: '50% Faster', label: 'Web Page Load' }
+    ],
+    challenge: 'Attracting engineering and MBA aspirants in Thane/Asangaon amidst heavy competition, using a slow, unoptimized web portal.',
+    solution: 'Rebuilt the college portal with mobile-first web engineering standards, integrated technical SEO audits, and launched Google/Facebook lead-generation funnels.',
+    tech: ['Web Engineering', 'Local SEO', 'Lead Funnels', 'Facebook Ads'],
+    impact: 'Admissions applications increased by 60% with zero server crashes during high-traffic results days.'
   }
 ];
 

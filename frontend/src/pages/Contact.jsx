@@ -5,7 +5,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 import { useLeads } from '../context/LeadContext';
-import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle, Globe } from 'lucide-react';
 
 const faqs = [
   {
@@ -59,9 +59,16 @@ const Contact = () => {
   const [settings, setSettings] = useState({
     company_name: 'Host2Unlimited',
     email: 'info@host2unlimited.com',
-    phone: '+91 70219 35273',
-    whatsapp_number: '+91 81046 12974',
+    emailHR: 'hr@host2unlimited.com',
+    emailSales: 'marketing@host2unlimited.com',
+    emailSupport: 'seo@host2unlimited.com',
+    phoneHR: '+91 7021935273',
+    phoneSales: '+91 8104612974',
+    phoneSupport: '+91 8879750893',
     address: '1207, Runwal R-Square, LBS Marg, Veena Nagar, Mulund West, Mumbai – 400080, Maharashtra, India.',
+    presenceHeadline: 'Serving a Diverse Clientele in the Education Vertical with Customized Digital Marketing Services',
+    presenceSubtitle: 'We craft tailored strategies for schools, colleges, and edtech brands to boost visibility and engagement.',
+    cities: ['MUMBAI', 'NASHIK', 'PUNE', 'CHHATRAPATI SAMBHAJI NAGAR', 'SATARA', 'JALGAON', 'KOLHAPUR', 'SANGALI'],
     social_links: {
       facebook: 'https://facebook.com/host2unlimited',
       twitter: 'https://twitter.com/host2unlimited',
@@ -75,7 +82,8 @@ const Contact = () => {
         const response = await fetch(`${CURRENT_API_BASE}/api/pages/website_settings`);
         if (response.ok) {
           const data = await response.json();
-          setSettings(data);
+          // Mix dynamic if available, keeping new structure intact
+          setSettings(prev => ({ ...prev, ...data }));
         }
       } catch (err) {
         console.warn('Failed to load dynamic website settings in Contact', err);
@@ -118,8 +126,8 @@ const Contact = () => {
     <div style={{ padding: '100px 0 100px 0' }}>
       <SEOMeta
         title="Contact Us"
-        description="Get in touch with Host2Unlimited. Contact our cloud server architects and sales desk for Shared, WordPress, VPS, or Dedicated Hosting enquiries."
-        keywords="contact host2unlimited, hosting support desk, server consultation, business sales email"
+        description="Get in touch with Host2Unlimited. Contact our digital marketing coordinators and support teams for admissions marketing and school branding."
+        keywords="contact host2unlimited, school branding support, admissions sales, HR career WhatsApp"
         canonical="https://host2unlimited.com/contact"
         breadcrumbPaths={breadcrumbs}
       />
@@ -143,7 +151,7 @@ const Contact = () => {
           </span>
           <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Contact Host2Unlimited</h1>
           <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '17px' }}>
-            Ready to scale your business portal? Submit our enquiry form below. A systems consultant will get back to you with structured blueprints.
+            Ready to scale your educational institution or brand? Submit our enquiry form below. A digital growth partner will contact you with structured blueprints.
           </p>
         </div>
 
@@ -151,49 +159,85 @@ const Contact = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '50px', marginBottom: '100px' }} className="contact-grid">
           
           {/* Info Side */}
-          <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '30px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: 800 }}>Connect Instantly</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6 }}>
-              Whether you need pricing queries, project updates, or urgent server assistance, reach our desk via details below.
-            </p>
+          <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '35px' }}>
+            <div>
+              <h2 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '10px' }}>Connect Instantly</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6 }}>
+                Whether you need pricing queries, admission campaigns planning, or recruitment support, reach our departments directly.
+              </p>
+            </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               
-              {/* Sales & Enquiries */}
+              {/* Careers & Placements */}
               <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
                 <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
-                  New Enquiries / Sales
+                  FOR CAREERS | PLACEMENTS
                 </span>
-                <a href={`tel:${settings.phone}`} style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>
-                  📞 {settings.phone}
+                <a href="mailto:hr@host2unlimited.com" style={{ fontSize: '14px', color: 'var(--text-primary)', display: 'block', marginBottom: '4px', fontWeight: 600 }}>
+                  ✉ hr@host2unlimited.com
                 </a>
-                <a href={`mailto:${settings.email}`} style={{ fontSize: '13.5px', color: 'var(--text-secondary)' }}>
-                  ✉ {settings.email}
+                <a href="tel:+917021935273" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  📞 +91 7021935273
                 </a>
               </div>
 
-              {/* WhatsApp Support Desk */}
-              <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--secondary)', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
-                  WhatsApp Support Desk
-                </span>
-                <a href={`https://wa.me/${settings.whatsapp_number.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  📞 {settings.whatsapp_number}
-                </a>
-              </div>
-
-              {/* Address */}
-              <div style={{ display: 'flex', gap: '12px', padding: '10px 0' }}>
+              {/* Head Office */}
+              <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', gap: '12px' }}>
                 <MapPin size={20} className="text-gradient" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px' }}>
-                    Consulting Head Office
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                    HEAD OFFICE
                   </span>
-                  <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontWeight: 600 }}>
-                    {settings.address}
+                  <span style={{ fontSize: '13.5px', color: 'var(--text-primary)', fontWeight: 600, display: 'block', marginBottom: '6px', lineHeight: 1.4 }}>
+                    1207, Runwal R-Square, LBS Marg, Veena Nagar, Mulund West, Mumbai – 400080, Maharashtra, India.
                   </span>
+                  <a href="mailto:info@host2unlimited.com" style={{ fontSize: '13.5px', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                    ✉ info@host2unlimited.com
+                  </a>
                 </div>
               </div>
+
+              {/* Contact Details HR */}
+              <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
+                  CONTACT DETAILS
+                </span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px', fontWeight: 600 }}>
+                  HR
+                </span>
+                <a href="tel:+917021935273" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  📞 +91 7021935273
+                </a>
+              </div>
+
+              {/* Servicing Support */}
+              <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
+                  EXISTING CLIENTS SERVICING SUPPORT
+                </span>
+                <a href="tel:+918879750893" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>
+                  📞 +91 8879750893
+                </a>
+                <a href="mailto:seo@host2unlimited.com" style={{ fontSize: '13.5px', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  ✉ seo@host2unlimited.com
+                </a>
+              </div>
+
+              {/* New Enquiries / Sales */}
+              <div style={{ padding: '16px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', display: 'block', marginBottom: '6px', letterSpacing: '0.5px' }}>
+                  NEW ENQUIRIES / SALES
+                </span>
+                <a href="tel:+918104612974" style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>
+                  📞 +91 8104612974
+                </a>
+                <a href="mailto:marketing@host2unlimited.com" style={{ fontSize: '13.5px', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  ✉ marketing@host2unlimited.com
+                </a>
+              </div>
+
+
 
             </div>
 
@@ -358,6 +402,37 @@ const Contact = () => {
             )}
           </div>
 
+        </div>
+
+        {/* Our Presence - Separate Full Width Section */}
+        <div className="card-glass" style={{ textAlign: 'left', marginBottom: '80px', padding: '40px' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '8px' }}>
+            OUR PRESENCE
+          </span>
+          <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '10px', textAlign: 'left' }}>
+            {settings.presenceHeadline}
+          </h2>
+          <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.6 }}>
+            {settings.presenceSubtitle}
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+            {settings.cities.map((city) => (
+              <span 
+                key={city} 
+                style={{ 
+                  fontSize: '12px', 
+                  fontWeight: 700, 
+                  color: 'var(--primary)', 
+                  backgroundColor: 'var(--primary-light)', 
+                  padding: '6px 14px', 
+                  borderRadius: '8px',
+                  letterSpacing: '0.4px'
+                }}
+              >
+                {city}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* FAQs Accordion Block */}

@@ -10,67 +10,127 @@ const ACTIVE_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.
 const staticArticles = [
   {
     id: 'static-1',
-    title: 'Why Vite + React is the Gold Standard for Modern SaaS in 2026',
-    category: 'Website Development',
-    date: 'June 28, 2026',
-    readTime: '6 min read',
-    desc: 'Unpacking the architectural benefits of hot module replacement, optimized build bundling, and code splitting configurations.',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'why-vite-react-gold-standard-saas-2026',
-    created_at: new Date('2026-06-28').toISOString(),
-    author: 'Admin'
+    title: 'Social Media Trends Every Educational Institute Should Know',
+    category: 'Social Media',
+    date: 'July 12, 2026',
+    readTime: '5 min read',
+    desc: 'Unpacking emerging video reels strategies, story campaigns, and community engagement algorithms for schools and colleges.',
+    image: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&q=80&w=400&h=260',
+    slug: 'social-media-trends-every-educational-institute-should-know',
+    created_at: new Date('2026-07-12').toISOString(),
+    author: 'Marketing Lead'
   },
   {
     id: 'static-2',
-    title: 'How Core Web Vitals Impact Your Google Search Rankings',
+    title: 'Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes',
     category: 'SEO',
-    date: 'June 15, 2026',
-    readTime: '8 min read',
-    desc: 'Why Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS) are critical search ranking signals and how to fix them.',
+    date: 'July 05, 2026',
+    readTime: '7 min read',
+    desc: 'How local search map optimizations, reviews monitoring, and timely updates drive parent inquiries directly to your admissions desk.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'how-core-web-vitals-impact-google-rankings',
-    created_at: new Date('2026-06-15').toISOString(),
+    slug: 'google-business-profile-most-underutilized-admission-tool',
+    created_at: new Date('2026-07-05').toISOString(),
     author: 'SEO Expert'
   },
   {
     id: 'static-3',
-    title: '5 Customer Acquisition Funnels That Convert 3x Better',
-    category: 'Digital Marketing',
-    date: 'May 30, 2026',
-    readTime: '5 min read',
-    desc: 'A case study review of landing page structure optimizations, localized landing pages, and interactive estimators.',
+    title: 'Why Every Educational Institute Needs a Consistent Digital Brand Identity',
+    category: 'Branding',
+    date: 'June 25, 2026',
+    readTime: '6 min read',
+    desc: 'Establishing a unified voice, visual guidelines, and digital footprints to secure trust and command a premium reputation online.',
     image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: '5-customer-acquisition-funnels-convert-better',
-    created_at: new Date('2026-05-30').toISOString(),
-    author: 'Acquisition Expert'
+    slug: 'why-every-educational-institute-needs-consistent-digital-brand-identity',
+    created_at: new Date('2026-06-25').toISOString(),
+    author: 'Branding Lead'
   },
   {
     id: 'static-4',
-    title: 'Building Serverless Workloads with AWS Lambda & Node.js',
-    category: 'Technology',
-    date: 'May 18, 2026',
-    readTime: '10 min read',
-    desc: 'An in-depth guide to engineering serverless REST APIs, setting up CORS configurations, and provisioning database clusters.',
+    title: 'Why Social Media is the New Trust-Building Platform for Brands',
+    category: 'Social Media',
+    date: 'June 18, 2026',
+    readTime: '5 min read',
+    desc: 'Traditional advertising is losing ground. Explore how authentic peer engagements, live interactions, and values sharing build brand credibility.',
     image: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'building-serverless-workloads-aws-lambda-nodejs',
-    created_at: new Date('2026-05-18').toISOString(),
-    author: 'Cloud Engineer'
+    slug: 'why-social-media-is-new-trust-building-platform',
+    created_at: new Date('2026-06-18').toISOString(),
+    author: 'Social Media Expert'
   },
   {
     id: 'static-5',
-    title: 'How Apex Global Accelerated Lead Captures by 60%',
-    category: 'Case Studies',
-    date: 'April 25, 2026',
-    readTime: '7 min read',
-    desc: 'A detailed breakdown of the wireframing, testing, and CSS refactoring tasks that solved mobile speed drops.',
+    title: 'How Social Media Builds Student Admissions for Educational Institutes',
+    category: 'Digital Marketing',
+    date: 'June 10, 2026',
+    readTime: '8 min read',
+    desc: 'A systematic review of running target demographic lead generation ads on Facebook, Instagram, and LinkedIn to fill classes.',
     image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'how-apex-global-accelerated-leads-60-percent',
-    created_at: new Date('2026-04-25').toISOString(),
-    author: 'UX Designer'
+    slug: 'how-social-media-builds-student-admissions',
+    created_at: new Date('2026-06-10').toISOString(),
+    author: 'Admissions Partner'
+  },
+  {
+    id: 'static-6',
+    title: 'How SEO Builds Long-Term Business Growth Beyond Rankings',
+    category: 'SEO',
+    date: 'June 02, 2026',
+    readTime: '6 min read',
+    desc: 'Search engine optimization yields compounding dividends. Discover the value of technical audits, content authority, and user intent alignment.',
+    image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=400&h=260',
+    slug: 'how-seo-builds-long-term-business-growth',
+    created_at: new Date('2026-06-02').toISOString(),
+    author: 'SEO Expert'
+  },
+  {
+    id: 'static-7',
+    title: 'Performance Marketing vs Traditional Marketing: What Wins in 2026?',
+    category: 'Digital Marketing',
+    date: 'May 28, 2026',
+    readTime: '7 min read',
+    desc: 'Comparing measurable parameters, budget tracking, and return on investment (ROI) in digital PPC ads versus print brochures.',
+    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400&h=260',
+    slug: 'performance-marketing-vs-traditional-marketing',
+    created_at: new Date('2026-05-28').toISOString(),
+    author: 'Analytics Lead'
+  },
+  {
+    id: 'static-8',
+    title: 'Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited',
+    category: 'SEO',
+    date: 'May 15, 2026',
+    readTime: '9 min read',
+    desc: 'A comprehensive playbook covering keywords for higher education, site speed optimization, schema markup, and backlink networks.',
+    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400&h=260',
+    slug: 'best-seo-strategies-for-educational-institutions',
+    created_at: new Date('2026-05-15').toISOString(),
+    author: 'SEO Lead'
+  },
+  {
+    id: 'static-9',
+    title: 'How Branding Builds Trust in Educational Institutions',
+    category: 'Branding',
+    date: 'April 30, 2026',
+    readTime: '5 min read',
+    desc: 'A strong brand connects emotionally. Understand how legacy highlights, parent testimonials, and core mission statements drive parent decisions.',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400&h=260',
+    slug: 'how-branding-builds-trust-in-educational-institutions',
+    created_at: new Date('2026-04-30').toISOString(),
+    author: 'Branding Expert'
+  },
+  {
+    id: 'static-10',
+    title: 'From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions',
+    category: 'Digital Marketing',
+    date: 'April 18, 2026',
+    readTime: '8 min read',
+    desc: 'The digital shift in the education vertical. How virtual tours, student reels, and CRM lead nurturing pipelines are replacing direct walk-ins.',
+    image: 'https://images.unsplash.com/photo-1516321497487-e288fb194ef3?auto=format&fit=crop&q=80&w=400&h=260',
+    slug: 'from-classroom-to-clicks-how-digital-marketing-transforming-admissions',
+    created_at: new Date('2026-04-18').toISOString(),
+    author: 'Growth Partner'
   }
 ];
 
-const categories = ['All', 'Website Development', 'SEO', 'Digital Marketing', 'Technology', 'Case Studies'];
+const categories = ['All', 'Digital Marketing', 'SEO', 'Branding', 'Social Media'];
 
 const Blog = () => {
   const [filter, setFilter] = useState('All');

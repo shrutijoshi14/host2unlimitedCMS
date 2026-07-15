@@ -13,6 +13,7 @@ import Blog from './pages/Blog';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Careers from './pages/Careers';
+import EducationalInstitutes from './pages/EducationalInstitutes';
 import AdminDashboard from './pages/AdminDashboard';
 import BlogPost from './pages/BlogPost';
 import ServiceDetail from './pages/ServiceDetail';
@@ -244,6 +245,7 @@ function AppContent() {
               <Route path="/about" element={<AnimatedPage><About /></AnimatedPage>} />
               <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
               <Route path="/careers" element={<AnimatedPage><Careers /></AnimatedPage>} />
+              <Route path="/educational-institutes" element={<AnimatedPage><EducationalInstitutes /></AnimatedPage>} />
               <Route path="/admin" element={<AnimatedPage><AdminDashboard /></AnimatedPage>} />
             </Routes>
           </AnimatePresence>

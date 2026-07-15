@@ -1,11 +1,131 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, animate, useMotionValue } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Zap, Cpu, Shield, PhoneCall } from 'lucide-react';
+import { 
+  ArrowRight, CheckCircle2, Zap, Cpu, Shield, PhoneCall, 
+  GraduationCap, BookOpen, Users, Award, Globe, Briefcase, 
+  Smile, Video, Target, Camera, Search, TrendingUp, Mail, 
+  FileText, Check 
+} from 'lucide-react';
 import Timeline from '../components/Timeline';
+import MarketingTimeline from '../components/MarketingTimeline';
 import TestimonialSlider from '../components/TestimonialSlider';
 import SEOMeta from '../components/SEOMeta';
 import schoolHero from '../assets/school_marketing_hero.png';
+
+const institutionsData = [
+  {
+    title: 'Preschools & Daycare Centers',
+    desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.',
+    iconName: 'Smile',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-preschools/'
+  },
+  {
+    title: 'Primary & Secondary Schools',
+    desc: 'Reputation with impactful stories and updates. Engage your audience with content.',
+    iconName: 'BookOpen',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-primary-secondary-schools/'
+  },
+  {
+    title: 'International Schools CBSE: ICSE: IB Board',
+    desc: 'Boost student engagement by consistently highlighting academic excellence.',
+    iconName: 'Globe',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-international-schools-cbse-icse-ib/'
+  },
+  {
+    title: 'Private Coaching Institutions',
+    desc: 'Promote innovative coaching methods, proven results, and unique approach.',
+    iconName: 'Users',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-private-coaching-institutions/'
+  },
+  {
+    title: 'Junior and Degree Colleges',
+    desc: 'Empowering students at Junior and Degree Colleges to achieve academic of excellence.',
+    iconName: 'GraduationCap',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-junior-and-degree-colleges/'
+  },
+  {
+    title: 'Institutes of Engineering & Technology',
+    desc: 'Future engineers with innovative learning, hands-on experience.',
+    iconName: 'Cpu',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-institutes-of-engineering-management-studies/'
+  },
+  {
+    title: 'Institutes of Management Studies',
+    desc: 'Empowering future leaders with practical knowledge, strategic thinking.',
+    iconName: 'Briefcase',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-institutes-of-engineering-management-studies/'
+  },
+  {
+    title: 'Public / Private / Deemed Universities',
+    desc: 'Empowering private educational institutions to attract the right students.',
+    iconName: 'Award',
+    link: 'https://host2unlimited.com/digital-marketing-partner-for-public-private-deemed-universities/'
+  }
+];
+
+const coordinatorBenefits = [
+  {
+    title: 'SEAMLESS EVENT COVERAGE & LIVE UPDATES',
+    desc: 'Capturing every important campus moment.',
+    iconName: 'Camera'
+  },
+  {
+    title: 'ADMISSION LEADS CAMPAIGNS',
+    desc: 'Keeping track of Admission leads for driving the right students to your institution.',
+    iconName: 'Target'
+  },
+  {
+    title: 'SOCIAL MEDIA MONITORING & ENGAGEMENT',
+    desc: 'Building a strong digital presence.',
+    iconName: 'Users'
+  },
+  {
+    title: 'CONTENT CREATION & MANAGEMENT',
+    desc: 'Capture and curate high-quality photos and videos of school events, student achievements, classroom activities, etc.',
+    iconName: 'Video'
+  },
+  {
+    title: 'SEO-UPDATED WEBSITE',
+    desc: 'Making your institute visible & credible online.',
+    iconName: 'Search'
+  },
+  {
+    title: 'ANALYTICS & REPORTING',
+    desc: 'Track post engagement, reach, and follower growth.',
+    iconName: 'TrendingUp'
+  }
+];
+
+const courseTopics = [
+  { title: 'Search Engine Optimization (SEO)', iconName: 'Search' },
+  { title: 'Social Media Marketing (SMM)', iconName: 'Users' },
+  { title: 'Google Ads & Paid Campaigns', iconName: 'Target' },
+  { title: 'Email Marketing & Automation', iconName: 'Mail' },
+  { title: 'Content Marketing & Blogging', iconName: 'FileText' },
+  { title: 'Analytics, Strategy & Reporting', iconName: 'TrendingUp' }
+];
+
+const getIconComponent = (name) => {
+  switch (name) {
+    case 'Smile': return <Smile size={24} />;
+    case 'BookOpen': return <BookOpen size={24} />;
+    case 'Globe': return <Globe size={24} />;
+    case 'Users': return <Users size={24} />;
+    case 'GraduationCap': return <GraduationCap size={24} />;
+    case 'Cpu': return <Cpu size={24} />;
+    case 'Briefcase': return <Briefcase size={24} />;
+    case 'Award': return <Award size={24} />;
+    case 'Camera': return <Camera size={24} />;
+    case 'Target': return <Target size={24} />;
+    case 'Video': return <Video size={24} />;
+    case 'Search': return <Search size={24} />;
+    case 'TrendingUp': return <TrendingUp size={24} />;
+    case 'Mail': return <Mail size={24} />;
+    case 'FileText': return <FileText size={24} />;
+    default: return <CheckCircle2 size={24} />;
+  }
+};
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -28,8 +148,20 @@ const Counter = ({ value, suffix = "" }) => {
   return <span>{displayValue}{suffix}</span>;
 };
 
+import armietLogo from '../assets/h2u logos/armiet_logo.jpeg';
+import pillaiLogo from '../assets/h2u logos/dr-pillai-global-academy.png';
+import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
+import somaiyaLogo from '../assets/h2u logos/somaiya_college.png';
+import uudaanLogo from '../assets/h2u logos/uudaan-montessori-preschool.jpg';
+import newHorizonLogo from '../assets/h2u logos/New-Horizon-logo.png';
+import dnyanGangaLogo from '../assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp';
+import gsgsLogo from '../assets/h2u logos/GSGS-logo@4x (1).png';
+import ulweLogo from '../assets/h2u logos/Ulwe-logo (1).png';
+import vsignLogo from '../assets/h2u logos/V-Sign-logo.png';
+
 const clientLogos = [
-  'AgriGlobal', 'FinVibe', 'NestaEdu', 'HealthLine', 'AutoDrive', 'SpaceLab', 'RetailPro', 'SwiftCargo'
+  armietLogo, pillaiLogo, euroKidsLogo, somaiyaLogo, uudaanLogo,
+  newHorizonLogo, dnyanGangaLogo, gsgsLogo, ulweLogo, vsignLogo
 ];
 
 const staticWhyChooseUsData = [
@@ -231,7 +363,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 style={{ textAlign: 'left' }}
               >
-                <div style={{ display: 'inline-flex', width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '20px' }}>
                   <CheckCircle2 size={24} />
                 </div>
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{item.title}</h3>
@@ -269,7 +401,7 @@ const Home = () => {
                 whileHover={{ y: -8, scale: 1.02, boxShadow: 'var(--shadow-lg)' }}
                 style={{ backgroundColor: 'var(--bg-primary)', textAlign: 'left' }}
               >
-                <div style={{ display: 'inline-flex', width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '24px' }}>
                   {idx === 0 ? <Zap size={22} /> : idx === 1 ? <Cpu size={22} /> : <Shield size={22} />}
                 </div>
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{service.title}</h3>
@@ -280,6 +412,182 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Major Educational Institutions We Work With */}
+      <section className="section-padding" style={{ position: 'relative' }}>
+        <div className="container">
+          <div className="text-center" style={{ marginBottom: '60px' }}>
+            <span style={{ 
+              display: 'inline-block', 
+              backgroundColor: 'var(--primary-light)', 
+              color: 'var(--primary)', 
+              padding: '6px 16px', 
+              borderRadius: '20px', 
+              fontWeight: 600, 
+              fontSize: '14px',
+              marginBottom: '16px'
+            }}>
+              Academic Verticals
+            </span>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>Major Educational Institutions We Work With</h2>
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '24px', maxWidth: '800px', margin: '0 auto 24px auto', lineHeight: 1.4 }}>
+              WISH TO BE AN EDUCATIONAL INSTITUTE WITH A MAGNIFICENT BRAND IMAGE ONLINE?
+            </h3>
+            <p style={{ maxWidth: '900px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6 }}>
+              We are Digital Marketing Partner of Educational Institutes like International Schools, Colleges, Campuses, Universities, etc. Our Major Activities include Digital Marketing Activities, Admission Marketing, Website development, Branding, Content Marketing, Public Relations, Influencer Engagements, Search Engine Optimization (SEO), Social Media Management, Reputation Management, Powerful Video Stories & Maximizing Event Success.
+            </p>
+          </div>
+
+          <div className="institutions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px' }}>
+            {institutionsData.map((inst, idx) => (
+              <motion.a 
+                key={idx}
+                href={inst.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card-glass"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                whileHover={{ y: -8, scale: 1.02, boxShadow: 'var(--shadow-lg)', borderColor: 'var(--primary)' }}
+                style={{ 
+                  textAlign: 'left', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'space-between',
+                  height: '100%',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  border: '1px solid var(--glass-border)',
+                  background: 'var(--glass-bg)',
+                  padding: '30px'
+                }}
+              >
+                <div>
+                  <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '20px' }}>
+                    {getIconComponent(inst.iconName)}
+                  </div>
+                  <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'left' }}>
+                    {inst.title}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5, marginBottom: '20px' }}>
+                    {inst.desc}
+                  </p>
+                </div>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13.5px', fontWeight: 600, color: 'var(--primary)', marginTop: 'auto' }}>
+                  Learn More <ArrowRight size={14} />
+                </span>
+              </motion.a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* In-House Coordinator Section */}
+      <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '50px', alignItems: 'center' }} className="coordinator-grid">
+            
+            {/* Left Content Column */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: 'left' }}
+            >
+              <span style={{ 
+                display: 'inline-block', 
+                backgroundColor: 'var(--primary-light)', 
+                color: 'var(--primary)', 
+                padding: '6px 16px', 
+                borderRadius: '20px', 
+                fontWeight: 600, 
+                fontSize: '14px',
+                marginBottom: '16px'
+              }}>
+                On-Campus Partnership
+              </span>
+              <h2 style={{ fontSize: '38px', fontWeight: 800, lineHeight: 1.2, marginBottom: '20px', textAlign: 'left' }}>
+                Our Dedicated In-House Digital Marketing Coordinator at Your Campus
+              </h2>
+              <p style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.6 }}>
+                In today's fast-paced digital world, every educational institute needs more than just a digital marketing agency – it needs the right digital partner right at the source. We deploy a trained coordinator on your campus to capture and manage live events, admissions campaigns, and updates.
+              </p>
+              
+              <div className="card-glass" style={{ background: 'var(--grad-primary)', color: 'white', padding: '30px', borderRadius: 'var(--radius-lg)' }}>
+                <h4 style={{ color: 'white', fontSize: '20px', fontWeight: 700, marginBottom: '10px', textAlign: 'left' }}>
+                  Need a custom strategy?
+                </h4>
+                <p style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '14.5px', marginBottom: '20px' }}>
+                  Get your FREE SOCIAL MEDIA STRATEGY and ROI REPORT that best suits your Institute’s goals, today!
+                </p>
+                <Link to="/contact" className="btn" style={{ backgroundColor: 'white', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                  Get Free Strategy <ArrowRight size={16} />
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right Benefits Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+              {coordinatorBenefits.map((benefit, idx) => (
+                <motion.div
+                  key={idx}
+                  className="card-glass"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  style={{ 
+                    padding: '24px', 
+                    textAlign: 'left', 
+                    backgroundColor: 'var(--bg-primary)',
+                    border: '1px solid var(--border-color)'
+                  }}
+                >
+                  <div style={{ display: 'inline-flex', width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                    {getIconComponent(benefit.iconName)}
+                  </div>
+                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px', textAlign: 'left', lineHeight: 1.3 }}>
+                    {benefit.title}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: 1.4, margin: 0 }}>
+                    {benefit.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Plan & Execute Marketing Process Section */}
+      <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+        <div className="container">
+          <div className="text-center" style={{ marginBottom: '60px' }}>
+            <span style={{ 
+              display: 'inline-block', 
+              backgroundColor: 'var(--primary-light)', 
+              color: 'var(--primary)', 
+              padding: '6px 16px', 
+              borderRadius: '20px', 
+              fontWeight: 600, 
+              fontSize: '14px',
+              marginBottom: '16px'
+            }}>
+              Marketing Operations
+            </span>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>How We Plan and Execute</h2>
+            <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px' }}>
+              We design and execute integrated digital strategies that scale enrollment and elevate institutional brand images.
+            </p>
+          </div>
+          
+          <MarketingTimeline />
         </div>
       </section>
 
@@ -310,18 +618,119 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Digital Marketing Course Section */}
+      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div style={{
+          position: 'absolute',
+          top: '-50px',
+          right: '-50px',
+          width: '200px',
+          height: '200px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, var(--primary-light) 0%, transparent 70%)',
+          zIndex: 1,
+          pointerEvents: 'none'
+        }} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="card-glass" style={{ 
+            padding: '50px 40px', 
+            background: 'var(--glass-bg)', 
+            border: '1px solid var(--glass-border)',
+            borderRadius: 'var(--radius-lg)' 
+          }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '50px', alignItems: 'center' }} className="course-grid">
+              
+              {/* Left Column: Course Details */}
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ 
+                  display: 'inline-block', 
+                  backgroundColor: 'var(--primary-light)', 
+                  color: 'var(--primary)', 
+                  padding: '6px 16px', 
+                  borderRadius: '20px', 
+                  fontWeight: 600, 
+                  fontSize: '14px',
+                  marginBottom: '16px'
+                }}>
+                  Expert Career Training
+                </span>
+                <h2 style={{ fontSize: '36px', fontWeight: 800, marginBottom: '16px', textAlign: 'left' }}>
+                  Master Digital Marketing with Expert Guidance
+                </h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '30px' }}>
+                  At Host2Unlimited, we offer a comprehensive Digital Marketing Course in Mumbai designed for beginners, professionals, and entrepreneurs. Whether you want to start a career in digital marketing, grow your business online, or upskill for better job opportunities, our hands-on training will give you the skills you need to succeed.
+                </p>
+
+                <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  What You Will Learn:
+                </h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px 20px' }}>
+                  {courseTopics.map((topic, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ color: 'var(--primary)', flexShrink: 0 }}>
+                        <Check size={16} strokeWidth={3} />
+                      </div>
+                      <span style={{ fontSize: '14.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                        {topic.title}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Column: CTA Card */}
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div className="card-glass" style={{ 
+                  width: '100%', 
+                  maxWidth: '380px', 
+                  padding: '35px 30px', 
+                  backgroundColor: 'var(--bg-primary)',
+                  boxShadow: 'var(--shadow-lg)',
+                  border: '1px solid var(--border-color)',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <GraduationCap size={28} />
+                  </div>
+                  <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '10px' }}>Join the Next Batch</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
+                    Get hands-on training and mentorship from industry specialists. Batch sizes are limited.
+                  </p>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <Link to="/contact" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '12px' }}>
+                      Enroll Now
+                    </Link>
+                    <Link to="/contact" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', padding: '12px' }}>
+                      Enquiry for Your Institute
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Client Logos Section */}
       <section style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', padding: '40px 0' }}>
         <div className="container">
           <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '24px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Trusted by Businesses Across Multiple Industries
+            Trusted by Educational Institutes & Brands Across Maharashtra
           </p>
           <div className="carousel-track-container">
             <div className="carousel-track">
               {clientLogos.concat(clientLogos).map((logo, idx) => (
-                <div key={idx} className="carousel-logo">
-                  <Cpu size={20} style={{ marginRight: '6px' }} />
-                  {logo}
+                <div key={idx} className="carousel-logo" style={{ display: 'flex', alignItems: 'center', height: '60px', padding: '0 25px' }}>
+                  <img 
+                    src={logo} 
+                    alt="Partner Logo" 
+                    style={{ maxHeight: '100%', maxWidth: '140px', objectFit: 'contain', filter: 'grayscale(1) opacity(0.75)', transition: 'all 0.3s ease' }} 
+                    onMouseEnter={(e) => { e.currentTarget.style.filter = 'grayscale(0) opacity(1)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.filter = 'grayscale(1) opacity(0.75)'; }}
+                  />
                 </div>
               ))}
             </div>
@@ -361,12 +770,12 @@ const Home = () => {
 
       <style>{`
         @media (max-width: 992px) {
-          .hero-grid {
+          .hero-grid, .coordinator-grid, .course-grid {
             grid-template-columns: 1fr !important;
             text-align: center !important;
             gap: 40px !important;
           }
-          .hero-grid div {
+          .hero-grid div, .coordinator-grid div, .course-grid div {
             text-align: center !important;
           }
           .stats-grid {
@@ -379,6 +788,9 @@ const Home = () => {
           .process-grid {
             grid-template-columns: 1fr !important;
             gap: 40px !important;
+          }
+          .coordinator-grid h2, .coordinator-grid p, .coordinator-grid div h4, .coordinator-grid div p, .course-grid h2, .course-grid p, .course-grid h4 {
+            text-align: center !important;
           }
         }
       `}</style>

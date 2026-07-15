@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLeads } from '../context/LeadContext';
 import { useTheme } from '../context/ThemeContext';
 import { 
@@ -111,16 +111,28 @@ const AdminDashboard = () => {
 
   // Toast Notification State
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const toastTimeoutRef = useRef(null);
+
+  // Forgot password flow states
+  const [authView, setAuthView] = useState('login'); // 'login' | 'forgot' | 'reset'
+  const [resetEmail, setResetEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showNewPass, setShowNewPass] = useState(false);
+  const [showConfirmNewPass, setShowConfirmNewPass] = useState(false);
   
   // Custom Delete Confirmation Modal State
   const [deleteConfirm, setDeleteConfirm] = useState({ show: false, title: '', desc: '', onConfirm: null });
 
-  const triggerToast = (message, type = 'success') => {
+  const triggerToast = useCallback((message, type = 'success') => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
     setToast({ show: true, message, type });
-    setTimeout(() => {
+    toastTimeoutRef.current = setTimeout(() => {
       setToast(prev => ({ ...prev, show: false }));
-    }, 3500);
-  };
+    }, 4500); // slightly longer duration to let user read
+  }, []);
 
   const fetchPageContent = useCallback(async (pageId) => {
     try {
@@ -236,13 +248,20 @@ const AdminDashboard = () => {
     checkAdminRegistration();
   }, [checkAdminRegistration]);
 
+  // Reset error when authentication view changes
+  useEffect(() => {
+    setError('');
+  }, [authView]);
+
   // Handle Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!usernameOrEmail.trim() || !password) {
-      setError('Username/Email and password are required.');
+      const errMsg = 'Username/Email and password are required.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
       return;
     }
 
@@ -264,8 +283,10 @@ const AdminDashboard = () => {
       setLoggedInUser(data.user);
       setIsAuthenticated(true);
       setError('');
+      triggerToast('Welcome back! Logged in successfully.', 'success');
     } catch (err) {
       setError(err.message);
+      triggerToast(err.message, 'error');
     }
   };
 
@@ -275,15 +296,21 @@ const AdminDashboard = () => {
     setError('');
 
     if (!username.trim() || !email.trim() || !password) {
-      setError('Please fill in all administrator input fields.');
+      const errMsg = 'Please fill in all administrator input fields.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
       return;
     }
     if (password !== confirmPassword) {
-      setError('Confirmation password does not match.');
+      const errMsg = 'Confirmation password does not match.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      const errMsg = 'Password must be at least 6 characters.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
       return;
     }
 
@@ -307,8 +334,92 @@ const AdminDashboard = () => {
       setIsAuthenticated(true);
       setAdminExists(true);
       setError('');
+      triggerToast('Administrator account created and logged in successfully!', 'success');
     } catch (err) {
       setError(err.message);
+      triggerToast(err.message, 'error');
+    }
+  };
+
+  // Handle forgot password request code
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!resetEmail.trim()) {
+      const errMsg = 'Email address is required.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${ACTIVE_API_BASE}/api/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: resetEmail.trim() })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to verify email address.');
+      }
+
+      triggerToast('Account email verified. Please choose a new password.', 'success');
+      setError('');
+      setAuthView('reset');
+    } catch (err) {
+      setError(err.message);
+      triggerToast(err.message, 'error');
+    }
+  };
+
+  // Handle password reset
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!resetEmail.trim() || !newPassword) {
+      const errMsg = 'Please fill in all fields.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      const errMsg = 'Confirmation password does not match.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
+      return;
+    }
+    if (newPassword.length < 6) {
+      const errMsg = 'Password must be at least 6 characters.';
+      setError(errMsg);
+      triggerToast(errMsg, 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${ACTIVE_API_BASE}/api/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: resetEmail.trim(),
+          newPassword
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to reset password.');
+      }
+
+      triggerToast('Password reset successfully! Please log in.', 'success');
+      setError('');
+      setAuthView('login');
+      setResetEmail('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (err) {
+      setError(err.message);
+      triggerToast(err.message, 'error');
     }
   };
 
@@ -321,6 +432,7 @@ const AdminDashboard = () => {
     setUsername('');
     setEmail('');
     setConfirmPassword('');
+    setAuthView('login');
     checkAdminRegistration();
   };
 
@@ -868,15 +980,7 @@ const AdminDashboard = () => {
                 placeholder="Username *" 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-color)',
-                  backgroundColor: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  fontSize: '14.5px'
-                }}
+                className="admin-input"
                 required
               />
               <input 
@@ -884,15 +988,7 @@ const AdminDashboard = () => {
                 placeholder="Email Address *" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-color)',
-                  backgroundColor: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  fontSize: '14.5px'
-                }}
+                className="admin-input"
                 required
               />
               <div style={{ position: 'relative', width: '100%' }}>
@@ -901,15 +997,8 @@ const AdminDashboard = () => {
                   placeholder="Password *" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 48px 12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-color)',
-                    backgroundColor: 'var(--bg-secondary)',
-                    color: 'var(--text-primary)',
-                    fontSize: '14.5px'
-                  }}
+                  className="admin-input"
+                  style={{ paddingRight: '48px' }}
                   required
                 />
                 <button 
@@ -939,15 +1028,8 @@ const AdminDashboard = () => {
                   placeholder="Confirm Password *" 
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 48px 12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-color)',
-                    backgroundColor: 'var(--bg-secondary)',
-                    color: 'var(--text-primary)',
-                    fontSize: '14.5px'
-                  }}
+                  className="admin-input"
+                  style={{ paddingRight: '48px' }}
                   required
                 />
                 <button 
@@ -980,7 +1062,7 @@ const AdminDashboard = () => {
               </button>
             </form>
           </div>
-        ) : (
+        ) : authView === 'login' ? (
           /* Render standard login form if admin exists */
           <div className="card-glass" style={{ padding: '40px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
             <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
@@ -996,15 +1078,7 @@ const AdminDashboard = () => {
                 placeholder="Username or Email..." 
                 value={usernameOrEmail}
                 onChange={(e) => setUsernameOrEmail(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-color)',
-                  backgroundColor: 'var(--bg-secondary)',
-                  color: 'var(--text-primary)',
-                  fontSize: '14.5px'
-                }}
+                className="admin-input"
                 required
                 autoFocus
               />
@@ -1014,15 +1088,8 @@ const AdminDashboard = () => {
                   placeholder="Password..." 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '12px 48px 12px 16px',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-color)',
-                    backgroundColor: 'var(--bg-secondary)',
-                    color: 'var(--text-primary)',
-                    fontSize: '14.5px'
-                  }}
+                  className="admin-input"
+                  style={{ paddingRight: '48px' }}
                   required
                 />
                 <button 
@@ -1045,13 +1112,170 @@ const AdminDashboard = () => {
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+
+              {/* Forgot Password Link */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-4px', marginBottom: '4px' }}>
+                <button 
+                  type="button" 
+                  onClick={() => setAuthView('forgot')}
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    color: 'var(--primary)', 
+                    fontSize: '13px', 
+                    cursor: 'pointer', 
+                    fontWeight: 600,
+                    padding: 0,
+                    transition: 'opacity 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.opacity = '0.8'}
+                  onMouseOut={(e) => e.target.style.opacity = '1'}
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
+              {error && (
+                <span style={{ fontSize: '13px', color: '#ef4444', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+                  <AlertCircle size={14} /> {error}
+                </span>
+              )}
+
+              <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+                Log In
+              </button>
+            </form>
+          </div>
+        ) : authView === 'forgot' ? (
+          /* Render Forgot Password request code form */
+          <div className="card-glass" style={{ padding: '40px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+            <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+              <Icons.KeyRound size={24} />
+            </div>
+            <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '10px' }}>Forgot Password?</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
+              Enter your registered administrator email address to request a reset code.
+            </p>
+            <form onSubmit={handleForgotPassword} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <input 
+                type="email" 
+                placeholder="Email Address..." 
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                className="admin-input"
+                required
+                autoFocus
+              />
               {error && (
                 <span style={{ fontSize: '13px', color: '#ef4444', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
                   <AlertCircle size={14} /> {error}
                 </span>
               )}
               <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-                Log In
+                Send Reset Code
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setAuthView('login')}
+                className="btn btn-secondary" 
+                style={{ width: '100%', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+              >
+                Back to Login
+              </button>
+            </form>
+          </div>
+        ) : (
+          /* Render Password Reset form using verification code */
+          <div className="card-glass" style={{ padding: '40px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+            <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+              <Icons.LockKeyhole size={24} />
+            </div>
+            <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '10px' }}>Reset Password</h2>
+             <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
+              Choose a new secure password for your administrator account.
+            </p>
+            <form onSubmit={handleResetPassword} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              
+              {/* New Password field */}
+              <div style={{ position: 'relative', width: '100%' }}>
+                <input 
+                  type={showNewPass ? 'text' : 'password'} 
+                  placeholder="New Password..." 
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="admin-input"
+                  style={{ paddingRight: '48px' }}
+                  required
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowNewPass(!showNewPass)}
+                  style={{
+                    position: 'absolute',
+                    right: '14px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 0
+                  }}
+                >
+                  {showNewPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+
+              {/* Confirm New Password field */}
+              <div style={{ position: 'relative', width: '100%' }}>
+                <input 
+                  type={showConfirmNewPass ? 'text' : 'password'} 
+                  placeholder="Confirm New Password..." 
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  className="admin-input"
+                  style={{ paddingRight: '48px' }}
+                  required
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowConfirmNewPass(!showConfirmNewPass)}
+                  style={{
+                    position: 'absolute',
+                    right: '14px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 0
+                  }}
+                >
+                  {showConfirmNewPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+
+              {error && (
+                <span style={{ fontSize: '13px', color: '#ef4444', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+                  <AlertCircle size={14} /> {error}
+                </span>
+              )}
+
+              <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+                Reset Password
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setAuthView('forgot')}
+                className="btn btn-secondary" 
+                style={{ width: '100%', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+              >
+                Back
               </button>
             </form>
           </div>
@@ -4207,36 +4431,87 @@ const AdminDashboard = () => {
       )}
 
       {/* -------------------- TOAST NOTIFICATION OVERLAY -------------------- */}
-      {toast.show && (
-        <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20, scale: 0.9 }}
-          style={{
-            position: 'fixed',
-            bottom: '30px',
-            right: '30px',
-            zIndex: 999999,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '14px 20px',
-            borderRadius: '10px',
-            border: toast.type === 'error' ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid rgba(16, 185, 129, 0.2)',
-            backgroundColor: toast.type === 'error' 
-              ? (darkMode ? 'rgba(239, 68, 68, 0.15)' : 'rgba(254, 242, 242, 0.95)')
-              : (darkMode ? 'rgba(16, 185, 129, 0.15)' : 'rgba(240, 253, 250, 0.95)'),
-            backdropFilter: 'blur(8px)',
-            boxShadow: 'var(--shadow-lg)',
-            color: toast.type === 'error' ? '#ef4444' : '#10b981',
-            fontWeight: 600,
-            fontSize: '14.5px'
-          }}
-        >
-          {toast.type === 'error' ? <AlertCircle size={18} /> : <Check size={18} />}
-          <span>{toast.message}</span>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {toast.show && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.92, rotateX: -10 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9, transition: { duration: 0.2 } }}
+            transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+            style={{
+              position: 'fixed',
+              bottom: '30px',
+              right: '30px',
+              zIndex: 999999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '14px',
+              padding: '16px 20px',
+              borderRadius: '12px',
+              border: toast.type === 'error' ? '1px solid rgba(239, 68, 68, 0.25)' : '1px solid rgba(16, 185, 129, 0.25)',
+              backgroundColor: toast.type === 'error' 
+                ? (darkMode ? 'rgba(24, 18, 18, 0.95)' : 'rgba(254, 242, 242, 0.97)')
+                : (darkMode ? 'rgba(18, 24, 20, 0.95)' : 'rgba(240, 253, 244, 0.97)'),
+              backdropFilter: 'blur(16px)',
+              boxShadow: toast.type === 'error' 
+                ? '0 10px 30px -10px rgba(239, 68, 68, 0.2)' 
+                : '0 10px 30px -10px rgba(16, 185, 129, 0.2)',
+              color: toast.type === 'error' 
+                ? (darkMode ? '#fca5a5' : '#dc2626') 
+                : (darkMode ? '#a7f3d0' : '#15803d'),
+              fontWeight: 600,
+              fontSize: '14.5px',
+              maxWidth: '380px',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              {toast.type === 'error' ? <AlertCircle size={20} style={{ flexShrink: 0 }} /> : <Check size={20} style={{ flexShrink: 0 }} />}
+              <span style={{ lineHeight: '1.4' }}>{toast.message}</span>
+            </div>
+            
+            <button 
+              onClick={() => setToast(prev => ({ ...prev, show: false }))}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: toast.type === 'error' 
+                  ? (darkMode ? '#fca5a5' : '#dc2626') 
+                  : (darkMode ? '#a7f3d0' : '#15803d'),
+                opacity: 0.7,
+                cursor: 'pointer',
+                padding: '4px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'opacity 0.2s, background-color 0.2s'
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.opacity = '0.7'; e.currentTarget.style.backgroundColor = 'transparent'; }}
+            >
+              <X size={14} />
+            </button>
+
+            {/* Glowing progress bar indicator that shrinks */}
+            <motion.div
+              key={toast.message}
+              initial={{ width: '100%' }}
+              animate={{ width: 0 }}
+              transition={{ duration: 4.5, ease: 'linear' }}
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                height: '3.5px',
+                backgroundColor: toast.type === 'error' ? '#ef4444' : '#10b981',
+                boxShadow: toast.type === 'error' ? '0 0 8px #ef4444' : '0 0 8px #10b981'
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* -------------------- DELETE CONFIRMATION DIALOG MODAL -------------------- */}
       {deleteConfirm.show && (

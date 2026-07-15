@@ -10,46 +10,67 @@ const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import
 
 const staticServicesData = [
   {
-    icon_name: 'Globe',
-    title: 'Website Development',
-    desc: 'Responsive, modern websites built for speed, redundant security, and high user conversion rates.',
-    features: ['Corporate Portals', 'SaaS Landing Pages', 'WordPress/Headless CMS Development', 'Website Redesign & Speed Optimization', 'Custom React & Vue Frameworks'],
-    slug: 'website-development'
-  },
-  {
-    icon_name: 'Cpu',
-    title: 'Custom Software Development',
-    desc: 'Business software solutions tailored to automate manual operations, remove pipeline errors, and improve team productivity.',
-    features: ['Enterprise Resource Planning (ERP)', 'Custom Customer Relationship Managers (CRM)', 'Third-Party API Integrations', 'Client Portals & Booking Platforms', 'Automated Accounting & Billing Software'],
-    slug: 'custom-software-development'
-  },
-  {
-    icon_name: 'Cloud',
-    title: 'Cloud Hosting Solutions',
-    desc: 'Highly reliable cloud hosting architectures optimized for low latency, secure database backups, and guaranteed uptime.',
-    features: ['Managed Amazon Web Services (AWS)', 'Google Cloud & Azure Deployments', 'Continuous Backup & Restore Systems', 'SSL/TLS & Security Policies Setup', 'Scalable Virtual Private Servers (VPS)'],
-    slug: 'cloud-hosting-solutions'
-  },
-  {
-    icon_name: 'LineChart',
-    title: 'SEO Services',
-    desc: 'Improve search visibility, rise to the top of Google page-rankings, and drive organic qualified traffic to your platforms.',
-    features: ['Technical Website SEO Audits', 'Local SEO & Google Maps optimization', 'Content Strategy & Link Building', 'Keyword Rank & Analytics Reports', 'Page Speed & Core Web Vitals optimization'],
-    slug: 'seo-services'
-  },
-  {
     icon_name: 'Megaphone',
     title: 'Digital Marketing',
-    desc: 'Reach the right demographics through targeted campaigns that maximize advertising return-on-investment (ROI).',
-    features: ['Pay-Per-Click Ads (Google & Socials)', 'Social Media Management (SMM)', 'High-Converting Sales Funnels', 'Email Marketing Campaigns', 'Brand Strategy & Identity Consulting'],
+    desc: 'Digital marketing activities involve using online platforms and tools to promote a brand, product, or service.',
+    features: ['Search Engine Optimization (SEO)', 'Social Media Management', 'Google Ads & Paid Campaigns', 'Email Marketing & Automation', 'Analytics, Strategy & Reporting'],
     slug: 'digital-marketing'
   },
   {
-    icon_name: 'ShoppingCart',
-    title: 'E-Commerce Development',
-    desc: 'Scalable online stores with frictionless checkout screens, stock synchronizations, and customer administration.',
-    features: ['Custom WooCommerce & Shopify Stores', 'Secure Payment Gateways Integration', 'Multi-currency & Multilingual support', 'Order, Inventory & Tax Tracking Modules', 'Customer Loyalty & Discounts setups'],
-    slug: 'e-commerce-development'
+    icon_name: 'GraduationCap',
+    title: 'Admissions Marketing',
+    desc: 'Choosing the right institution sets the foundation for your child’s or your own future success. Our programs are designed to inspire curiosity, creativity, and confidence.',
+    features: ['Quality Leads Generation Campaigns', 'Custom Demographics Targeting', 'Student Inquiry Conversion Trackers', 'Campaign ROI Audits', 'Multi-channel Ads Management'],
+    slug: 'admissions-marketing'
+  },
+  {
+    icon_name: 'ShieldCheck',
+    title: 'Reputation Management',
+    desc: 'Reputation management is the practice of shaping how your brand, business, or personal identity is perceived by the public in the digital era.',
+    features: ['Online Reviews Monitoring', 'Social Media Listening', 'Crisis Management & Support', 'Brand Credibility Enhancements', 'Feedback Surveys & Analysis'],
+    slug: 'reputation-management'
+  },
+  {
+    icon_name: 'FileText',
+    title: 'Content Marketing',
+    desc: 'Content marketing is more than just creating posts — it’s about telling a story that connects with your audience and builds lasting trust.',
+    features: ['Educational Blogs & Articles', 'Creative Visual Copywriting', 'Consistent Brand Messaging', 'Branded Graphic Assets', 'Audience Growth Strategies'],
+    slug: 'content-marketing'
+  },
+  {
+    icon_name: 'Users',
+    title: 'Public Relations',
+    desc: 'PR is the strategic communication process that organizations use to build and maintain a positive image with their audience, stakeholders, and the public.',
+    features: ['Media Outlets Partnerships', 'Press Releases Drafting', 'Keynote & Event PR Coverage', 'Stakeholders Engagement Desk', 'Crisis Communications'],
+    slug: 'public-relations'
+  },
+  {
+    icon_name: 'UserCheck',
+    title: 'Influencer Activities',
+    desc: 'Influencer activities are powerful collaborations between brands and social media personalities to increase visibility, trust, and organic engagement.',
+    features: ['Alumni Advocacy Networks', 'Social Personalities Sourcing', 'Authentic Campaign Narrative', 'Audience Trust Verification', 'Impact Analysis Reports'],
+    slug: 'influencer-activities'
+  },
+  {
+    icon_name: 'Search',
+    title: 'Search Engine Optimization',
+    desc: 'Search Engine Optimization (SEO) is the process of enhancing a website’s visibility on search engines like Google, Bing, and Yahoo.',
+    features: ['Technical Site SEO Audits', 'Local SEO & Maps Rankings', 'Targeted Keyword Mapping', 'Link Building Campaigns', 'Core Web Vitals Optimizations'],
+    slug: 'search-engine-optimization'
+  },
+  {
+    icon_name: 'Video',
+    title: 'Powerful Video Stories',
+    desc: 'Capturing failure, learning, and growth through determination. Setbacks become stepping stones, captured with emotional details and inspiring narratives.',
+    features: ['Seamless Event Video Coverage', 'Alumni Interview Stories', 'Professional Sound Design', 'Creative Visual Storyboarding', 'Multi-platform Video Reels'],
+    slug: 'powerful-video-stories'
+  },
+  {
+    icon_name: 'Calendar',
+    title: 'Event Marketing',
+    desc: 'Incorporate Brand Visibility, Interactive Session setups, and Lead Captures to showcase your brand to the right audience.',
+    features: ['Brand Visibility & Display', 'Interactive Sessions Planning', 'Visitor Lead Captures', 'Post-Event Blog Narratives', 'Logistics Execution Management'],
+    slug: 'event-marketing'
   }
 ];
 
@@ -180,7 +201,7 @@ const Services = () => {
                 >
                   <div>
                     {/* Icon wrap */}
-                    <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '14px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                    <div className="card-icon-container" style={{ width: '56px', height: '56px', borderRadius: '14px', marginBottom: '24px' }}>
                       <Icon size={26} />
                     </div>
                     <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '16px' }}>{service.title}</h3>
