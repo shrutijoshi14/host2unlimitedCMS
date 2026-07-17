@@ -97,6 +97,8 @@ export async function initializeDatabase() {
           author VARCHAR(100) NOT NULL,
           status VARCHAR(50) DEFAULT 'Draft',
           read_time VARCHAR(50) DEFAULT '5 min read',
+          published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          sse_notified SMALLINT DEFAULT 0,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
@@ -187,6 +189,8 @@ export async function initializeDatabase() {
           author VARCHAR(100) NOT NULL,
           status VARCHAR(50) DEFAULT 'Draft',
           read_time VARCHAR(50) DEFAULT '5 min read',
+          published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          sse_notified TINYINT(1) DEFAULT 0,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -248,6 +252,36 @@ export async function initializeDatabase() {
       console.log('Admin password reset columns verified/added successfully.');
     } catch (columnErr) {
       console.error('Error verifying/adding reset columns:', columnErr);
+    }
+
+    // Ensure published_at column exists in blogs table
+    try {
+      if (dbType === 'postgres') {
+        await pgPool.query('ALTER TABLE blogs ADD COLUMN IF NOT EXISTS published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+      } else {
+        const [columns] = await mysqlPool.query("SHOW COLUMNS FROM blogs LIKE 'published_at'");
+        if (columns.length === 0) {
+          await mysqlPool.query('ALTER TABLE blogs ADD COLUMN published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+        }
+      }
+      console.log('Blog published_at column verified/added successfully.');
+    } catch (columnErr) {
+      console.error('Error verifying/adding published_at column:', columnErr);
+    }
+
+    // Ensure sse_notified column exists in blogs table
+    try {
+      if (dbType === 'postgres') {
+        await pgPool.query('ALTER TABLE blogs ADD COLUMN IF NOT EXISTS sse_notified SMALLINT DEFAULT 0');
+      } else {
+        const [columns] = await mysqlPool.query("SHOW COLUMNS FROM blogs LIKE 'sse_notified'");
+        if (columns.length === 0) {
+          await mysqlPool.query('ALTER TABLE blogs ADD COLUMN sse_notified TINYINT(1) DEFAULT 0');
+        }
+      }
+      console.log('Blog sse_notified column verified/added successfully.');
+    } catch (columnErr) {
+      console.error('Error verifying/adding sse_notified column:', columnErr);
     }
 
     // 4. Seed initial modules if table is empty
@@ -728,12 +762,12 @@ export async function initializeDatabase() {
           'testimonials',
           JSON.stringify([
             {
-              name: 'Sandeep Deshmukh',
-              company: 'AgriGlobal Exports',
-              designation: 'Managing Director',
-              photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150',
+              name: 'Dr. R. S. Jain',
+              company: 'ARMIET Engineering College',
+              designation: 'Principal',
+              photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150',
               rating: 5,
-              review: 'Host2Unlimited completely overhauled our international supply portal. Our site load speeds improved by 40% and online inquiries tripled in under 3 months. Outstanding customer support!'
+              review: 'Host2Unlimited helped us establish our digital admissions portal and online lead marketing funnel. The student enrollment campaigns produced excellent results and visibility across Maharashtra.'
             },
             {
               name: 'Priya Nair',
@@ -742,6 +776,14 @@ export async function initializeDatabase() {
               photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150',
               rating: 5,
               review: 'Their custom software developers created an intuitive student portal with integrated payments and dashboard analytics. Project management was transparent and delivery was prompt.'
+            },
+            {
+              name: 'Sanjay Sawant',
+              company: 'EuroKids Pre-School',
+              designation: 'Director',
+              photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=150&h=150',
+              rating: 5,
+              review: 'The local SEO and digital marketing strategy by Host2Unlimited significantly improved parent inquiries for our preschool branches. The conversion tracking is precise and reliable.'
             },
             {
               name: 'Marcus Vance',

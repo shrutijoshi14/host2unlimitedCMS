@@ -82,6 +82,20 @@ const Solutions = () => {
       }
     };
     fetchSolutions();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'solutions' || e.detail?.type === 'module_update') {
+        fetchSolutions();
+      }
+    };
+
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    window.addEventListener('cmsModuleUpdate', handleUpdate);
+
+    return () => {
+      window.removeEventListener('cmsPageUpdate', handleUpdate);
+      window.removeEventListener('cmsModuleUpdate', handleUpdate);
+    };
   }, []);
 
   const breadcrumbs = [{ name: 'Solutions', path: '/solutions' }];

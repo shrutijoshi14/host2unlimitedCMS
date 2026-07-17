@@ -10,6 +10,13 @@ const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import
 
 const staticServicesData = [
   {
+    icon_name: 'Globe',
+    title: 'Web Development',
+    desc: 'Responsive, modern websites built for high performance, top-tier security, and optimized user conversions.',
+    features: ['Custom React & WordPress Sites', 'Mobile Responsive Layouts', 'Speed Optimization & CDN Setup', 'Interactive Enquiry Forms', 'Secure Code & SSL Integrations'],
+    slug: 'web-development'
+  },
+  {
     icon_name: 'Megaphone',
     title: 'Digital Marketing',
     desc: 'Digital marketing activities involve using online platforms and tools to promote a brand, product, or service.',

@@ -206,6 +206,18 @@ const Blog = () => {
     };
 
     checkCMSAndLoadData();
+
+    const handleUpdate = () => {
+      checkCMSAndLoadData();
+    };
+
+    window.addEventListener('cmsBlogUpdate', handleUpdate);
+    window.addEventListener('cmsModuleUpdate', handleUpdate);
+
+    return () => {
+      window.removeEventListener('cmsBlogUpdate', handleUpdate);
+      window.removeEventListener('cmsModuleUpdate', handleUpdate);
+    };
   }, [page, filter, search, limit]);
 
   // Reset page when filter or search changes
@@ -309,8 +321,9 @@ const Blog = () => {
                     : art.image;
 
                   const readTitle = art.read_time || art.readTime || '5 min read';
-                  const formattedDate = art.created_at 
-                    ? new Date(art.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                  const dateToUse = art.published_at || art.created_at;
+                  const formattedDate = dateToUse 
+                    ? new Date(dateToUse).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
                     : art.date;
 
                   return (

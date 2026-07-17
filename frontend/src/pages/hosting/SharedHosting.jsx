@@ -161,47 +161,49 @@ const SharedHosting = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
             {pricingPlans.map((plan, idx) => (
-              <motion.div 
-                key={idx}
-                className="card-glass"
-                style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'space-between',
-                  backgroundColor: 'var(--bg-primary)',
-                  position: 'relative',
-                  border: plan.popular ? '2px solid var(--primary)' : '1px solid var(--glass-border)'
-                }}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.2 }}
-              >
+              <div key={idx} style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
                 {plan.popular && (
-                  <span style={{ position: 'absolute', top: '-15px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'var(--primary)', color: 'white', padding: '4px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 700 }}>
+                  <span style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'var(--primary)', color: 'white', padding: '4px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, zIndex: 10 }}>
                     MOST POPULAR
                   </span>
                 )}
-                <div>
-                  <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '8px', textAlign: 'left' }}>{plan.name}</h3>
-                  <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginBottom: '24px', textAlign: 'left', lineHeight: 1.4 }}>{plan.desc}</p>
-                  
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '24px' }}>
-                    <span style={{ fontSize: '36px', fontWeight: 900, color: 'var(--text-primary)' }}>{plan.price}</span>
-                    <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>/{plan.period}</span>
-                  </div>
+                <motion.div 
+                  className="card-glass"
+                  style={{ 
+                    flex: 1,
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'space-between',
+                    backgroundColor: 'var(--bg-primary)',
+                    position: 'relative',
+                    border: plan.popular ? '2px solid var(--primary)' : '1px solid var(--glass-border)'
+                  }}
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div>
+                    <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '8px', textAlign: 'left' }}>{plan.name}</h3>
+                    <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginBottom: '24px', textAlign: 'left', lineHeight: 1.4 }}>{plan.desc}</p>
+                    
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '24px' }}>
+                      <span style={{ fontSize: '36px', fontWeight: 900, color: 'var(--text-primary)' }}>{plan.price}</span>
+                      <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>/{plan.period}</span>
+                    </div>
 
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
-                    {plan.features.map((feat, fidx) => (
-                      <li key={fidx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: 'var(--text-secondary)', textAlign: 'left' }}>
-                        <Check size={16} className="text-gradient" style={{ flexShrink: 0 }} />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Link to="/contact" className={`btn ${plan.popular ? 'btn-primary' : 'btn-secondary'}`} style={{ width: '100%' }}>
-                  {plan.cta}
-                </Link>
-              </motion.div>
+                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
+                      {plan.features.map((feat, fidx) => (
+                        <li key={fidx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: 'var(--text-secondary)', textAlign: 'left' }}>
+                          <Check size={16} className="text-gradient" style={{ flexShrink: 0 }} />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Link to="/contact" className={`btn ${plan.popular ? 'btn-primary' : 'btn-secondary'}`} style={{ width: '100%' }}>
+                    {plan.cta}
+                  </Link>
+                </motion.div>
+              </div>
             ))}
           </div>
         </div>

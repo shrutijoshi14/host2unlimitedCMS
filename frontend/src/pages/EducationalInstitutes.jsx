@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLeads } from '../context/LeadContext';
 import { 
@@ -10,46 +11,81 @@ import Breadcrumbs from '../components/Breadcrumbs';
 
 const sectors = [
   {
+    id: 'preschools',
     icon: Baby,
     title: 'Preschools & Daycare Centers',
     desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.'
   },
   {
+    id: 'primary-secondary',
     icon: BookOpen,
     title: 'Primary & Secondary Schools',
-    desc: 'Reputation with impactful stories and updates. Engage your audience with content.'
+    desc: 'Reputation built with impactful stories and updates — engage your audience with content.'
   },
   {
+    id: 'international',
     icon: Globe,
     title: 'International Schools (CBSE / ICSE / IB)',
     desc: 'Boost student engagement by highlighting academic excellence and achievements.'
   },
   {
+    id: 'coaching',
     icon: GraduationCap,
     title: 'Private Coaching Institutions',
-    desc: 'Promote innovative and personalized coaching methods, proven results, and focused approaches.'
+    desc: 'Promote innovative and personalized coaching methods, proven results, and approach.'
   },
   {
+    id: 'colleges',
     icon: School,
     title: 'Junior and Degree Colleges',
     desc: 'Empowering students at Junior and Degree Colleges to achieve academic excellence.'
   },
   {
+    id: 'engineering',
     icon: Cpu,
     title: 'Institutes of Engineering & Technology',
-    desc: 'Future engineers with innovative learning, hands-on experience, and practical labs.'
+    desc: 'Future engineers with innovative learning and hands-on experience.'
   },
   {
+    id: 'management',
     icon: Briefcase,
     title: 'Institutes of Management Studies',
     desc: 'Future leaders with practical knowledge, strategic thinking, and a global perspective.'
   },
   {
+    id: 'universities',
     icon: Award,
     title: 'Public / Private / Deemed Universities',
     desc: 'Private educational institutions striving continuously to attract the right students.'
   }
 ];
+
+const caseStudiesData = {
+  preschools: [
+    { name: 'Poddar Brio Kids', tag: 'Hyperlocal Leads', metric: '45% Enrolment Growth' },
+    { name: 'Uudaan Montessori', tag: 'Local SEO & Maps', metric: '3x Parent Inquiries' },
+    { name: 'The Learning Curve India', tag: 'Social Media Trust', metric: '200+ Active Leads' }
+  ],
+  'primary-secondary': [
+    { name: 'Holy Cross English Medium School', tag: 'School Branding & Engagement', metric: '3x Social Reach' },
+    { name: 'Navodaya English High School & Junior College', tag: 'Admission Season Campaign', metric: '60% More Conversions' }
+  ],
+  international: [
+    { name: 'Poddar Brio School', tag: 'Prestige Positioning & Search', metric: 'High-intent Inquiries' },
+    { name: 'DG International CBSE School', tag: 'Admissions Campaign & Ads', metric: '100% Seats Filled' },
+    { name: 'Gautam Singhania Global School', tag: 'Virtual Tour & Reputation', metric: 'Top Local Authority' }
+  ],
+  coaching: [
+    { name: 'Ardent Tutorials', tag: 'Urgency Campaign & Topper Interviews', metric: 'Fast Batch Bookings' }
+  ],
+  colleges: [
+    { name: 'Royal Junior & Degree College', tag: 'Student-centric Reels & Web Funnels', metric: 'Gen Z Focus' }
+  ],
+  engineering: [
+    { name: 'ARMIET Engineering & Management College', tag: 'Multi-audience SEO & LinkedIn', metric: '60% More Direct Leads' },
+    { name: 'Shivajirao S. Jondhle College of Engineering & Technology', tag: 'Targeted Regional Funnels', metric: 'Enhanced admissions flow' }
+  ]
+};
 
 const faqs = [
   {
@@ -142,7 +178,7 @@ const EducationalInstitutes = () => {
       <div className="container" style={{ marginTop: '40px' }}>
         
         {/* Banner Section */}
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <span style={{ 
             display: 'inline-block', 
             backgroundColor: 'var(--primary-light)', 
@@ -159,31 +195,35 @@ const EducationalInstitutes = () => {
             Digital Growth for Educational Institutes
           </h1>
           <p style={{ maxWidth: '750px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '17px', lineHeight: 1.6 }}>
-            We at Host2Unlimited help educational institutes harness the power of digital platforms to achieve sustainable growth. From boosting admissions and strengthening online reputation to creating impactful video stories.
+            We help educational institutes harness the power of digital platforms to achieve sustainable growth. Click a card to view our customized strategy for each sector.
           </p>
         </div>
 
-        {/* Sectors Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', marginBottom: '100px' }}>
+        {/* Sectors Index Directory Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '60px' }}>
           {sectors.map((sector, idx) => {
             const Icon = sector.icon;
             return (
-              <motion.div
+              <Link
                 key={idx}
+                to={`/educational-institutes/${sector.id}`}
                 className="card-glass"
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.06 }}
-                whileHover={{ y: -8, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 20px 40px -15px rgba(14, 165, 233, 0.15)' }}
-                style={{ textAlign: 'left', border: '1px solid var(--glass-border)', transition: 'border-color 0.2s, box-shadow 0.2s' }}
+                style={{ 
+                  textAlign: 'left', 
+                  border: '1px solid var(--glass-border)', 
+                  padding: '24px', 
+                  cursor: 'pointer', 
+                  transition: 'all 0.3s ease',
+                  display: 'block',
+                  textDecoration: 'none'
+                }}
               >
-                <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '20px' }}>
-                  <Icon size={24} />
+                <div className="card-icon-container" style={{ width: '40px', height: '40px', borderRadius: '10px', marginBottom: '16px' }}>
+                  <Icon size={20} />
                 </div>
-                <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>{sector.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5 }}>{sector.desc}</p>
-              </motion.div>
+                <h3 style={{ fontSize: '15.5px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>{sector.title}</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '12.5px', lineHeight: 1.4, marginBottom: 0 }}>{sector.desc}</p>
+              </Link>
             );
           })}
         </div>
@@ -312,7 +352,7 @@ const EducationalInstitutes = () => {
                   </div>
                 </div>
 
-                <div>
+                <div style={{ marginBottom: '8px' }}>
                   <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Message / Requirements</label>
                   <textarea 
                     name="details"
@@ -320,14 +360,14 @@ const EducationalInstitutes = () => {
                     onChange={handleChange}
                     className="form-control"
                     placeholder="Describe your requirements or questions..."
-                    style={{ minHeight: '80px', padding: '10px' }}
+                    style={{ minHeight: '100px', padding: '12px' }}
                   />
                 </div>
 
                 <button 
                   type="submit" 
                   className="btn btn-primary"
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', marginTop: '10px' }}
                 >
                   <Send size={14} /> Submit Inquiry
                 </button>

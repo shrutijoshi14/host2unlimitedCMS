@@ -99,6 +99,10 @@ router.post('/', async (req, res) => {
       ]
     );
 
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'service_update' });
+    }
+
     res.status(201).json({
       message: 'Service created successfully.',
       id: result.insertId,
@@ -161,6 +165,10 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Service not found.' });
     }
 
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'service_update' });
+    }
+
     res.json({ message: 'Service updated successfully.', id, slug });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -176,6 +184,10 @@ router.delete('/:id', async (req, res) => {
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Service not found.' });
+    }
+
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'service_update' });
     }
 
     res.json({ message: 'Service deleted successfully.' });

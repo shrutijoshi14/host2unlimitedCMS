@@ -41,6 +41,10 @@ router.post('/:id', async (req, res) => {
       [id, stringified, stringified]
     );
 
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'page_update', page: id });
+    }
+
     res.json({
       message: `Universal page content for '${id}' saved successfully.`,
       updated: result.affectedRows > 0
@@ -67,6 +71,10 @@ router.put('/:id', async (req, res) => {
       'UPDATE cms_pages SET content_data = ? WHERE id = ?',
       [stringified, id]
     );
+
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'page_update', page: id });
+    }
 
     res.json({
       message: `Universal page content for '${id}' updated successfully.`

@@ -34,6 +34,10 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: `Module with ID "${id}" not found.` });
     }
 
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'module_update', id, enabled: !!enabled });
+    }
+
     res.json({ message: `Module "${id}" status updated.`, id, enabled: !!enabled });
   } catch (error) {
     res.status(500).json({ error: error.message });

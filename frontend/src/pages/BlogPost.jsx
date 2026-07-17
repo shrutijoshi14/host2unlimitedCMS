@@ -47,7 +47,14 @@ const BlogPost = () => {
 
     fetchBlogPost();
 
+    const handleUpdate = () => {
+      fetchBlogPost();
+    };
+
+    window.addEventListener('cmsBlogUpdate', handleUpdate);
+
     return () => {
+      window.removeEventListener('cmsBlogUpdate', handleUpdate);
       // Reset document title to general
       document.title = 'Host2Unlimited | Modern Web & Marketing Agency';
     };
@@ -176,7 +183,7 @@ const BlogPost = () => {
               <User size={15} style={{ color: 'var(--primary)' }} /> By <strong>{blog.author}</strong>
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Calendar size={15} /> {new Date(blog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              <Calendar size={15} /> {new Date(blog.published_at || blog.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Clock size={15} /> {blog.read_time || '5 min read'}

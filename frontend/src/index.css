@@ -289,6 +289,8 @@ body.dark .admin-input:-webkit-autofill:active {
 
 /* Card UI */
 .card-glass {
+  position: relative;
+  overflow: hidden;
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow), 0 4px 20px -2px rgba(0, 0, 0, 0.02);
@@ -298,13 +300,45 @@ body.dark .admin-input:-webkit-autofill:active {
   -webkit-backdrop-filter: blur(14px);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
               box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.3s ease;
+              border-color 0.3s ease,
+              background-color 0.3s ease;
+}
+
+/* Shimmer Sheen Sweep Reflection */
+.card-glass::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.22),
+    transparent
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+  transition: none;
+}
+
+.card-glass:hover::after {
+  left: 200%;
+  transition: left 0.85s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .card-glass:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 20px 40px -10px rgba(14, 165, 233, 0.18), var(--glass-shadow);
-  border-color: var(--primary);
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 22px 40px -10px rgba(14, 165, 233, 0.25), 
+              0 0 20px 0px rgba(14, 165, 233, 0.08),
+              var(--glass-shadow);
+  border-color: rgba(14, 165, 233, 0.6);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+body.dark .card-glass:hover {
+  background-color: rgba(255, 255, 255, 0.015);
 }
 
 /* Card Icon Hover Micro-animations */
@@ -322,8 +356,8 @@ body.dark .admin-input:-webkit-autofill:active {
 .card-glass:hover > div > div > .card-icon-container {
   background-color: var(--primary);
   color: #ffffff !important;
-  transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 8px 20px -4px rgba(14, 165, 233, 0.45);
+  transform: scale(1.12) translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(14, 165, 233, 0.45);
 }
 
 .card-glass:hover > .card-icon-container svg,
@@ -538,6 +572,10 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+  body {
+    padding-bottom: 75px !important;
+  }
+
   .mobile-sticky-bar {
     position: fixed;
     bottom: 0;
@@ -578,15 +616,15 @@ textarea.form-control {
     color: white !important;
   }
 
-  .mobile-sticky-bar .sticky-btn-email {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-color);
+  .mobile-sticky-bar .sticky-btn-whatsapp {
+    background-color: #25D366;
+    color: white !important;
+    border: none;
   }
 
-  .mobile-sticky-bar .sticky-btn-email:hover {
-    background-color: var(--bg-tertiary);
-    color: var(--text-primary) !important;
+  .mobile-sticky-bar .sticky-btn-whatsapp:hover {
+    background-color: #128C7E;
+    color: white !important;
   }
 
   /* Offset global floating buttons up on mobile to make room for bottom action bar */

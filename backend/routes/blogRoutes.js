@@ -74,6 +74,11 @@ router.get('/', async (req, res) => {
       countQuery += ' AND status = ?';
       params.push(status);
       countParams.push(status);
+
+      if (status === 'Published') {
+        query += ' AND published_at <= NOW()';
+        countQuery += ' AND published_at <= NOW()';
+      }
     }
 
     // Sort by created_at descending
@@ -103,7 +108,10 @@ router.get('/:slug', async (req, res) => {
   const { slug } = req.params;
   try {
     const db = getPool();
-    const [rows] = await db.query('SELECT * FROM blogs WHERE slug = ?', [slug]);
+    const [rows] = await db.query(
+      'SELECT * FROM blogs WHERE slug = ? AND (status != ? OR published_at <= NOW())', 
+      [slug, 'Published']
+    );
     
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Blog not found' });
@@ -128,7 +136,8 @@ router.post('/', async (req, res) => {
     meta_description,
     author,
     status,
-    read_time
+    read_time,
+    published_at
   } = req.body;
 
   if (!title || !content || !category || !slug || !author) {
@@ -144,9 +153,12 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'A blog post with this URL slug already exists.' });
     }
 
+    const isFuture = status === 'Published' && published_at && new Date(published_at) > new Date();
+    const sseNotified = isFuture ? 0 : 1;
+
     const [result] = await db.query(
-      `INSERT INTO blogs (title, content, category, tags, image_url, slug, seo_title, meta_description, author, status, read_time)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO blogs (title, content, category, tags, image_url, slug, seo_title, meta_description, author, status, read_time, published_at, sse_notified)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         title,
         content,
@@ -158,9 +170,15 @@ router.post('/', async (req, res) => {
         meta_description || '',
         author,
         status || 'Draft',
-        read_time || '5 min read'
+        read_time || '5 min read',
+        published_at ? new Date(published_at) : new Date(),
+        sseNotified
       ]
     );
+
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'blog_update' });
+    }
 
     res.status(201).json({
       message: 'Blog post created successfully.',
@@ -186,7 +204,8 @@ router.put('/:id', async (req, res) => {
     meta_description,
     author,
     status,
-    read_time
+    read_time,
+    published_at
   } = req.body;
 
   if (!title || !content || !category || !slug || !author) {
@@ -202,11 +221,14 @@ router.put('/:id', async (req, res) => {
       return res.status(400).json({ error: 'A blog post with this URL slug already exists.' });
     }
 
+    const isFuture = status === 'Published' && published_at && new Date(published_at) > new Date();
+    const sseNotified = isFuture ? 0 : 1;
+
     const [result] = await db.query(
       `UPDATE blogs SET 
         title = ?, content = ?, category = ?, tags = ?, image_url = ?, 
         slug = ?, seo_title = ?, meta_description = ?, author = ?, 
-        status = ?, read_time = ?
+        status = ?, read_time = ?, published_at = ?, sse_notified = ?
        WHERE id = ?`,
       [
         title,
@@ -220,12 +242,18 @@ router.put('/:id', async (req, res) => {
         author,
         status || 'Draft',
         read_time || '5 min read',
+        published_at ? new Date(published_at) : new Date(),
+        sseNotified,
         id
       ]
     );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Blog post not found' });
+    }
+
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'blog_update' });
     }
 
     res.json({ message: 'Blog post updated successfully.', id, slug });
@@ -243,6 +271,10 @@ router.delete('/:id', async (req, res) => {
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Blog post not found' });
+    }
+
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'blog_update' });
     }
 
     res.json({ message: 'Blog post deleted successfully.' });

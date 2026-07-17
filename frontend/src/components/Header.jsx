@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { Sun, Moon, Menu, X, ShieldAlert } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
+import logoWebp from '../assets/logo.webp';
+
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const Header = () => {
@@ -29,6 +31,16 @@ const Header = () => {
       }
     };
     fetchSettings();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'website_settings') {
+        fetchSettings();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => {
+      window.removeEventListener('cmsPageUpdate', handleUpdate);
+    };
   }, []);
 
   useEffect(() => {
@@ -52,6 +64,7 @@ const Header = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Services', path: '/services' },
+    { name: 'Pricing', path: '/pricing' },
     { name: 'Educational Institutes', path: '/educational-institutes' },
     { name: 'Case Studies', path: '/case-studies' },
     { name: 'Careers', path: '/careers' },
@@ -78,24 +91,8 @@ const Header = () => {
         >
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {/* Logo Left */}
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <svg width="46" height="40" viewBox="0 0 80 80" style={{ flexShrink: 0 }}>
-                {/* Left blue pillar */}
-                <path d="M12,38 L26,30 L26,76 L12,70 Z" fill="#38bdf8" />
-                {/* Right blue pillar */}
-                <path d="M34,22 L48,14 L48,76 L34,76 Z" fill="#0ea5e9" />
-                {/* Arrow slicing through */}
-                <path d="M5,60 L62,32" stroke="var(--text-primary)" strokeWidth="8" strokeLinecap="round" />
-                <path d="M46,24 L62,32 L48,46" stroke="var(--text-primary)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              </svg>
-              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', lineHeight: 1.1 }}>
-                <span style={{ fontFamily: '"Pacifico", cursive', fontSize: '22px', color: '#0ea5e9', fontWeight: 'normal' }}>
-                  Host 2 Unlimited
-                </span>
-                <span style={{ fontSize: '8px', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.4px', marginTop: '1px' }}>
-                  Enterprise-Level Cloud Web Hosting Solutions
-                </span>
-              </div>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '42px', width: 'auto', objectFit: 'contain' }} />
             </Link>
 
             {/* Contact details Right */}
@@ -111,23 +108,13 @@ const Header = () => {
         </div>
 
         {/* Row 2: Navbar (Nav links and CTA button) */}
-        <div className="header-nav-bar" style={{ padding: isScrolled ? '10px 0' : '14px 0', transition: 'all var(--transition-normal)', backgroundColor: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+        <div className="header-nav-bar" style={{ padding: isScrolled ? '10px 0' : '14px 0', transition: 'all var(--transition-normal)', backgroundColor: darkMode ? 'var(--glass-bg)' : 'rgba(241, 245, 249, 0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: isScrolled ? '1px solid var(--border-color)' : 'none' }}>
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             
             {/* Mobile-only Logo */}
             <div className="mobile-only-logo" style={{ display: 'none' }}>
-              <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <svg width="34" height="30" viewBox="0 0 80 80" style={{ flexShrink: 0 }}>
-                  <path d="M12,38 L26,30 L26,76 L12,70 Z" fill="#38bdf8" />
-                  <path d="M34,22 L48,14 L48,76 L34,76 Z" fill="#0ea5e9" />
-                  <path d="M5,60 L62,32" stroke="var(--text-primary)" strokeWidth="8" strokeLinecap="round" />
-                  <path d="M46,24 L62,32 L48,46" stroke="var(--text-primary)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                </svg>
-                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', lineHeight: 1.1 }}>
-                  <span style={{ fontFamily: '"Pacifico", cursive', fontSize: '18px', color: '#0ea5e9', fontWeight: 'normal' }}>
-                    Host 2 Unlimited
-                  </span>
-                </div>
+              <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+                <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
               </Link>
             </div>
 
@@ -139,10 +126,9 @@ const Header = () => {
                   to={link.path} 
                   style={{ 
                     fontWeight: 600, 
-                    fontSize: '14px', 
-                    color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-secondary)' 
+                    fontSize: '14px'
                   }} 
-                  className="nav-link"
+                  className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
                 >
                   {link.name}
                 </Link>
@@ -269,7 +255,30 @@ const Header = () => {
             display: none !important;
           }
         }
-        .nav-link:hover {
+        .desktop-menu .nav-link {
+          position: relative;
+          padding: 6px 0;
+          text-decoration: none;
+          transition: color 0.3s ease;
+        }
+        .desktop-menu .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background-color: var(--primary);
+          transition: width 0.3s ease;
+        }
+        .desktop-menu .nav-link:hover::after,
+        .desktop-menu .nav-link.active::after {
+          width: 100%;
+        }
+        .desktop-menu .nav-link.active {
+          color: var(--primary) !important;
+        }
+        .top-bar-contacts .nav-link:hover {
           color: var(--primary) !important;
         }
       `}</style>

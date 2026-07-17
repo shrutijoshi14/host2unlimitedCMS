@@ -9,8 +9,18 @@ import {
   ChevronLeft, ChevronRight, Check, X, AlertCircle
 } from 'lucide-react';
 import * as Icons from 'lucide-react';
+import logoWebp from '../assets/logo.webp';
 
 const ACTIVE_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+
+const formatDateForInput = (dateVal) => {
+  if (!dateVal) return '';
+  const d = new Date(dateVal);
+  if (isNaN(d.getTime())) return '';
+  const tzOffset = d.getTimezoneOffset() * 60000;
+  const localISOTime = (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 16);
+  return localISOTime;
+};
 
 const AdminDashboard = () => {
   const { leads, updateLeadStatus, deleteLead } = useLeads();
@@ -70,6 +80,7 @@ const AdminDashboard = () => {
   const [author, setAuthor] = useState('Host2Unlimited Admin');
   const [status, setStatus] = useState('Draft');
   const [readTime, setReadTime] = useState('5 min read');
+  const [publishedAt, setPublishedAt] = useState('');
   
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
@@ -702,6 +713,7 @@ const AdminDashboard = () => {
     setAuthor(blog.author);
     setStatus(blog.status);
     setReadTime(blog.read_time || '5 min read');
+    setPublishedAt(blog.published_at ? formatDateForInput(blog.published_at) : formatDateForInput(new Date()));
     setFormError('');
     setFormSuccess('');
     setShowFormModal(true);
@@ -723,6 +735,7 @@ const AdminDashboard = () => {
     setAuthor('Host2Unlimited Admin');
     setStatus('Draft');
     setReadTime('5 min read');
+    setPublishedAt(formatDateForInput(new Date()));
     setFormError('');
     setFormSuccess('');
     setShowFormModal(true);
@@ -795,7 +808,8 @@ const AdminDashboard = () => {
       meta_description: metaDescription,
       author,
       status,
-      read_time: readTime
+      read_time: readTime,
+      published_at: publishedAt ? new Date(publishedAt).toISOString() : new Date().toISOString()
     };
 
     try {
@@ -932,19 +946,8 @@ const AdminDashboard = () => {
         backgroundColor: 'var(--bg-primary, #0f172a)',
         gap: '24px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', animation: 'pulse 1.8s infinite ease-in-out' }}>
-          <svg width="60" height="52" viewBox="0 0 80 80" style={{ flexShrink: 0 }}>
-            {/* Left blue pillar */}
-            <path d="M12,38 L26,30 L26,76 L12,70 Z" fill="#38bdf8" />
-            {/* Right blue pillar */}
-            <path d="M34,22 L48,14 L48,76 L34,76 Z" fill="#0ea5e9" />
-            {/* Arrow slicing through */}
-            <path d="M5,60 L62,32" stroke="var(--text-primary, #f8fafc)" strokeWidth="8" strokeLinecap="round" />
-            <path d="M46,24 L62,32 L48,46" stroke="var(--text-primary, #f8fafc)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-          </svg>
-          <span style={{ fontFamily: '"Pacifico", cursive', fontSize: '32px', color: '#0ea5e9', fontWeight: 'normal' }}>
-            Host2Unlimited
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', animation: 'pulse 1.8s infinite ease-in-out' }}>
+          <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
         </div>
         
         {/* Smooth Loader Ring */}
@@ -3189,8 +3192,8 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* Meta row: Category, Author, Read Time, Status */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }} className="form-grid-4">
+                {/* Meta row: Category, Author, Read Time, Status, Publish Date */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px' }} className="form-grid-4">
                   <div>
                     <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px', color: 'var(--text-muted)', letterSpacing: '0.5px' }}>
                       Category <span style={{ fontSize: '10px', textTransform: 'none', fontWeight: 500, color: 'var(--text-muted)' }}>(Topic)</span>
@@ -3249,6 +3252,19 @@ const AdminDashboard = () => {
                       <option value="Draft">Draft (Hidden)</option>
                       <option value="Published">Published (Visible)</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px', color: 'var(--text-muted)', letterSpacing: '0.5px' }}>
+                      Publish Date & Time <span style={{ fontSize: '10px', textTransform: 'none', fontWeight: 500, color: 'var(--text-muted)' }}>(Scheduling)</span>
+                    </label>
+                    <input 
+                      type="datetime-local" 
+                      value={publishedAt}
+                      onChange={(e) => setPublishedAt(e.target.value)}
+                      className="form-control"
+                      style={{ height: '42px', background: darkMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)', border: darkMode ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(15, 23, 42, 0.1)', color: darkMode ? '#fff' : '#000', colorScheme: darkMode ? 'dark' : 'light' }}
+                    />
                   </div>
                 </div>
 
@@ -3357,16 +3373,16 @@ const AdminDashboard = () => {
                   {/* Rich Text Custom Toolbar */}
                   {!editorPreviewMode && (
                     <div style={{ display: 'flex', gap: '4px', border: darkMode ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(15, 23, 42, 0.1)', borderBottom: 'none', padding: '8px', backgroundColor: darkMode ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.03)', borderRadius: '8px 8px 0 0', flexWrap: 'wrap', alignItems: 'center' }}>
-                      <button type="button" onClick={() => insertFormat('<strong>', '</strong>')} className="toolbar-btn" title="Bold"><Bold size={13} /></button>
-                      <button type="button" onClick={() => insertFormat('<em>', '</em>')} className="toolbar-btn" title="Italic"><Italic size={13} /></button>
-                      <button type="button" onClick={() => insertFormat('<u>', '</u>')} className="toolbar-btn" title="Underline"><Underline size={13} /></button>
-                      <div style={{ width: '1px', height: '18px', backgroundColor: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)', margin: '0 6px' }} />
-                      <button type="button" onClick={() => insertFormat('<h2>', '</h2>')} className="toolbar-btn" title="Heading 2"><Heading2 size={13} /></button>
-                      <button type="button" onClick={() => insertFormat('<h3>', '</h3>')} className="toolbar-btn" title="Heading 3"><Heading3 size={13} /></button>
-                      <div style={{ width: '1px', height: '18px', backgroundColor: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)', margin: '0 6px' }} />
-                      <button type="button" onClick={() => insertFormat('<blockquote>', '</blockquote>')} className="toolbar-btn" title="Blockquote"><Quote size={13} /></button>
-                      <button type="button" onClick={() => insertFormat('<ul>\n  <li>', '</li>\n</ul>')} className="toolbar-btn" title="Unordered List"><List size={13} /></button>
-                      <button type="button" onClick={() => insertFormat('<ol>\n  <li>', '</li>\n</ol>')} className="toolbar-btn" title="Ordered List"><ListOrdered size={13} /></button>
+                      <button type="button" onClick={() => insertFormat('<strong>', '</strong>')} className="toolbar-btn" title="Bold"><span style={{ fontWeight: 700, fontSize: '15px' }}>B</span></button>
+                      <button type="button" onClick={() => insertFormat('<em>', '</em>')} className="toolbar-btn" title="Italic"><span style={{ fontStyle: 'italic', fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: '15px' }}>I</span></button>
+                      <button type="button" onClick={() => insertFormat('<u>', '</u>')} className="toolbar-btn" title="Underline"><span style={{ textDecoration: 'underline', fontWeight: 600, fontSize: '15px' }}>U</span></button>
+                      <div style={{ width: '1px', height: '22px', backgroundColor: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)', margin: '0 6px' }} />
+                      <button type="button" onClick={() => insertFormat('<h2>', '</h2>')} className="toolbar-btn" title="Heading 2"><span style={{ fontWeight: 700, fontSize: '12.5px' }}>H2</span></button>
+                      <button type="button" onClick={() => insertFormat('<h3>', '</h3>')} className="toolbar-btn" title="Heading 3"><span style={{ fontWeight: 700, fontSize: '12.5px' }}>H3</span></button>
+                      <div style={{ width: '1px', height: '22px', backgroundColor: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.1)', margin: '0 6px' }} />
+                      <button type="button" onClick={() => insertFormat('<blockquote>', '</blockquote>')} className="toolbar-btn" title="Blockquote"><Quote size={15} strokeWidth={2.5} /></button>
+                      <button type="button" onClick={() => insertFormat('<ul>\n  <li>', '</li>\n</ul>')} className="toolbar-btn" title="Unordered List"><List size={16} strokeWidth={2.5} /></button>
+                      <button type="button" onClick={() => insertFormat('<ol>\n  <li>', '</li>\n</ol>')} className="toolbar-btn" title="Ordered List"><ListOrdered size={16} strokeWidth={2.5} /></button>
                     </div>
                   )}
 
@@ -4577,16 +4593,16 @@ const AdminDashboard = () => {
       {/* Styled component helper rules */}
       <style>{`
         .toolbar-btn {
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           border: 1px solid var(--border-color);
           background-color: var(--bg-primary);
           color: var(--text-secondary);
-          border-radius: 4px;
+          border-radius: 6px;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
-          justifyContent: center;
+          justify-content: center;
           transition: all var(--transition-fast);
         }
         .toolbar-btn:hover {

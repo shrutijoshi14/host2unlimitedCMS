@@ -6,35 +6,61 @@ const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import
 const staticTestimonials = [
   {
     id: 1,
-    name: 'Sandeep Deshmukh',
-    company: 'AgriGlobal Exports',
-    designation: 'Managing Director',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150',
+    name: 'Dr. R. S. Jain',
+    company: 'ARMIET Engineering College',
+    designation: 'Principal',
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150',
     rating: 5,
-    review: 'Host2Unlimited completely overhauled our international supply portal. Our site load speeds improved by 40% and online inquiries tripled in under 3 months. Outstanding customer support!'
+    review: 'Host2Unlimited helped us establish our digital admissions portal and online lead marketing funnel. The student enrollment campaigns produced excellent results and visibility across Maharashtra.'
   },
   {
     id: 2,
-    name: 'Priya Nair',
-    company: 'EduSphere Hub',
-    designation: 'Co-Founder',
-    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150',
+    name: 'Dr. Hitesh Patel',
+    company: 'Somaiya College',
+    designation: 'Academic Head',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150',
     rating: 5,
-    review: 'Their custom software developers created an intuitive student portal with integrated payments and dashboard analytics. Project management was transparent and delivery was prompt.'
+    review: 'Their web development team built a highly responsive, custom portal for our admissions. The server hosting is incredibly reliable and handles our traffic spikes during admission cycles with ease.'
   },
   {
     id: 3,
-    name: 'Marcus Vance',
-    company: 'CloudScale SaaS',
-    designation: 'Tech Director',
+    name: 'Sanjay Sawant',
+    company: 'EuroKids Pre-School',
+    designation: 'Director',
+    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=150&h=150',
+    rating: 5,
+    review: 'The local SEO and digital marketing strategy by Host2Unlimited significantly improved parent inquiries for our preschool branches. The conversion tracking is precise and reliable.'
+  },
+  {
+    id: 4,
+    name: 'Sunita Nair',
+    company: 'New Horizon School',
+    designation: 'Admissions Coordinator',
+    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150',
+    rating: 5,
+    review: 'Host2Unlimited completely transformed our school\'s online branding. Their social media campaigns and targeted lead funnels helped us connect with local parents and meet our enrollment goals.'
+  },
+  {
+    id: 5,
+    name: 'Megha Joshi',
+    company: 'Dnyan Ganga Education Trust',
+    designation: 'Trustee',
+    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150',
+    rating: 5,
+    review: 'Our trust has been working with Host2Unlimited for multiple school branches. Their admission marketing campaigns are highly structured and transparent, producing consistent, measurable growth.'
+  },
+  {
+    id: 6,
+    name: 'Rajesh Kadam',
+    company: 'V-Sign Preschool',
+    designation: 'Founder',
     photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150&h=150',
     rating: 5,
-    review: 'Switching our servers to Host2Unlimited cloud infrastructure reduced latency by half and solved our scaling challenges. A highly professional team of technicians.'
+    review: 'We saw a dramatic rise in search engine rankings and parent inquiries within just three months of hiring Host2Unlimited for local SEO and web development. A fantastic strategic partner!'
   }
 ];
 
 const TestimonialSlider = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,15 +101,6 @@ const TestimonialSlider = () => {
     fetchTestimonials();
   }, []);
 
-  // Auto transition
-  useEffect(() => {
-    if (testimonials.length === 0) return;
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % testimonials.length);
-    }, 8000);
-    return () => clearInterval(timer);
-  }, [testimonials]);
-
   if (loading) {
     return (
       <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
@@ -96,125 +113,137 @@ const TestimonialSlider = () => {
     return null;
   }
 
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const activeTestimony = testimonials[activeIndex] || testimonials[0];
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%' }}>
       
-      {/* Slider block */}
-      <div className="card-glass" style={{ position: 'relative', overflow: 'hidden', padding: '48px', maxWidth: '800px', margin: '0 auto' }}>
-        
-        <Quote 
-          size={80} 
-          style={{ 
-            position: 'absolute', 
-            top: '20px', 
-            left: '20px', 
-            opacity: 0.05, 
-            color: 'var(--primary)' 
-          }} 
-        />
-
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          {/* Star Rating */}
-          <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', marginBottom: '24px' }}>
-            {[...Array(activeTestimony.rating || 5)].map((_, i) => (
-              <Star key={i} size={18} fill="var(--secondary)" color="var(--secondary)" />
-            ))}
-          </div>
-
-          {/* Testimonial Review Content */}
-          <p style={{ 
-            fontSize: '18px', 
-            lineHeight: 1.7, 
-            color: 'var(--text-primary)', 
-            fontWeight: 500, 
-            marginBottom: '32px',
-            fontStyle: 'italic'
-          }}>
-            "{activeTestimony.review}"
-          </p>
-
-          {/* User Profile Info */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-            <img 
-              src={activeTestimony.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150'} 
-              alt={activeTestimony.name} 
+      {/* Testimonials Grid (3 columns on desktop, responsive) */}
+      <div className="testimonials-grid" style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(3, 1fr)', 
+        gap: '24px', 
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto'
+      }}>
+        {testimonials.map((testimony, idx) => (
+          <div 
+            key={testimony.id || idx} 
+            className="card-glass testimonial-card" 
+            style={{ 
+              position: 'relative', 
+              overflow: 'hidden', 
+              padding: '32px', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'space-between',
+              gap: '24px',
+              backgroundColor: 'var(--bg-secondary)',
+              border: '1px solid var(--border-color)',
+              borderRadius: 'var(--radius-lg)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          >
+            <Quote 
+              size={50} 
               style={{ 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                objectFit: 'cover',
-                border: '2px solid var(--primary-light)' 
+                position: 'absolute', 
+                top: '16px', 
+                right: '16px', 
+                opacity: 0.05, 
+                color: 'var(--primary)' 
               }} 
             />
-            <div style={{ textAlign: 'left' }}>
-              <h4 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {activeTestimony.name}
-                <CheckCircle size={14} color="#10b981" />
-              </h4>
-              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                {activeTestimony.designation}, <strong>{activeTestimony.company}</strong>
-              </span>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Star Rating */}
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[...Array(testimony.rating || 5)].map((_, i) => (
+                  <Star key={i} size={16} fill="var(--secondary)" color="var(--secondary)" />
+                ))}
+              </div>
+
+              {/* Testimonial Review Content */}
+              <p style={{ 
+                fontSize: '15px', 
+                lineHeight: 1.6, 
+                color: 'var(--text-primary)', 
+                fontWeight: 500, 
+                fontStyle: 'italic',
+                margin: 0
+              }}>
+                "{testimony.review}"
+              </p>
+            </div>
+
+            {/* User Profile Info */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+              <img 
+                src={testimony.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150'} 
+                alt={testimony.name} 
+                style={{ 
+                  width: '44px', 
+                  height: '44px', 
+                  borderRadius: '50%', 
+                  objectFit: 'cover',
+                  border: '2px solid var(--primary-light)' 
+                }} 
+              />
+              <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <h4 style={{ fontSize: '14.5px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {testimony.name}
+                  <CheckCircle size={13} color="#10b981" />
+                </h4>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.2 }}>
+                  {testimony.designation}, <strong>{testimony.company}</strong>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Navigation Arrows */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'absolute', width: '92%', top: '50%', left: '4%', transform: 'translateY(-50%)', pointerEvents: 'none' }} className="slider-arrows">
-          <button 
-            onClick={handlePrev}
-            style={{ 
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--bg-secondary)', 
-              border: '1px solid var(--border-color)', 
-              color: 'var(--text-primary)', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              cursor: 'pointer',
-              pointerEvents: 'auto',
-              boxShadow: 'var(--shadow-sm)',
-              transition: 'all var(--transition-fast)'
-            }}
-            className="slider-arrow-btn"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <button 
-            onClick={handleNext}
-            style={{ 
-              width: '40px', 
-              height: '40px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--bg-secondary)', 
-              border: '1px solid var(--border-color)', 
-              color: 'var(--text-primary)', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              cursor: 'pointer',
-              pointerEvents: 'auto',
-              boxShadow: 'var(--shadow-sm)',
-              transition: 'all var(--transition-fast)'
-            }}
-            className="slider-arrow-btn"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
-
+        ))}
       </div>
+
+      {/* Google Reviews CTA */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginTop: '10px' }}>
+        <a 
+          href="https://www.google.com/search?q=Host2Unlimited+Mulund&sca_esv=5fbeaf94ea03b9d5&sxsrf=APpeQnucxrlLKMwGWJ9IYtLVEBNW9FQmxA%3A1784186391024&ei=F4ZYasBuiLaq2w_-l72QBg&biw=1138&bih=484&ved=0ahUKEwiA1rKg1NaVAxUIm2oFHf5LD2IQ4dUDCBI&uact=5&oq=Host2Unlimited+Mulund&gs_lp=Egxnd3Mtd2l6LXNlcnAiFUhvc3QyVW5saW1pdGVkIE11bHVuZDIEECMYJzIGEAAYFhgeMgIQJjIFEAAY7wUyCBAAGIAEGKIEMggQABiABBiiBDIIEAAYgAQYogRI5ChQsxlYnCVwAXgAkAEAmAGFAqABxQuqAQUwLjcuMbgBA8gBAPgBAZgCBKAC-wTCAg4QABiABBiKBRiGAxiwA8ICCxAAGIAEGKIEGLADwgIIEAAY7wUYsAOYAwCIBgGQBgeSBwUxLjIuMaAH-CKyBwUwLjIuMbgH9ATCBwMyLTTIBxWACAE&sclient=gws-wiz-serp#lrd=0x3be7b8fff5308517:0x18c885b8cc0fdc0,3,,,," 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="btn btn-primary" 
+          style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            padding: '12px 24px',
+            fontSize: '14.5px',
+            fontWeight: 600
+          }}
+        >
+          ✍ Write a Google Review
+        </a>
+      </div>
+
+      <style>{`
+        .testimonials-grid {
+          display: grid !important;
+          grid-template-columns: repeat(3, 1fr) !important;
+        }
+        @media (max-width: 992px) {
+          .testimonials-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .testimonials-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+        .testimonial-card:hover {
+          transform: translateY(-6px);
+          border-color: var(--primary) !important;
+          box-shadow: 0 12px 24px rgba(14, 165, 233, 0.12) !important;
+        }
+      `}</style>
+
     </div>
   );
 };

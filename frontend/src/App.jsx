@@ -14,6 +14,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Careers from './pages/Careers';
 import EducationalInstitutes from './pages/EducationalInstitutes';
+import EducationalInstituteDetail from './pages/EducationalInstituteDetail';
 import AdminDashboard from './pages/AdminDashboard';
 import BlogPost from './pages/BlogPost';
 import ServiceDetail from './pages/ServiceDetail';
@@ -26,6 +27,7 @@ import ResellerHosting from './pages/hosting/ResellerHosting';
 import { ThemeProvider } from './context/ThemeContext';
 import { LeadProvider } from './context/LeadContext';
 import { Phone, Mail } from 'lucide-react';
+import logoWebp from './assets/logo.webp';
 
 // Scroll to top helper on route transition
 const ScrollToTop = () => {
@@ -78,7 +80,34 @@ function AppContent() {
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [settings, setSettings] = useState({ whatsapp_number: '+91 81046 12974' });
   const location = useLocation();
+
+  useEffect(() => {
+    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch(`${apiBase}/api/pages/website_settings`);
+        if (response.ok) {
+          const data = await response.json();
+          setSettings(data);
+        }
+      } catch (err) {
+        console.warn('Failed to load website settings in AppContent', err);
+      }
+    };
+    fetchSettings();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'website_settings') {
+        fetchSettings();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => {
+      window.removeEventListener('cmsPageUpdate', handleUpdate);
+    };
+  }, []);
 
   // Dynamic SEO application
   useEffect(() => {
@@ -166,6 +195,33 @@ function AppContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Server-Sent Events subscriber for real-time updates
+  useEffect(() => {
+    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+    const eventSource = new EventSource(`${apiBase}/api/events`);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'page_update') {
+          window.dispatchEvent(new CustomEvent('cmsPageUpdate', { detail: data }));
+        } else if (data.type === 'module_update') {
+          window.dispatchEvent(new CustomEvent('cmsModuleUpdate', { detail: data }));
+        } else if (data.type === 'service_update') {
+          window.dispatchEvent(new CustomEvent('cmsServiceUpdate', { detail: data }));
+        } else if (data.type === 'blog_update') {
+          window.dispatchEvent(new CustomEvent('cmsBlogUpdate', { detail: data }));
+        }
+      } catch (err) {
+        console.warn('Real-time event parse error:', err);
+      }
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
   const scrollToTopAction = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -200,15 +256,7 @@ function AppContent() {
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-              <svg width="70" height="60" viewBox="0 0 80 80">
-                <path d="M12,38 L26,30 L26,76 L12,70 Z" fill="#38bdf8" />
-                <path d="M34,22 L48,14 L48,76 L34,76 Z" fill="#0ea5e9" />
-                <path d="M5,60 L62,32" stroke="white" strokeWidth="8" strokeLinecap="round" />
-                <path d="M46,24 L62,32 L48,46" stroke="white" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              </svg>
-              <h2 style={{ fontFamily: '"Pacifico", cursive', fontSize: '26px', color: '#38bdf8', margin: 0 }}>
-                Host 2 Unlimited
-              </h2>
+              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
               <span style={{ fontSize: '11px', letterSpacing: '3px', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase', fontWeight: 700 }}>
                 Initializing {loadProgress}%
               </span>
@@ -246,6 +294,7 @@ function AppContent() {
               <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
               <Route path="/careers" element={<AnimatedPage><Careers /></AnimatedPage>} />
               <Route path="/educational-institutes" element={<AnimatedPage><EducationalInstitutes /></AnimatedPage>} />
+              <Route path="/educational-institutes/:id" element={<AnimatedPage><EducationalInstituteDetail /></AnimatedPage>} />
               <Route path="/admin" element={<AnimatedPage><AdminDashboard /></AnimatedPage>} />
             </Routes>
           </AnimatePresence>
@@ -326,11 +375,11 @@ function AppContent() {
 
       {/* Mobile Bottom Sticky Contact Bar */}
       <div className="mobile-sticky-bar">
-        <a href="tel:+918104612974" className="sticky-btn sticky-btn-call">
+        <a href={`tel:${(settings.whatsapp_number || '+91 81046 12974').replace(/[^\d+]/g, '')}`} className="sticky-btn sticky-btn-call">
           <Phone size={16} /> Call
         </a>
-        <a href="mailto:info@host2unlimited.com" className="sticky-btn sticky-btn-email">
-          <Mail size={16} /> Email
+        <a href={`https://wa.me/${(settings.whatsapp_number || '918104612974').replace(/\D/g, '')}`} className="sticky-btn sticky-btn-whatsapp" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" style={{ marginRight: '4px' }}><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.727-1.458L0 24zm6.59-4.846c1.6.95 3.16 1.449 4.825 1.451 5.436 0 9.86-4.42 9.863-9.864.001-2.637-1.03-5.116-2.905-6.993-1.876-1.878-4.36-2.91-7-2.912-5.445 0-9.87 4.417-9.873 9.861-.001 1.77.463 3.5 1.34 5.02L1.86 21.19l4.787-1.256zM17.65 14.5c-.307-.154-1.82-.9-2.1-.1s-.1.5-.1.5-.2.2-.4.1-.7-.3-1.3-.9c-.5-.4-.8-.9-.9-1.1-.1-.2-.1-.3 0-.4l.3-.3.2-.3c.1-.1.1-.2 0-.3s-.8-2.1-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4s-1.1 1.1-1.1 2.7.9 3.1 1.1 3.3c.2.2 2.1 3.2 5 4.5.7.3 1.2.5 1.7.7.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.4s.2-1.3.1-1.4-.4-.2-.7-.3z"/></svg> WhatsApp
         </a>
       </div>
     </>

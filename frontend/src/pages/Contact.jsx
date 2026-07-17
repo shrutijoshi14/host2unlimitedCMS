@@ -4,6 +4,7 @@ import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+import pointingWomanImg from '../assets/h2u/host2new-contact-page-01 (1).png';
 import { useLeads } from '../context/LeadContext';
 import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle, Globe } from 'lucide-react';
 
@@ -42,6 +43,74 @@ const faqs = [
   }
 ];
 
+const getBudgetOptions = (service) => {
+  switch (service) {
+    case 'Website Development':
+      return [
+        { value: '₹15,000 – ₹25,000', label: '₹15,000 – ₹25,000 (Starter Website)' },
+        { value: '₹35,000 – ₹60,000', label: '₹35,000 – ₹60,000 (Business Website)' },
+        { value: 'Custom Pricing', label: 'Custom Pricing (Enterprise Solutions)' }
+      ];
+    case 'Web App/Software Development':
+      return [
+        { value: '₹35,000 – ₹60,000', label: '₹35,000 – ₹60,000 (Basic Portal)' },
+        { value: '₹60,000 – ₹1,20,000', label: '₹60,000 – ₹1,20,000 (Custom Web App)' },
+        { value: 'Above ₹1,20,000', label: 'Above ₹1,20,000 (Enterprise CRM/ERP)' }
+      ];
+    case 'Social Media Post Designing':
+      return [
+        { value: '₹5,000 – ₹10,000 / month', label: '₹5,000 – ₹10,000 / month (4-12 posts)' },
+        { value: '₹10,000 – ₹15,000 / month', label: '₹10,000 – ₹15,000 / month (12-20 posts)' },
+        { value: '₹15,000 – ₹20,000 / month', label: '₹15,000 – ₹20,000 / month (20-60 posts)' }
+      ];
+    case 'Facebook Management':
+    case 'Instagram Management':
+    case 'Google Business Profile Management':
+    case 'LinkedIn Management':
+    case 'YouTube Management':
+      return [
+        { value: '₹3,000 – ₹5,000 / month', label: '₹3,000 – ₹5,000 / month (Single Platform)' },
+        { value: '₹8,000 – ₹15,000 / month', label: '₹8,000 – ₹15,000 / month (Multiple Platforms)' },
+        { value: 'Above ₹15,000 / month', label: 'Above ₹15,000 / month (Full Platform Sync)' }
+      ];
+    case 'Monthly Photoshoot / Video Shoot':
+      return [
+        { value: '₹6,000 – ₹15,000 / month', label: '₹6,000 – ₹15,000 / month (1-3 Shoot Days)' },
+        { value: '₹15,000 – ₹35,000 / month', label: '₹15,000 – ₹35,000 / month (3-8 Shoot Days)' },
+        { value: 'Above ₹35,000 / month', label: 'Above ₹35,000 / month (Enterprise Coverage)' }
+      ];
+    case 'Meta Ads Management':
+    case 'Google Ads Management':
+      return [
+        { value: '₹5,000 – ₹25,000 / month', label: '₹5,000 – ₹25,000 / month (Small Ad Spend)' },
+        { value: '₹25,000 – ₹1,00,000 / month', label: '₹25,000 – ₹1,00,000 / month (Medium Ad Spend)' },
+        { value: 'Above ₹1,00,000 / month', label: 'Above ₹1,00,000 / month (Enterprise Ad Spend)' }
+      ];
+    case 'Website Maintenance':
+    case 'SEO':
+      return [
+        { value: '₹10,000 / month', label: '₹10,000 / month (Standard Monthly Package)' },
+        { value: 'Custom / Multi-Month Packages', label: 'Custom / Multi-Month Retainer' }
+      ];
+    case 'Online Reputation Management':
+      return [
+        { value: '₹15,000 / month', label: '₹15,000 / month (Standard Monthly Package)' },
+        { value: 'Custom Monthly Package', label: 'Custom Monthly Package' }
+      ];
+    case 'WhatsApp Marketing':
+      return [
+        { value: '₹5,000 / month', label: '₹5,000 / month (Standard Monthly Package)' },
+        { value: 'Custom Monthly Package', label: 'Custom Monthly Package' }
+      ];
+    default:
+      return [
+        { value: '₹15,000 – ₹25,000', label: '₹15,000 – ₹25,000 (Starter)' },
+        { value: '₹35,000 – ₹60,000', label: '₹35,000 – ₹60,000 (Business)' },
+        { value: 'Custom Pricing', label: 'Custom Pricing (Enterprise)' }
+      ];
+  }
+};
+
 const Contact = () => {
   const { addLead } = useLeads();
   const [formData, setFormData] = useState({
@@ -49,8 +118,8 @@ const Contact = () => {
     companyName: '',
     email: '',
     phone: '',
-    service: 'Website Development',
-    budget: '₹35,000 – ₹60,000',
+    service: '',
+    budget: '₹15,000 – ₹25,000',
     details: ''
   });
 
@@ -90,17 +159,61 @@ const Contact = () => {
       }
     };
     fetchSettings();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'website_settings') {
+        fetchSettings();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => {
+      window.removeEventListener('cmsPageUpdate', handleUpdate);
+    };
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: value };
+      if (name === 'service') {
+        const budgets = getBudgetOptions(value);
+        updated.budget = budgets[0] ? budgets[0].value : '';
+      }
+      return updated;
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Save to local CMS log
     addLead(formData);
     setSubmitted(true);
+
+    // Send email via Web3Forms
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: "17ec246a-7f1e-44f9-b8e4-ea3625b2cb01",
+          subject: "Thank you for contacting us",
+          from_name: "Thank you for contacting us",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.companyName,
+          service: formData.service,
+          budget: formData.budget,
+          message: formData.details || "New Contact Submission"
+        })
+      });
+    } catch (err) {
+      console.warn("Web3Forms email delivery failed:", err);
+    }
   };
 
   const toggleFaq = (idx) => {
@@ -113,7 +226,7 @@ const Contact = () => {
       companyName: '',
       email: '',
       phone: '',
-      service: 'Website Development',
+      service: '',
       budget: '₹35,000 – ₹60,000',
       details: ''
     });
@@ -320,29 +433,41 @@ const Contact = () => {
                     <label className="form-label">Service Required</label>
                     <select 
                       name="service" 
+                      required
                       value={formData.service} 
                       onChange={handleChange} 
                       className="form-control"
                     >
+                      <option value="">- Select -</option>
                       <option value="Website Development">Website Development</option>
-                      <option value="Custom Software Development">Custom Software Development</option>
-                      <option value="Cloud Hosting Solutions">Cloud Hosting Solutions</option>
-                      <option value="SEO Services">SEO Services</option>
-                      <option value="Digital Marketing">Digital Marketing</option>
-                      <option value="E-Commerce Development">E-Commerce Development</option>
+                      <option value="Web App/Software Development">Web App/Software Development</option>
+                      <option value="Social Media Post Designing">Social Media Post Designing</option>
+                      <option value="Facebook Management">Facebook Management</option>
+                      <option value="Instagram Management">Instagram Management</option>
+                      <option value="Google Business Profile Management">Google Business Profile Management</option>
+                      <option value="LinkedIn Management">LinkedIn Management</option>
+                      <option value="YouTube Management">YouTube Management</option>
+                      <option value="Monthly Photoshoot / Video Shoot">Monthly Photoshoot / Video Shoot</option>
+                      <option value="Meta Ads Management">Meta Ads Management</option>
+                      <option value="Google Ads Management">Google Ads Management</option>
+                      <option value="Website Maintenance">Website Maintenance</option>
+                      <option value="SEO">SEO (Search Engine Optimization)</option>
+                      <option value="Online Reputation Management">Online Reputation Management</option>
+                      <option value="WhatsApp Marketing">WhatsApp Marketing</option>
                     </select>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Budget Range</label>
                     <select 
                       name="budget" 
+                      required
                       value={formData.budget} 
                       onChange={handleChange} 
                       className="form-control"
                     >
-                      <option value="₹15,000 – ₹25,000">₹15,000 – ₹25,000 (Starter)</option>
-                      <option value="₹35,000 – ₹60,000">₹35,000 – ₹60,000 (Business)</option>
-                      <option value="Custom Pricing">Custom Pricing (Enterprise)</option>
+                      {getBudgetOptions(formData.service).map((opt) => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -435,6 +560,49 @@ const Contact = () => {
           </div>
         </div>
 
+        {/* Visit Our Office Map Location Section */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '50px', alignItems: 'center', marginBottom: '80px' }} className="contact-map-grid">
+          
+          {/* Pointing Woman Image */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <img 
+              src={pointingWomanImg} 
+              alt="Find Host2Unlimited Office Map Location" 
+              style={{ width: '100%', maxWidth: '385px', height: 'auto', display: 'block', objectFit: 'contain' }} 
+            />
+          </div>
+
+          {/* Map details Card */}
+          <div className="card-glass" style={{ padding: '30px', display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'left' }}>
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--primary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
+                📍 VISIT OUR OFFICE
+              </span>
+              <h3 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', margin: '0 0 8px 0', textAlign: 'left' }}>
+                Find Us On The Map
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.55 }}>
+                {settings.address}
+              </p>
+            </div>
+
+            {/* Embedded Google Map iframe */}
+            <div style={{ width: '100%', height: '320px', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+              <iframe
+                title="Host2Unlimited Office Location Map"
+                src="https://maps.google.com/maps?q=Runwal%20R-Square%20Mulund%20Mumbai&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+
+        </div>
+
         {/* FAQs Accordion Block */}
         <div>
           <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '16px', textAlign: 'center' }}>Frequently Asked Questions</h2>
@@ -475,6 +643,10 @@ const Contact = () => {
           .form-row-grid {
             grid-template-columns: 1fr !important;
             gap: 0 !important;
+          }
+          .contact-map-grid {
+            grid-template-columns: 1fr !important;
+            gap: 30px !important;
           }
         }
       `}</style>

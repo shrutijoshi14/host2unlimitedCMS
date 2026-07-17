@@ -148,44 +148,46 @@ const Pricing = () => {
           /* Pricing Cards Grid */
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px', marginBottom: '100px' }} className="pricing-grid">
             {packages.map((pkg, idx) => (
-              <motion.div 
-                key={idx} 
-                className="card-glass"
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.15 }}
-                whileHover={{ 
-                  y: -10, 
-                  scale: pkg.popular ? 1.05 : 1.03, 
-                  boxShadow: '0 20px 40px -15px rgba(14, 165, 233, 0.25)', 
-                  borderColor: 'var(--primary)' 
-                }}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  textAlign: 'left',
-                  border: pkg.popular ? '2px solid var(--primary)' : '1px solid var(--glass-border)',
-                  position: 'relative',
-                  transition: 'border-color var(--transition-fast)'
-                }}
-              >
+              <div key={idx} style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
                 {pkg.popular && (
                   <span style={{
                     position: 'absolute',
-                    top: '-15px',
+                    top: '-14px',
                     right: '30px',
                     backgroundColor: 'var(--primary)',
                     color: 'white',
                     padding: '4px 14px',
                     borderRadius: '20px',
                     fontSize: '12px',
-                    fontWeight: 700
+                    fontWeight: 700,
+                    zIndex: 10
                   }}>
                     MOST POPULAR
                   </span>
                 )}
+                <motion.div 
+                  className="card-glass"
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.15 }}
+                  whileHover={{ 
+                    y: -10, 
+                    scale: pkg.popular ? 1.05 : 1.03, 
+                    boxShadow: '0 20px 40px -15px rgba(14, 165, 233, 0.25)', 
+                    borderColor: 'var(--primary)' 
+                  }}
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    textAlign: 'left',
+                    border: pkg.popular ? '2px solid var(--primary)' : '1px solid var(--glass-border)',
+                    position: 'relative',
+                    transition: 'border-color var(--transition-fast)'
+                  }}
+                >
 
                 <div>
                   <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>{pkg.name}</h3>
@@ -219,7 +221,8 @@ const Pricing = () => {
                   {pkg.cta || 'Select Package'}
                 </Link>
               </motion.div>
-            ))}
+            </div>
+          ))}
           </div>
         )}
 
