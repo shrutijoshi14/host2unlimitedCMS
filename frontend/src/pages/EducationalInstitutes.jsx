@@ -182,15 +182,6 @@ const EducationalInstitutes = () => {
       >
         <div className="container hero-content-wrapper">
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
-            <span className="hero-badge">
-              🎓 Educational Institutes Partner
-            </span>
-            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-1px' }}>
-              Digital Growth for Educational Institutes
-            </h1>
-            <p style={{ maxWidth: '750px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px', lineHeight: 1.6 }}>
-              We help educational institutes harness the power of digital platforms to achieve sustainable growth. Click a card to view our customized strategy for each sector.
-            </p>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>

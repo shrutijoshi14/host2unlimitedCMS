@@ -155,21 +155,6 @@ const About = () => {
       >
         <div className="container hero-content-wrapper">
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
-            <span className="hero-badge">
-              {banner.subtitle}
-            </span>
-            <h1 style={{ fontSize: '42px', fontWeight: 800, marginBottom: '24px', letterSpacing: '-1px', lineHeight: 1.2 }}>{banner.title}</h1>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: '#cbd5e1', fontSize: '16px', lineHeight: 1.7, textAlign: 'center' }}>
-              <p style={{ margin: 0 }}>
-                🎓 {banner.desc}
-              </p>
-              <p style={{ margin: 0 }}>
-                🎓 {banner.para2}
-              </p>
-              <p style={{ margin: 0 }}>
-                🎓 {banner.para3}
-              </p>
-            </div>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>

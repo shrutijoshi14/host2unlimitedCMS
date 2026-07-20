@@ -169,13 +169,6 @@ const Services = () => {
       >
         <div className="container hero-content-wrapper">
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
-            <span className="hero-badge">
-              🚀 {banner.subtitle} {isCMSActive && '• Live'}
-            </span>
-            <h1 style={{ fontSize: '44px', fontWeight: 800, marginBottom: '20px' }}>{banner.title}</h1>
-            <p style={{ maxWidth: '750px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px', lineHeight: 1.6 }}>
-              {banner.desc}
-            </p>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>

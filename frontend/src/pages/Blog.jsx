@@ -251,13 +251,6 @@ const Blog = () => {
       >
         <div className="container hero-content-wrapper">
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
-            <span className="hero-badge">
-              📰 Insights & Articles {isCMSActive && '• Live'}
-            </span>
-            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Latest Articles & News</h1>
-            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px' }}>
-              Stay updated with engineering insights, search engine guidelines, and digital conversion strategies.
-            </p>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>

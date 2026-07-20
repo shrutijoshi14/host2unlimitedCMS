@@ -253,13 +253,6 @@ const Contact = () => {
       >
         <div className="container hero-content-wrapper">
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
-            <span className="hero-badge">
-              📞 Get In Touch
-            </span>
-            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Contact Host2Unlimited</h1>
-            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px' }}>
-              Ready to scale your educational institution or brand? Submit our enquiry form below. A digital growth partner will contact you with structured blueprints.
-            </p>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>
