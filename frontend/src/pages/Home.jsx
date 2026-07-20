@@ -405,7 +405,7 @@ const Home = () => {
         </div>
 
         <div className="container" style={{ position: 'relative', zIndex: 3 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px', alignItems: 'center' }} className="hero-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 0.9fr', gap: '30px', alignItems: 'center' }} className="hero-grid">
             
             {/* Hero Left Content */}
             <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -413,28 +413,17 @@ const Home = () => {
               {/* Huge Titles */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', textAlign: 'left' }}>
                 <h1 style={{ 
-                  fontSize: '34px', 
+                  fontSize: '32px', 
                   fontWeight: 800, 
                   lineHeight: 1.15, 
                   margin: 0, 
                   letterSpacing: '-0.5px', 
                   color: '#ffffff',
                   fontFamily: 'system-ui, -apple-system, sans-serif',
-                  textAlign: 'left'
+                  textAlign: 'left',
+                  whiteSpace: 'nowrap'
                 }}>
-                  DIGITAL PROMOTION
-                </h1>
-                <h1 style={{ 
-                  fontSize: '34px', 
-                  fontWeight: 800, 
-                  lineHeight: 1.15, 
-                  margin: 0, 
-                  letterSpacing: '-0.5px', 
-                  color: '#ffffff',
-                  fontFamily: 'system-ui, -apple-system, sans-serif',
-                  textAlign: 'left'
-                }}>
-                  PARTNERS
+                  DIGITAL PROMOTION PARTNERS
                 </h1>
                 
                 <AnimatePresence mode="wait">
