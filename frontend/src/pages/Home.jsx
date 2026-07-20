@@ -5,7 +5,8 @@ import {
   ArrowRight, CheckCircle2, Zap, Cpu, Shield, PhoneCall, 
   GraduationCap, BookOpen, Users, Award, Globe, Briefcase, 
   Smile, Video, Target, Camera, Search, TrendingUp, Mail, 
-  FileText, Check, ChevronLeft, ChevronRight 
+  FileText, Check, ChevronLeft, ChevronRight, 
+  Share2
 } from 'lucide-react';
 import Timeline from '../components/Timeline';
 import MarketingTimeline from '../components/MarketingTimeline';
@@ -127,6 +128,7 @@ const getIconComponent = (name) => {
     case 'TrendingUp': return <TrendingUp size={24} />;
     case 'Mail': return <Mail size={24} />;
     case 'FileText': return <FileText size={24} />;
+    case 'Share2': return <Share2 size={24} />;
     default: return <CheckCircle2 size={24} />;
   }
 };
@@ -205,8 +207,8 @@ const staticServicesPreview = [
     desc: 'Intelligent business software solutions tailored to automate manual operations and improve productivity.'
   },
   {
-    title: 'Cloud Hosting Solutions',
-    desc: 'Ultra-reliable cloud hosting infrastructure designed for max speeds, redundant security backups, and 99.9% uptime.'
+    title: 'Social Media Marketing',
+    desc: 'Data-driven social media management, organic strategy, paid ads, and targeted engagement campaigns to grow your brand.'
   }
 ];
 
@@ -570,15 +572,18 @@ const Home = () => {
                 style={{ backgroundColor: 'var(--bg-primary)', textAlign: 'left' }}
               >
                 <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '24px' }}>
-                  {idx === 0 ? <Zap size={22} /> : idx === 1 ? <Cpu size={22} /> : <Shield size={22} />}
+                  {idx === 0 ? <Zap size={22} /> : idx === 1 ? <Cpu size={22} /> : <Share2 size={22} />}
                 </div>
                 <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{service.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: '24px', lineHeight: 1.5 }}>{service.desc}</p>
-                <Link to="/services" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 600, color: 'var(--primary)' }}>
-                  Learn More <ArrowRight size={14} />
-                </Link>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: 0, lineHeight: 1.5 }}>{service.desc}</p>
               </motion.div>
             ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <Link to="/services" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', fontSize: '15px', fontWeight: 600 }}>
+              View All Services <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
@@ -609,7 +614,7 @@ const Home = () => {
           </div>
 
           <div className="institutions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px' }}>
-            {institutionsData.map((inst, idx) => (
+            {institutionsData.slice(0, 3).map((inst, idx) => (
               <motion.a 
                 key={idx}
                 href={inst.link}
@@ -641,15 +646,18 @@ const Home = () => {
                   <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'left' }}>
                     {inst.title}
                   </h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5, marginBottom: '20px' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5, marginBottom: 0 }}>
                     {inst.desc}
                   </p>
                 </div>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13.5px', fontWeight: 600, color: 'var(--primary)', marginTop: 'auto' }}>
-                  Learn More <ArrowRight size={14} />
-                </span>
               </motion.a>
             ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <Link to="/educational-institutes" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', fontSize: '15px', fontWeight: 600 }}>
+              Explore All Educational Institutes <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
@@ -1015,6 +1023,12 @@ const Home = () => {
                 <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.5 }}>{item.desc}</p>
               </motion.div>
             ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <Link to="/about" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', fontSize: '15px', fontWeight: 600 }}>
+              Read More About Us <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>

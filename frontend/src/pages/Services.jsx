@@ -11,6 +11,13 @@ const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import
 
 const staticServicesData = [
   {
+    icon_name: 'Share2',
+    title: 'Social Media Marketing',
+    desc: 'Data-driven social media management, organic strategy, paid ads, and targeted engagement campaigns to grow your brand.',
+    features: ['High-Converting Paid Ad Campaigns', 'Social Media Strategy & Content Calendars', 'Community Engagement & Monitoring', 'Custom Graphic & Video Reels Production', 'Performance Analytics & Monthly Audits'],
+    slug: 'social-media-marketing'
+  },
+  {
     icon_name: 'Globe',
     title: 'Web Development',
     desc: 'Responsive, modern websites built for high performance, top-tier security, and optimized user conversions.',
