@@ -367,16 +367,16 @@ const Home = () => {
           top: 0,
           right: 0,
           bottom: 0,
-          width: '50%',
+          width: '55%',
           zIndex: 1,
           overflow: 'hidden'
         }} className="hero-right-img-container">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
-              initial={{ opacity: 0, scale: 1.02 }}
+              initial={{ opacity: 0, scale: 1.03 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
+              exit={{ opacity: 0, scale: 1.03 }}
               transition={{ duration: 0.8 }}
               style={{
                 width: '100%',
@@ -387,17 +387,17 @@ const Home = () => {
                 position: 'relative'
               }}
             >
-              {/* Fade overlays to blend the building image into the dark blue/green background */}
+              {/* Soft fade overlays to blend the building image while keeping it clear and visible */}
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to right, #061a40 0%, rgba(6, 26, 64, 0.95) 10%, rgba(6, 26, 64, 0.6) 40%, transparent 100%)',
+                background: 'linear-gradient(to right, #061a40 0%, rgba(6, 26, 64, 0.7) 15%, rgba(6, 26, 64, 0.2) 50%, transparent 100%)',
                 zIndex: 2
               }} />
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'linear-gradient(to top, #3f4f13 0%, rgba(63, 79, 19, 0.4) 30%, transparent 100%)',
+                background: 'linear-gradient(to top, rgba(63, 79, 19, 0.6) 0%, rgba(63, 79, 19, 0.15) 40%, transparent 100%)',
                 zIndex: 2
               }} />
             </motion.div>

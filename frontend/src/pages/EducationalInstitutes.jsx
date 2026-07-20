@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import educationalHeroBg from '../assets/hero_bg/educational_hero.png';
 
 const sectors = [
   {
@@ -165,7 +166,7 @@ const EducationalInstitutes = () => {
   const breadcrumbs = [{ name: 'Educational Institutes', path: '/educational-institutes' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div style={{ paddingTop: '80px' }}>
       <SEOMeta
         title="Educational Institutes Digital Marketing Partner | Host2Unlimited"
         description="We partner with Preschools, Schools, Junior Colleges, and Universities across Maharashtra to boost admissions and build a magnificent online brand presence."
@@ -173,31 +174,29 @@ const EducationalInstitutes = () => {
         canonical="https://host2unlimited.com/educational-institutes"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
-
-      <div className="container" style={{ marginTop: '40px' }}>
-        
-        {/* Banner Section */}
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <span style={{ 
-            display: 'inline-block', 
-            backgroundColor: 'var(--primary-light)', 
-            color: 'var(--primary)', 
-            padding: '6px 16px', 
-            borderRadius: '20px', 
-            fontWeight: 600, 
-            fontSize: '14px',
-            marginBottom: '16px'
-          }}>
-            Future-Ready Digital Education
-          </span>
-          <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-1px' }}>
-            Digital Growth for Educational Institutes
-          </h1>
-          <p style={{ maxWidth: '750px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '17px', lineHeight: 1.6 }}>
-            We help educational institutes harness the power of digital platforms to achieve sustainable growth. Click a card to view our customized strategy for each sector.
-          </p>
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${educationalHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <span className="hero-badge">
+              🎓 Educational Institutes Partner
+            </span>
+            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-1px' }}>
+              Digital Growth for Educational Institutes
+            </h1>
+            <p style={{ maxWidth: '750px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px', lineHeight: 1.6 }}>
+              We help educational institutes harness the power of digital platforms to achieve sustainable growth. Click a card to view our customized strategy for each sector.
+            </p>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
         </div>
+      </section>
+
+      <div className="container" style={{ marginTop: '50px' }}>
 
         {/* Sectors Index Directory Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '60px' }}>

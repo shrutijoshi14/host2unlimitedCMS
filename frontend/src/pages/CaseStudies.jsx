@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, TrendingUp, Target } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero.png';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -90,7 +91,7 @@ const CaseStudies = () => {
   const breadcrumbs = [{ name: 'Case Studies', path: '/case-studies' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div style={{ paddingTop: '80px' }}>
       <SEOMeta
         title="Web System Case Studies & Uptime Metrics | Host2Unlimited"
         description="Read our case studies detailing performance tuning, custom CRM configurations, WooCommerce integrations, and server optimizations."
@@ -98,29 +99,27 @@ const CaseStudies = () => {
         canonical="https://host2unlimited.com/case-studies"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
-
-      <div className="container" style={{ marginTop: '40px' }}>
-        
-        {/* Top Header */}
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <span style={{ 
-            display: 'inline-block', 
-            backgroundColor: 'var(--primary-light)', 
-            color: 'var(--primary)', 
-            padding: '6px 16px', 
-            borderRadius: '20px', 
-            fontWeight: 600, 
-            fontSize: '14px',
-            marginBottom: '16px'
-          }}>
-            Success Metrics
-          </span>
-          <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Case Studies</h1>
-          <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '17px' }}>
-            Discover how Host2Unlimited custom development and cloud hosting frameworks solve technical bottlenecks and improve business revenue.
-          </p>
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${caseStudiesHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <span className="hero-badge">
+              📈 Client Success & Impact
+            </span>
+            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Case Studies</h1>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px' }}>
+              Discover how Host2Unlimited custom development and cloud hosting frameworks solve technical bottlenecks and improve business revenue.
+            </p>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
         </div>
+      </section>
+
+      <div className="container" style={{ marginTop: '50px' }}>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>

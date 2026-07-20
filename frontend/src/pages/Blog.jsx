@@ -4,6 +4,7 @@ import { Search, Calendar, Clock, ArrowRight, ChevronLeft, ChevronRight, User } 
 import { Link } from 'react-router-dom';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import blogHeroBg from '../assets/hero_bg/blog_hero.png';
 
 const ACTIVE_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -234,7 +235,7 @@ const Blog = () => {
   const breadcrumbs = [{ name: 'Blog', path: '/blog' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div style={{ paddingTop: '80px' }}>
       <SEOMeta
         title="Blog"
         description="Read technical articles on Host2Unlimited's blog. Caching tips, Google search guidelines, server configuration walkthroughs, and SEO advice."
@@ -242,29 +243,27 @@ const Blog = () => {
         canonical="https://host2unlimited.com/blog"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
-
-      <div className="container" style={{ marginTop: '40px' }}>
-        
-        {/* Header Block */}
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <span style={{ 
-            display: 'inline-block', 
-            backgroundColor: 'var(--primary-light)', 
-            color: 'var(--primary)', 
-            padding: '6px 16px', 
-            borderRadius: '20px', 
-            fontWeight: 600, 
-            fontSize: '14px',
-            marginBottom: '16px'
-          }}>
-            Technical Articles {isCMSActive && '• Live'}
-          </span>
-          <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Latest Articles & News</h1>
-          <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '17px' }}>
-            Stay updated with engineering insights, search engine guidelines, and digital conversion strategies.
-          </p>
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${blogHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <span className="hero-badge">
+              📰 Insights & Articles {isCMSActive && '• Live'}
+            </span>
+            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Latest Articles & News</h1>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px' }}>
+              Stay updated with engineering insights, search engine guidelines, and digital conversion strategies.
+            </p>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
         </div>
+      </section>
+
+      <div className="container" style={{ marginTop: '50px' }}>
 
         {/* Search and filter row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginBottom: '40px', flexWrap: 'wrap' }} className="blog-controls">

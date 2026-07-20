@@ -4,6 +4,7 @@ import { useLeads } from '../context/LeadContext';
 import { Briefcase, MapPin, Clock, Send, CheckCircle2, ChevronRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import careersHeroBg from '../assets/hero_bg/careers_hero.png';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -172,7 +173,7 @@ const Careers = () => {
   const breadcrumbs = [{ name: 'Careers', path: '/careers' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div style={{ paddingTop: '80px' }}>
       <SEOMeta
         title="Careers & Open Job Openings | Host2Unlimited"
         description="Join the team at Host2Unlimited. Explore open positions in web design, system engineering, digital marketing, and software developers."
@@ -180,32 +181,30 @@ const Careers = () => {
         canonical="https://host2unlimited.com/careers"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
-
-      <div className="container" style={{ marginTop: '40px' }}>
-        
-        {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <span style={{ 
-            display: 'inline-block', 
-            backgroundColor: 'var(--primary-light)', 
-            color: 'var(--primary)', 
-            padding: '6px 16px', 
-            borderRadius: '20px', 
-            fontWeight: 600, 
-            fontSize: '14px',
-            marginBottom: '16px'
-          }}>
-            {banner.subtitle}
-          </span>
-          <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-1px' }}>{banner.title}</h1>
-          <p style={{ maxWidth: '650px', margin: '0 auto 16px auto', color: 'var(--text-secondary)', fontSize: '17px', lineHeight: 1.6 }}>
-            {banner.desc}
-          </p>
-          <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--primary)', fontSize: '15px', fontWeight: 600 }}>
-            ✉ You can also send your resume to <a href="mailto:hr@host2unlimited.com" style={{ textDecoration: 'underline', color: 'var(--primary)' }}>hr@host2unlimited.com</a> or HR WhatsApp: <a href="https://wa.me/917021935273" style={{ textDecoration: 'underline', color: 'var(--primary)' }}>+91 70219 35273</a>
-          </p>
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${careersHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <span className="hero-badge">
+              💼 {banner.subtitle}
+            </span>
+            <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>{banner.title}</h1>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '17px' }}>
+              {banner.desc}
+            </p>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
         </div>
+      </section>
+
+      <div className="container" style={{ marginTop: '50px' }}>
+        <p style={{ maxWidth: '650px', margin: '0 auto 40px auto', color: 'var(--primary)', fontSize: '15px', fontWeight: 600, textAlign: 'center' }}>
+          ✉ You can also send your resume to <a href="mailto:hr@host2unlimited.com" style={{ textDecoration: 'underline', color: 'var(--primary)' }}>hr@host2unlimited.com</a> or HR WhatsApp: <a href="https://wa.me/917021935273" style={{ textDecoration: 'underline', color: 'var(--primary)' }}>+91 70219 35273</a>
+        </p>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>

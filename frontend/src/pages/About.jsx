@@ -5,6 +5,7 @@ import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 import founderImg from '../assets/h2u/RAM-SIR-01-1.png';
+import aboutHeroBg from '../assets/hero_bg/about_hero.png';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -138,7 +139,7 @@ const About = () => {
   const breadcrumbs = [{ name: 'About Us', path: '/about' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div style={{ paddingTop: '80px' }}>
       <SEOMeta
         title="About Us | Host2Unlimited"
         description="Founded in 2010 in Mumbai, we are the leading digital marketing partner of educational institutions like schools, colleges, and campuses in Maharashtra."
@@ -146,37 +147,35 @@ const About = () => {
         canonical="https://host2unlimited.com/about"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
 
-      <div className="container" style={{ marginTop: '40px' }}>
-        
-        {/* Header Block */}
-        <div style={{ textAlign: 'center', marginBottom: '80px', maxWidth: '850px', margin: '0 auto 80px auto' }}>
-          <span style={{ 
-            display: 'inline-block', 
-            backgroundColor: 'var(--primary-light)', 
-            color: 'var(--primary)', 
-            padding: '6px 16px', 
-            borderRadius: '20px', 
-            fontWeight: 600, 
-            fontSize: '14px',
-            marginBottom: '16px'
-          }}>
-            {banner.subtitle}
-          </span>
-          <h1 style={{ fontSize: '42px', fontWeight: 800, marginBottom: '24px', letterSpacing: '-1px', lineHeight: 1.2 }}>{banner.title}</h1>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.7, textAlign: 'left' }}>
-            <p style={{ margin: 0 }}>
-              🎓 {banner.desc}
-            </p>
-            <p style={{ margin: 0 }}>
-              🎓 {banner.para2}
-            </p>
-            <p style={{ margin: 0 }}>
-              🎓 {banner.para3}
-            </p>
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${aboutHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <span className="hero-badge">
+              {banner.subtitle}
+            </span>
+            <h1 style={{ fontSize: '42px', fontWeight: 800, marginBottom: '24px', letterSpacing: '-1px', lineHeight: 1.2 }}>{banner.title}</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: '#cbd5e1', fontSize: '16px', lineHeight: 1.7, textAlign: 'center' }}>
+              <p style={{ margin: 0 }}>
+                🎓 {banner.desc}
+              </p>
+              <p style={{ margin: 0 }}>
+                🎓 {banner.para2}
+              </p>
+              <p style={{ margin: 0 }}>
+                🎓 {banner.para3}
+              </p>
+            </div>
+            <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>
+      </section>
+
+      <div className="container" style={{ marginTop: '50px' }}>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>

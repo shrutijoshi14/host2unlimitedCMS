@@ -1,39 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronRight, Home } from 'lucide-react';
 
 /**
  * Breadcrumbs Component
  * Renders SEO-optimized visual navigation trail with Schema support.
  * @param {Array} paths - Array of { name, path }
+ * @param {Boolean} centered - Whether to center align breadcrumbs (default true)
  */
-const Breadcrumbs = ({ paths = [] }) => {
+const Breadcrumbs = ({ paths = [], centered = true }) => {
   if (!paths || paths.length === 0) return null;
 
   return (
     <nav 
       aria-label="Breadcrumb" 
       style={{
-        padding: '12px 24px',
-        backgroundColor: 'var(--bg-secondary)',
-        borderBottom: '1px solid var(--border-color)',
+        padding: '10px 0',
+        backgroundColor: 'transparent',
+        border: 'none',
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-start'
+        justifyContent: centered ? 'center' : 'flex-start',
+        marginTop: '20px'
       }}
     >
       <div 
-        className="container"
         style={{
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
-          gap: '8px',
+          gap: '10px',
           flexWrap: 'wrap',
-          fontSize: '13.5px',
-          fontWeight: 500,
-          color: 'var(--text-secondary)'
+          fontSize: '14px',
+          fontWeight: 600,
+          color: '#cbd5e1',
+          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+          padding: '6px 18px',
+          borderRadius: '30px',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255, 255, 255, 0.12)'
         }}
       >
         {/* Home Link */}
@@ -43,12 +48,12 @@ const Breadcrumbs = ({ paths = [] }) => {
             display: 'flex', 
             alignItems: 'center', 
             gap: '4px', 
-            color: 'var(--text-muted)',
-            transition: 'color var(--transition-fast)' 
+            color: '#94a3b8',
+            transition: 'color var(--transition-fast)',
+            textDecoration: 'none'
           }}
           className="breadcrumb-link"
         >
-          <Home size={14} />
           <span>Home</span>
         </Link>
 
@@ -57,13 +62,13 @@ const Breadcrumbs = ({ paths = [] }) => {
 
           return (
             <React.Fragment key={idx}>
-              <ChevronRight size={12} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              <span style={{ color: '#64748b', fontWeight: 400, userSelect: 'none' }}>/</span>
               
               {isLast ? (
                 <motion.span 
-                  initial={{ opacity: 0, x: -4 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  style={{ color: 'var(--primary)', fontWeight: 600 }}
+                  initial={{ opacity: 0, y: 2 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{ color: '#60a5fa', fontWeight: 700 }}
                   aria-current="page"
                 >
                   {item.name}
@@ -72,8 +77,9 @@ const Breadcrumbs = ({ paths = [] }) => {
                 <Link 
                   to={item.path}
                   style={{ 
-                    color: 'var(--text-muted)',
-                    transition: 'color var(--transition-fast)' 
+                    color: '#94a3b8',
+                    transition: 'color var(--transition-fast)',
+                    textDecoration: 'none'
                   }}
                   className="breadcrumb-link"
                 >
@@ -87,7 +93,7 @@ const Breadcrumbs = ({ paths = [] }) => {
 
       <style>{`
         .breadcrumb-link:hover {
-          color: var(--primary) !important;
+          color: #ffffff !important;
           text-decoration: underline !important;
         }
       `}</style>
@@ -96,3 +102,4 @@ const Breadcrumbs = ({ paths = [] }) => {
 };
 
 export default Breadcrumbs;
+
