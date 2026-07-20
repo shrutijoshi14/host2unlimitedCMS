@@ -187,7 +187,18 @@ const EducationalInstitutes = () => {
         </div>
       </section>
 
-      <div className="container" style={{ marginTop: '50px' }}>
+      <div className="container" style={{ marginTop: '40px' }}>
+
+        {/* Subpage Header Content shifted below Hero Banner */}
+        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
+          <span className="badge" style={{ marginBottom: '12px' }}>Future-Ready Digital Education</span>
+          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+            Digital Growth for Educational Institutes
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7 }}>
+            We help educational institutes harness the power of digital platforms to achieve sustainable growth. Click a card to view our customized strategy for each sector.
+          </p>
+        </div>
 
         {/* Sectors Index Directory Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '60px' }}>

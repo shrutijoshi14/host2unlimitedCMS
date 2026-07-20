@@ -258,7 +258,18 @@ const Contact = () => {
         </div>
       </section>
 
-      <div className="container" style={{ marginTop: '50px' }}>
+      <div className="container" style={{ marginTop: '40px' }}>
+
+        {/* Subpage Header Content shifted below Hero Banner */}
+        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
+          <span className="badge" style={{ marginBottom: '12px' }}>Get In Touch</span>
+          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+            Contact Host2Unlimited
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7 }}>
+            Ready to scale your educational institution or brand? Submit our enquiry form below. A digital growth partner will contact you with structured blueprints.
+          </p>
+        </div>
 
         {/* Contact info + Form grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '50px', marginBottom: '100px' }} className="contact-grid">

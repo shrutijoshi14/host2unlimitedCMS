@@ -130,7 +130,18 @@ const Pricing = () => {
         </div>
       </section>
 
-      <div className="container" style={{ marginTop: '50px' }}>
+      <div className="container" style={{ marginTop: '40px' }}>
+
+        {/* Subpage Header Content shifted below Hero Banner */}
+        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
+          <span className="badge" style={{ marginBottom: '12px' }}>Clear Pricing</span>
+          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+            Flexible Investment Packages
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7 }}>
+            Choose a locked-in website package or use our interactive cost estimator to design your project.
+          </p>
+        </div>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>

@@ -194,7 +194,19 @@ const Careers = () => {
         </div>
       </section>
 
-      <div className="container" style={{ marginTop: '50px' }}>
+      <div className="container" style={{ marginTop: '40px' }}>
+
+        {/* Subpage Header Content shifted below Hero Banner */}
+        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 35px auto' }}>
+          <span className="badge" style={{ marginBottom: '12px' }}>{banner.subtitle || 'Join Our Team'}</span>
+          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+            {banner.title}
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7 }}>
+            {banner.desc}
+          </p>
+        </div>
+
         <p style={{ maxWidth: '650px', margin: '0 auto 40px auto', color: 'var(--primary)', fontSize: '15px', fontWeight: 600, textAlign: 'center' }}>
           ✉ You can also send your resume to <a href="mailto:hr@host2unlimited.com" style={{ textDecoration: 'underline', color: 'var(--primary)' }}>hr@host2unlimited.com</a> or HR WhatsApp: <a href="https://wa.me/917021935273" style={{ textDecoration: 'underline', color: 'var(--primary)' }}>+91 70219 35273</a>
         </p>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, animate, useMotionValue } from 'framer-motion';
 import { Globe } from 'lucide-react';
 import * as Icons from 'lucide-react';
@@ -6,6 +7,9 @@ import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 import founderImg from '../assets/h2u/RAM-SIR-01-1.png';
 import aboutHeroBg from '../assets/hero_bg/about_hero.png';
+import visionImg from '../assets/about/vision.png';
+import missionImg from '../assets/about/mission.png';
+import valuesImg from '../assets/about/values.png';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -13,6 +17,7 @@ const staticValues = [
   {
     icon_name: 'Eye',
     title: 'Our Vision',
+    image: visionImg,
     desc: 'To be Partner of Choice of Educational Institutes for creating brands and increasing their Business',
     points: [
       'Driving creativity and forward-thinking solutions.',
@@ -24,6 +29,7 @@ const staticValues = [
   {
     icon_name: 'Rocket',
     title: 'Our Mission',
+    image: missionImg,
     desc: 'To increase the business of Educational Institutes by having extremely creative & talented teams through use of Creativity, Latest Web Tools and Digital Platform',
     points: [
       'Helping clients and partners achieve sustainable success.',
@@ -35,6 +41,7 @@ const staticValues = [
   {
     icon_name: 'HeartHandshake',
     title: 'Our Values',
+    image: valuesImg,
     desc: 'Building trust, honoring commitment, and fostering growth together.',
     points: [
       'Trust',
@@ -189,7 +196,31 @@ const About = () => {
         </div>
       </section>
 
-      <div className="container" style={{ marginTop: '50px' }}>
+      <div className="container" style={{ marginTop: '40px' }}>
+
+        {/* Subpage Header Content shifted below Hero Banner */}
+        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 50px auto' }}>
+          <span className="badge" style={{ marginBottom: '12px' }}>About Us</span>
+          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '20px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+            Digital Growth Partner for Education Institutes & Businesses
+          </h1>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.7, marginBottom: '28px', textAlign: 'center' }}>
+            <p style={{ margin: 0 }}>
+              🎓Founded in 2010 in Mumbai, our journey began with a deep focus on the education sector—supporting schools, colleges, coaching centers, and ed-tech platforms with creative, results-driven marketing. 🎓 Partner with Host2Unlimited – your trusted digital partner for educational institutes.
+            </p>
+            <p style={{ margin: 0 }}>
+              🎓From boosting your online presence to social media management and school admission campaigns – we help you start early and stay ahead!
+            </p>
+            <p style={{ margin: 0 }}>
+              🎓From seamless event coverage to admission lead campaigns, we help educational institutes shine with the right digital strategies.
+            </p>
+          </div>
+          <div>
+            <Link to="/services" className="btn btn-primary" style={{ padding: '12px 28px', fontSize: '15px', fontWeight: 700, borderRadius: '30px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              Discover Our Services <Icons.ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
@@ -255,29 +286,38 @@ const About = () => {
             <div style={{ marginBottom: '85px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '40px', textAlign: 'center', letterSpacing: '-0.5px' }}>Our Core Pillars</h2>
               
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }} className="values-grid">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', alignItems: 'stretch' }} className="values-grid">
                 {aboutData.values.map((v, idx) => {
-                  const Icon = Icons[v.icon_name] || Globe;
                   return (
-                    <div key={idx} className="card-glass" style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                      <div>
-                        <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '20px' }}>
-                          <Icon size={24} />
+                    <div key={idx} className="card-glass" style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', padding: 0 }}>
+                      {v.image && (
+                        <div style={{ width: '100%', height: '180px', overflow: 'hidden', borderBottom: '1px solid var(--border-color)', position: 'relative', flexShrink: 0 }}>
+                          <img 
+                            src={v.image} 
+                            alt={v.title} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }} 
+                            className="pillar-card-image"
+                          />
+                          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(15, 23, 42, 0.4))' }} />
                         </div>
-                        <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '12px' }}>{v.title}</h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5, marginBottom: '20px' }}>{v.desc}</p>
-                      </div>
-
-                      {v.points && (
-                        <ul style={{ listStyle: 'none', padding: 0, margin: '20px 0 0 0', display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
-                          {v.points.map((pt, pIdx) => (
-                            <li key={pIdx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                              <Icons.CheckCircle2 size={14} color="var(--primary)" style={{ flexShrink: 0 }} />
-                              {pt}
-                            </li>
-                          ))}
-                        </ul>
                       )}
+                      <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                        <div>
+                          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)' }}>{v.title}</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: '20px' }}>{v.desc}</p>
+                        </div>
+
+                        {v.points && (
+                          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+                            {v.points.map((pt, pIdx) => (
+                              <li key={pIdx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                                <Icons.CheckCircle2 size={15} color="var(--primary)" style={{ flexShrink: 0 }} />
+                                {pt}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
