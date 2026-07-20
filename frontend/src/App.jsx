@@ -211,6 +211,8 @@ function AppContent() {
           window.dispatchEvent(new CustomEvent('cmsServiceUpdate', { detail: data }));
         } else if (data.type === 'blog_update') {
           window.dispatchEvent(new CustomEvent('cmsBlogUpdate', { detail: data }));
+        } else if (data.type === 'team_update') {
+          window.dispatchEvent(new CustomEvent('cmsTeamUpdate', { detail: data }));
         }
       } catch (err) {
         console.warn('Real-time event parse error:', err);

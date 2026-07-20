@@ -10,6 +10,7 @@ import moduleRoutes from './routes/moduleRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import pageRoutes from './routes/pageRoutes.js';
+import teamRoutes from './routes/teamRoutes.js';
 
 dotenv.config();
 
@@ -73,6 +74,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/pages', pageRoutes);
+app.use('/api/team', teamRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

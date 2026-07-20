@@ -111,6 +111,24 @@ const AdminDashboard = () => {
   const [serviceSuccess, setServiceSuccess] = useState('');
   const [uploadingBanner, setUploadingBanner] = useState(false);
 
+  // Team Management State
+  const [teamList, setTeamList] = useState([]);
+  const [teamLoading, setTeamLoading] = useState(false);
+  const [teamSearch, setTeamSearch] = useState('');
+
+  const [showTeamModal, setShowTeamModal] = useState(false);
+  const [teamFormMode, setTeamFormMode] = useState('create'); // 'create' | 'edit'
+  const [editingTeamId, setEditingTeamId] = useState(null);
+
+  const [teamName, setTeamName] = useState('');
+  const [teamRole, setTeamRole] = useState('');
+  const [teamImageUrl, setTeamImageUrl] = useState('');
+  const [teamDisplayOrder, setTeamDisplayOrder] = useState(0);
+  const [teamStatus, setTeamStatus] = useState('Active'); // 'Active' | 'Suspended' | 'Left'
+
+  const [teamFormError, setTeamFormError] = useState('');
+  const [uploadingTeamImage, setUploadingTeamImage] = useState(false);
+
   // Universal Pages CMS States
   const [pageContent, setPageContent] = useState([]);
   const [pageContentLoading, setPageContentLoading] = useState(false);
@@ -499,13 +517,204 @@ const AdminDashboard = () => {
     }
   }, [servicesSearch]);
 
+  // Fetch team members list
+  const fetchTeam = useCallback(async () => {
+    try {
+      setTeamLoading(true);
+      const response = await fetch(`${ACTIVE_API_BASE}/api/team?all=true`);
+      if (response.ok) {
+        const data = await response.json();
+        setTeamList(data);
+      }
+    } catch (err) {
+      console.error('Error fetching team members:', err);
+    } finally {
+      setTeamLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchModules();
       fetchBlogs();
       fetchServices();
+      fetchTeam();
     }
-  }, [isAuthenticated, blogsPage, blogSearch, servicesSearch, fetchModules, fetchBlogs, fetchServices]);
+  }, [isAuthenticated, blogsPage, blogSearch, servicesSearch, fetchModules, fetchBlogs, fetchServices, fetchTeam]);
+
+  // Refetch team when team tab becomes active
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'team') {
+      fetchTeam();
+    }
+  }, [isAuthenticated, activeTab, fetchTeam]);
+
+  // Listen to SSE live update events in Admin Dashboard
+  useEffect(() => {
+    const handleUpdate = (e) => {
+      if (e.detail?.type === 'team_update' || e.type === 'cmsTeamUpdate') {
+        fetchTeam();
+      }
+    };
+    window.addEventListener('cmsTeamUpdate', handleUpdate);
+    return () => {
+      window.removeEventListener('cmsTeamUpdate', handleUpdate);
+    };
+  }, [fetchTeam]);
+
+  // Open Create Team modal
+  const openCreateTeamModal = () => {
+    setTeamFormMode('create');
+    setEditingTeamId(null);
+    setTeamName('');
+    setTeamRole('');
+    setTeamImageUrl('');
+    setTeamDisplayOrder(teamList.length + 1);
+    setTeamStatus('Active');
+    setTeamFormError('');
+    setShowTeamModal(true);
+  };
+
+  // Open Edit Team modal
+  const openEditTeamModal = (member) => {
+    setTeamFormMode('edit');
+    setEditingTeamId(member.id);
+    setTeamName(member.name);
+    setTeamRole(member.role);
+    setTeamImageUrl(member.image_url || member.image || '');
+    setTeamDisplayOrder(member.display_order || 0);
+    setTeamStatus(member.status || 'Active');
+    setTeamFormError('');
+    setShowTeamModal(true);
+  };
+
+  // Save Team member (Create / Edit)
+  const handleSaveTeam = async (e) => {
+    e.preventDefault();
+    setTeamFormError('');
+
+    if (!teamName.trim() || !teamRole.trim()) {
+      setTeamFormError('Name and Role/Position are required.');
+      return;
+    }
+
+    try {
+      const isEdit = teamFormMode === 'edit';
+      const endpoint = isEdit ? `${ACTIVE_API_BASE}/api/team/${editingTeamId}` : `${ACTIVE_API_BASE}/api/team`;
+      const method = isEdit ? 'PUT' : 'POST';
+
+      const response = await fetch(endpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: teamName.trim(),
+          role: teamRole.trim(),
+          image_url: teamImageUrl.trim(),
+          display_order: parseInt(teamDisplayOrder, 10) || 0,
+          status: teamStatus
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save team member.');
+      }
+
+      setShowTeamModal(false);
+      fetchTeam();
+      triggerToast(`Team member ${isEdit ? 'updated' : 'added'} successfully!`, 'success');
+    } catch (err) {
+      setTeamFormError(err.message);
+      triggerToast(err.message, 'error');
+    }
+  };
+
+  // Delete Team member
+  const handleDeleteTeam = (id, name) => {
+    const executeDelete = async () => {
+      try {
+        const response = await fetch(`${ACTIVE_API_BASE}/api/team/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          fetchTeam();
+          triggerToast(`Team member "${name}" deleted successfully!`, 'error');
+        } else {
+          const data = await response.json();
+          triggerToast(data.error || 'Failed to delete team member.', 'error');
+        }
+      } catch (err) {
+        console.error('Error deleting team member:', err);
+        triggerToast('Error deleting team member.', 'error');
+      }
+    };
+
+    setDeleteConfirm({
+      show: true,
+      title: 'Delete Team Member',
+      desc: `Are you sure you want to delete "${name}" from team members?`,
+      onConfirm: executeDelete
+    });
+  };
+
+  // Quick direct status update button handler for Team member
+  const handleTeamStatusUpdate = async (member, newStatus) => {
+    try {
+      const response = await fetch(`${ACTIVE_API_BASE}/api/team/${member.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: member.name,
+          role: member.role,
+          image_url: member.image_url || member.image || '',
+          display_order: member.display_order || 0,
+          status: newStatus
+        })
+      });
+      if (response.ok) {
+        fetchTeam();
+        triggerToast(`Status for "${member.name}" updated to ${newStatus}.`, 'success');
+      } else {
+        const data = await response.json();
+        triggerToast(data.error || 'Failed to update status.', 'error');
+      }
+    } catch (err) {
+      console.error('Error updating status:', err);
+      triggerToast('Error updating status.', 'error');
+    }
+  };
+
+  // Handle Team member photo upload
+  const handleTeamImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      setUploadingTeamImage(true);
+      setTeamFormError('');
+
+      const response = await fetch(`${ACTIVE_API_BASE}/api/blogs/upload`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Photo upload failed.');
+      }
+
+      const data = await response.json();
+      setTeamImageUrl(data.image_url);
+      triggerToast('Photo uploaded successfully!', 'success');
+    } catch (err) {
+      setTeamFormError(err.message);
+      triggerToast(err.message, 'error');
+    } finally {
+      setUploadingTeamImage(false);
+    }
+  };
 
   // Handle global key events (Esc to close modals)
   useEffect(() => {
@@ -1523,6 +1732,26 @@ const AdminDashboard = () => {
               <Icons.Info size={16} /> About CMS
             </button>
           )}
+
+          <button 
+            onClick={() => setActiveTab('team')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'team' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'team' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Users size={16} /> Team Members
+          </button>
 
           {isModuleEnabled('testimonials') && (
             <button 
@@ -2590,6 +2819,149 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {/* -------------------- TEAM MEMBERS CMS MANAGEMENT -------------------- */}
+        {activeTab === 'team' && (
+          <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '15px' }}>
+              <div>
+                <h3 style={{ fontSize: '20px', fontWeight: 800, margin: 0 }}>Team Members CMS</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '4px', margin: 0 }}>
+                  Add, edit, or remove staff members, leadership positions, and roles displayed on the About page.
+                </p>
+              </div>
+              <button 
+                onClick={openCreateTeamModal}
+                className="btn btn-primary"
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', fontSize: '13.5px' }}
+              >
+                <Plus size={16} /> Add Team Member
+              </button>
+            </div>
+
+            {/* Search filter */}
+            <div style={{ marginBottom: '24px', maxWidth: '400px' }}>
+              <div style={{ position: 'relative' }}>
+                <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <input 
+                  type="text"
+                  value={teamSearch}
+                  onChange={(e) => setTeamSearch(e.target.value)}
+                  placeholder="Search by name or position/role..."
+                  className="form-control"
+                  style={{ paddingLeft: '38px', fontSize: '13.5px' }}
+                />
+              </div>
+            </div>
+
+            {teamLoading ? (
+              <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
+                Loading team members...
+              </div>
+            ) : teamList.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '50px 0', color: 'var(--text-muted)', border: '1px dashed var(--border-color)', borderRadius: '12px' }}>
+                No team members found. Click <strong>+ Add Team Member</strong> to add a team member.
+              </div>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)', textAlign: 'left', backgroundColor: 'var(--bg-secondary)' }}>
+                      <th style={{ padding: '12px 16px', fontWeight: 700 }}>Photo</th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700 }}>Name</th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700 }}>Position & Role</th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700 }}>Status</th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700 }}>Order</th>
+                      <th style={{ padding: '12px 16px', fontWeight: 700, textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {teamList
+                      .filter(m => 
+                        !teamSearch || 
+                        m.name.toLowerCase().includes(teamSearch.toLowerCase()) || 
+                        m.role.toLowerCase().includes(teamSearch.toLowerCase()) ||
+                        (m.status || 'Active').toLowerCase().includes(teamSearch.toLowerCase())
+                      )
+                      .map((member) => {
+                        const statusVal = member.status || 'Active';
+                        const statusBadgeStyle = 
+                          statusVal === 'Active' 
+                            ? { backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)' }
+                            : statusVal === 'Suspended'
+                            ? { backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.3)' }
+                            : { backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)' };
+
+                        return (
+                          <tr key={member.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                            <td style={{ padding: '12px 16px' }}>
+                              <div style={{ width: '44px', height: '44px', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                                {(member.image_url || member.image) ? (
+                                  <img src={member.image_url || member.image} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                ) : (
+                                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: 'var(--primary)', backgroundColor: 'var(--primary-light)' }}>
+                                    {member.name ? member.name[0] : 'T'}
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td style={{ padding: '12px 16px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                              {member.name}
+                            </td>
+                            <td style={{ padding: '12px 16px', color: 'var(--text-secondary)' }}>
+                              <span style={{ display: 'inline-block', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', padding: '2px 10px', borderRadius: '12px', fontSize: '12.5px', fontWeight: 600 }}>
+                                {member.role}
+                              </span>
+                            </td>
+                            <td style={{ padding: '12px 16px' }}>
+                              <select 
+                                value={statusVal}
+                                onChange={(e) => handleTeamStatusUpdate(member, e.target.value)}
+                                style={{ 
+                                  padding: '4px 10px', 
+                                  borderRadius: '12px', 
+                                  fontSize: '12px', 
+                                  fontWeight: 700, 
+                                  cursor: 'pointer',
+                                  outline: 'none',
+                                  ...statusBadgeStyle 
+                                }}
+                              >
+                                <option value="Active" style={{ background: darkMode ? '#0f172a' : '#fff', color: '#10b981' }}>Active</option>
+                                <option value="Suspended" style={{ background: darkMode ? '#0f172a' : '#fff', color: '#f59e0b' }}>Suspended</option>
+                                <option value="Left" style={{ background: darkMode ? '#0f172a' : '#fff', color: '#ef4444' }}>Left</option>
+                              </select>
+                            </td>
+                            <td style={{ padding: '12px 16px', color: 'var(--text-muted)' }}>
+                              {member.display_order || 0}
+                            </td>
+                            <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                <button 
+                                  onClick={() => openEditTeamModal(member)}
+                                  className="action-btn-edit"
+                                  style={{ padding: '6px 12px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                                >
+                                  <Edit size={12} /> Edit
+                                </button>
+                                <button 
+                                  onClick={() => handleDeleteTeam(member.id, member.name)}
+                                  className="action-btn-delete"
+                                  style={{ padding: '6px 12px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                                >
+                                  <Trash2 size={12} /> Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* -------------------- WEBSITE SETTINGS CMS EDITOR -------------------- */}
         {activeTab === 'website_settings' && isModuleEnabled('settings') && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
@@ -3126,7 +3498,7 @@ const AdminDashboard = () => {
             <div style={{ height: '4px', background: 'var(--grad-primary)', width: '100%', flexShrink: 0 }} />
 
             {/* Modal Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
               <div>
                 <h2 style={{ fontSize: '24px', fontWeight: 800, color: darkMode ? '#f8fafc' : 'var(--text-primary)', letterSpacing: '-0.5px' }}>
                   {formMode === 'create' ? 'Draft New Blog Article' : 'Modify Existing Article'}
@@ -3478,7 +3850,7 @@ const AdminDashboard = () => {
               </div>
 
                 {/* Submit Buttons */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
                   <button 
                     type="button" 
                     onClick={() => setShowFormModal(false)}
@@ -3539,7 +3911,7 @@ const AdminDashboard = () => {
           >
             
             {/* Modal Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
               <h2 style={{ fontSize: '22px', fontWeight: 800, color: darkMode ? '#f8fafc' : 'var(--text-primary)' }}>
                 {serviceFormMode === 'create' ? 'Register New Service Catalog' : 'Modify Existing Service Parameters'}
               </h2>
@@ -3820,7 +4192,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Submit Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
                 <button 
                   type="button" 
                   onClick={() => setShowServiceModal(false)}
@@ -3879,7 +4251,7 @@ const AdminDashboard = () => {
                 : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%)'
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
               <h2 style={{ fontSize: '20px', fontWeight: 800, color: darkMode ? '#f8fafc' : 'var(--text-primary)' }}>
                 {pageEditIndex !== null ? 'Modify Record' : 'Create Record'}
               </h2>
@@ -4423,7 +4795,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Submit Buttons */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
                 <button 
                   type="button" 
                   onClick={() => setShowPageModal(false)}
@@ -4528,6 +4900,174 @@ const AdminDashboard = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* -------------------- TEAM MEMBER ADD/EDIT MODAL -------------------- */}
+      {showTeamModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(7, 11, 25, 0.85)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 999999,
+          padding: '20px'
+        }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            className="card-glass"
+            style={{
+              maxWidth: '550px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflow: 'hidden',
+              padding: '0',
+              borderRadius: '16px',
+              textAlign: 'left',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: darkMode ? '0 25px 50px -12px rgba(0, 0, 0, 0.6)' : '0 25px 50px -12px rgba(15, 23, 42, 0.15)',
+              border: darkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(15, 23, 42, 0.1)',
+              background: darkMode 
+                ? 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(8, 12, 30, 0.99) 100%)' 
+                : 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.99) 100%)'
+            }}
+          >
+            {/* Modal Sticky Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '24px 32px 20px 32px', flexShrink: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 800, margin: 0, color: darkMode ? '#f8fafc' : 'var(--text-primary)' }}>
+                {teamFormMode === 'create' ? 'Add New Team Member' : 'Edit Team Member'}
+              </h3>
+              <button 
+                onClick={() => setShowTeamModal(false)}
+                className="modal-close-hover"
+                style={{ background: darkMode ? 'rgba(255, 255, 255, 0.04)' : 'rgba(15, 23, 42, 0.04)', border: darkMode ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(15, 23, 42, 0.08)', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', transition: 'all var(--transition-fast)' }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Form Container */}
+            <form onSubmit={handleSaveTeam} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flexGrow: 1, margin: 0 }}>
+              
+              {/* Scrollable Form Fields Wrapper */}
+              <div style={{ flexGrow: 1, overflowY: 'auto', padding: '24px 32px 24px 32px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                
+                {teamFormError && (
+                  <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', padding: '10px 14px', borderRadius: '8px', fontSize: '13px', margin: 0 }}>
+                    {teamFormError}
+                  </div>
+                )}
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px', color: 'var(--text-muted)' }}>
+                    Full Name *
+                  </label>
+                  <input 
+                    type="text"
+                    value={teamName}
+                    onChange={(e) => setTeamName(e.target.value)}
+                    placeholder="e.g. Rampratap Bugalia"
+                    className="form-control"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px', color: 'var(--text-muted)' }}>
+                    Position & Role *
+                  </label>
+                  <input 
+                    type="text"
+                    value={teamRole}
+                    onChange={(e) => setTeamRole(e.target.value)}
+                    placeholder="e.g. Founder & CEO, HR Head, SEO Specialist"
+                    className="form-control"
+                    required
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px', color: 'var(--text-muted)' }}>
+                      Display Order Index
+                    </label>
+                    <input 
+                      type="number"
+                      value={teamDisplayOrder}
+                      onChange={(e) => setTeamDisplayOrder(e.target.value)}
+                      placeholder="1"
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px', color: 'var(--text-muted)' }}>
+                      Photo Upload
+                    </label>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={handleTeamImageUpload}
+                      style={{ display: 'none' }}
+                      id="team-photo-file-picker"
+                    />
+                    <label 
+                      htmlFor="team-photo-file-picker" 
+                      className="btn file-upload-hover" 
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: '100%', border: '1px dashed var(--border-color)', backgroundColor: 'var(--bg-secondary)', cursor: 'pointer', height: '42px', fontSize: '12.5px', borderRadius: '6px' }}
+                    >
+                      <Upload size={14} style={{ color: 'var(--primary)' }} /> {uploadingTeamImage ? 'Uploading...' : 'Browse Photo...'}
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px', color: 'var(--text-muted)' }}>
+                    Image URL / Web Address
+                  </label>
+                  <input 
+                    type="text"
+                    value={teamImageUrl}
+                    onChange={(e) => setTeamImageUrl(e.target.value)}
+                    placeholder="Paste URL or upload image above..."
+                    className="form-control"
+                  />
+                </div>
+
+                {teamImageUrl && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', backgroundColor: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                    <img src={teamImageUrl.startsWith('http') ? teamImageUrl : `${ACTIVE_API_BASE}${teamImageUrl}`} alt="Preview" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teamImageUrl}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Sticky Footer */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', borderTop: darkMode ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(15, 23, 42, 0.06)', padding: '16px 32px 24px 32px', flexShrink: 0, margin: 0, backgroundColor: darkMode ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)', backdropFilter: 'blur(8px)', zIndex: 5 }}>
+                <button 
+                  type="button" 
+                  onClick={() => setShowTeamModal(false)}
+                  className="btn btn-secondary"
+                  style={{ padding: '10px 24px', borderRadius: '6px', fontSize: '13px' }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn btn-primary"
+                  style={{ padding: '10px 28px', borderRadius: '6px', fontSize: '13px' }}
+                >
+                  {teamFormMode === 'create' ? 'Add Team Member' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
 
       {/* -------------------- DELETE CONFIRMATION DIALOG MODAL -------------------- */}
       {deleteConfirm.show && (

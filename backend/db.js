@@ -139,6 +139,19 @@ export async function initializeDatabase() {
         );
       `);
 
+      await pgPool.query(`
+        CREATE TABLE IF NOT EXISTS team_members (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(150) NOT NULL,
+          role VARCHAR(150) NOT NULL,
+          image_url VARCHAR(500) DEFAULT '',
+          display_order INT DEFAULT 0,
+          status VARCHAR(50) DEFAULT 'Active',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+
     } else {
       dbType = 'mysql';
       
@@ -230,12 +243,91 @@ export async function initializeDatabase() {
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
       `);
+
+      await mysqlPool.query(`
+        CREATE TABLE IF NOT EXISTS team_members (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(150) NOT NULL,
+          role VARCHAR(150) NOT NULL,
+          image_url VARCHAR(500) DEFAULT '',
+          display_order INT DEFAULT 0,
+          status VARCHAR(50) DEFAULT 'Active',
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `);
     }
 
     // Set the global pool variable to be our query wrapper object
     pool = {
       query: dbQuery
     };
+
+    // Ensure status column exists in team_members table for migration
+    try {
+      if (dbType === 'postgres') {
+        await pgPool.query(`ALTER TABLE team_members ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'Active';`);
+      } else {
+        const [statusCol] = await mysqlPool.query(`SHOW COLUMNS FROM team_members LIKE 'status'`);
+        if (statusCol.length === 0) {
+          await mysqlPool.query(`ALTER TABLE team_members ADD COLUMN status VARCHAR(50) DEFAULT 'Active';`);
+        }
+      }
+    } catch (migErr) {
+      console.warn('Migration status col on team_members warning:', migErr.message);
+    }
+
+    // Seed initial team members if table is missing records
+    try {
+      const defaultTeam = [
+        { name: 'Rampratap Bugalia', role: 'Founder & CEO', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/Ram-Sir.jpg' },
+        { name: 'Kirti Kadam', role: 'HR Head', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/HR.png' },
+        { name: 'Niti Jotania', role: 'Social Media Manager', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/Niti-1.jpg' },
+        { name: 'Yashika Shinde', role: 'Social Media Coordinator', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/03/H2U-Yashika.png' },
+        { name: 'Nishu Singh', role: 'Social Media Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/Nishu.jpg' },
+        { name: 'Harsha Bhondwe', role: 'WordPress Developer', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/04/Harsha-Bhondwe.png' },
+        { name: 'Abhishek Lokhande', role: 'SEO Specialist', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Abhishek.png' },
+        { name: 'Shubham Sharma', role: 'Graphics Designer', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/Shubham.jpg' },
+        { name: 'Prajwal Jadhav', role: 'Graphic Designer & Video Editor', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Prajwal.png' },
+        { name: 'Khushi Doshi', role: 'Graphic Design Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/02/khushi.jpg' },
+        { name: 'Pranav Upare', role: 'Business Development', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/04/PRANAV-PRITAM-UPARE.png' },
+        { name: 'Priynka Gupta', role: 'PR & Social Media', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/03/H2U-priyanka.png' },
+        { name: 'Jagjot Singh', role: 'Digital Marketing Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/04/Jagjot-Singh.png' },
+        { name: 'Nirver Singh', role: 'Digital Marketing Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/04/Nirver-Singh.png' },
+        { name: 'Kumkum Rathi', role: 'Social Media Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/kumkum.jpeg' },
+        { name: 'Omkar Mejari', role: 'Social Media Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/05/Omkar.png' },
+        { name: 'Dhara Joshi', role: 'Social Media Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Dhara.png' },
+        { name: 'Vishakha Deorukhkar', role: 'Social Media Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-12-at-6.36.35-PM.jpeg' },
+        { name: 'Khushi Jain', role: 'Social Media Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Khushi.png' },
+        { name: 'Aditi Momaya', role: 'Social Media Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/10/aditi.jpeg' },
+        { name: 'Swapnil Gaikwad', role: 'Digital Marketing Executive', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/04/Swapnil-Gaikwad.png' },
+        { name: 'Sakshi Kulkarni', role: 'Social Media Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/03/H2U-Sakshi.png' },
+        { name: 'Aditi Panigrahi', role: 'Social Media Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/02/Aditi.jpg' },
+        { name: 'Isha Chaubey', role: 'Social Media Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/03/H2U-isha.png' },
+        { name: 'Latasha Mhankavi', role: 'Seo Intern', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-13-at-11.15.10-AM.jpeg' },
+        { name: 'Anuj Gorale', role: 'Social Media & Event Manager', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Anuj.png' },
+        { name: 'Riten Halpani', role: 'Event Management', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/reten.jpeg' },
+        { name: 'Harshit Birla', role: 'Photographer', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Harshit.jpg' },
+        { name: 'Pranit Patil', role: 'Photographer', image_url: 'https://host2unlimited.com/wp-content/uploads/2026/01/Pranit-Patil-2.png' },
+        { name: 'Pushkarni Lambole', role: 'Nashik Sales & Marketing', image_url: 'https://host2unlimited.com/wp-content/uploads/2025/09/pushkarni1.jpeg' }
+      ];
+
+      const [existing] = await pool.query('SELECT name FROM team_members');
+      const existingNames = new Set((existing || []).map(r => r.name.toLowerCase().trim()));
+
+      for (let i = 0; i < defaultTeam.length; i++) {
+        const member = defaultTeam[i];
+        if (!existingNames.has(member.name.toLowerCase().trim())) {
+          await pool.query(
+            'INSERT INTO team_members (name, role, image_url, display_order, status) VALUES (?, ?, ?, ?, ?)',
+            [member.name, member.role, member.image_url, i + 1, 'Active']
+          );
+        }
+      }
+      console.log('Verified and seeded complete team members list.');
+    } catch (teamSeedErr) {
+      console.error('Error seeding initial team members:', teamSeedErr);
+    }
 
     // Ensure password reset columns exist in admins table
     try {

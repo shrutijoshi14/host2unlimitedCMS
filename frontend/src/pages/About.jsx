@@ -127,6 +127,7 @@ const Counter = ({ value, suffix = "" }) => {
 
 const About = () => {
   const [aboutData] = useState({ values: staticValues, stats: staticStats });
+  const [membersList, setMembersList] = useState(teamMembers);
   const [banner] = useState({
     title: 'Digital Growth Partner for Education Institutes & Businesses',
     subtitle: 'About Us',
@@ -135,6 +136,34 @@ const About = () => {
     para3: 'From seamless event coverage to admission lead campaigns, we help educational institutes shine with the right digital strategies.'
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const response = await fetch(`${CURRENT_API_BASE}/api/team`);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setMembersList(data);
+          }
+        }
+      } catch (err) {
+        console.warn('Backend team fetch offline, using static team members.', err);
+      }
+    };
+    fetchTeam();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.type === 'team_update' || e.type === 'cmsTeamUpdate') {
+        fetchTeam();
+      }
+    };
+
+    window.addEventListener('cmsTeamUpdate', handleUpdate);
+    return () => {
+      window.removeEventListener('cmsTeamUpdate', handleUpdate);
+    };
+  }, []);
 
   const breadcrumbs = [{ name: 'About Us', path: '/about' }];
 
@@ -340,9 +369,9 @@ const About = () => {
               <h3 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '30px', textAlign: 'center', letterSpacing: '-0.5px' }}>Our Team Experts</h3>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
-                {teamMembers.map((member, idx) => (
+                {membersList.map((member, idx) => (
                   <motion.div
-                    key={idx}
+                    key={member.id || idx}
                     className="card-glass"
                     whileHover={{ y: -4, borderColor: 'var(--primary)' }}
                     style={{ padding: '20px', border: '1px solid var(--border-color)', textAlign: 'center', transition: 'all var(--transition-fast)' }}
@@ -357,15 +386,15 @@ const About = () => {
                       boxShadow: 'var(--shadow-sm)',
                       backgroundColor: 'var(--bg-secondary)'
                     }}>
-                      {member.image ? (
+                      {(member.image || member.image_url) ? (
                         <img 
-                          src={member.image} 
+                          src={member.image || member.image_url} 
                           alt={member.name} 
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                         />
                       ) : (
                         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', fontSize: '20px', fontWeight: 700 }}>
-                          {member.name.split(' ').map(n => n[0]).join('')}
+                          {member.name ? member.name.split(' ').map(n => n[0]).join('') : 'TM'}
                         </div>
                       )}
                     </div>
