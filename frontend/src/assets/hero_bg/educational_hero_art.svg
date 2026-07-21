@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="eduGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="50%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="500" fill="url(#eduGrad)"/>
+  <!-- Mortarboard Graduation Cap & Globe Lines -->
+  <g opacity="0.35" transform="translate(150, 120)">
+    <polygon points="120,30 220,70 120,110 20,70" fill="none" stroke="#38bdf8" stroke-width="4"/>
+    <path d="M60,90 L60,140 C60,170 180,170 180,140 L180,90" fill="none" stroke="#38bdf8" stroke-width="4"/>
+  </g>
+  <g opacity="0.35" transform="translate(1250, 100)">
+    <circle cx="120" cy="120" r="90" fill="none" stroke="#38bdf8" stroke-width="3"/>
+    <ellipse cx="120" cy="120" rx="90" ry="35" fill="none" stroke="#38bdf8" stroke-width="2"/>
+    <line x1="120" y1="30" x2="120" y2="210" stroke="#38bdf8" stroke-width="2"/>
+  </g>
+</svg>

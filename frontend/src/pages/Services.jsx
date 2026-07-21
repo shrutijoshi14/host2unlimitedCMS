@@ -5,7 +5,8 @@ import { Globe, CheckCircle, ArrowRight } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import servicesHeroBg from '../assets/hero_bg/services_hero.png';
+import Timeline from '../components/Timeline';
+import servicesHeroBg from '../assets/hero_bg/services_hero_art.svg';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -256,6 +257,11 @@ const Services = () => {
             })}
           </div>
         )}
+
+        {/* Development & Execution Roadmap */}
+        <div style={{ marginTop: '80px', marginBottom: '40px' }}>
+          <Timeline />
+        </div>
 
       </div>
     </div>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="blogGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="50%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="500" fill="url(#blogGrad)"/>
+  <!-- Editorial Article Document & Pen -->
+  <g opacity="0.35" transform="translate(150, 120)">
+    <rect x="0" y="0" width="120" height="160" fill="none" stroke="#2dd4bf" stroke-width="4" rx="8"/>
+    <line x1="20" y1="30" x2="100" y2="30" stroke="#2dd4bf" stroke-width="4"/>
+    <line x1="20" y1="60" x2="80" y2="60" stroke="#2dd4bf" stroke-width="3"/>
+    <line x1="20" y1="90" x2="100" y2="90" stroke="#2dd4bf" stroke-width="3"/>
+    <line x1="20" y1="120" x2="60" y2="120" stroke="#2dd4bf" stroke-width="3"/>
+  </g>
+  <g opacity="0.35" transform="translate(1300, 100)">
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#2dd4bf" stroke-width="4"/>
+    <path d="M70,120 L130,70 L140,80 L80,130 Z" fill="#2dd4bf" opacity="0.6"/>
+  </g>
+</svg>

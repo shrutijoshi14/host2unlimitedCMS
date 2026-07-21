@@ -4,45 +4,38 @@ import { Target, Code, Globe, Shield, FileText, Users } from 'lucide-react';
 const steps = [
   {
     id: 1,
-    title: 'Strategic Admissions Marketing',
+    title: 'Strategic Admission',
     desc: 'Launch hyper-targeted enrollment campaigns across digital channels to connect with prospective students and parents, ensuring optimal conversion rates.',
     icon: Target,
     color: '#3b82f6'
   },
   {
     id: 2,
-    title: 'High-Performance Web Engineering',
-    desc: 'Develop fast, secure, WCAG-compliant web portals and school systems to represent your institute with modern, interactive technology.',
+    title: 'Event Coverage',
+    desc: 'Capture live campus events, student achievements, and academic milestones with real-time video updates and photo coverage.',
     icon: Code,
     color: '#06b6d4'
   },
   {
     id: 3,
-    title: 'Academic Public Relations (PR)',
-    desc: 'Share campus achievements, event milestones, and major announcements with digital media publications to build public authority.',
+    title: 'Google Ads & Meta Ads',
+    desc: 'Run precision-targeted ad campaigns across Search, Instagram, and Facebook to generate high-quality admissions inquiries.',
     icon: Globe,
     color: '#6366f1'
   },
   {
     id: 4,
-    title: 'Digital Reputation Management',
-    desc: 'Actively monitor online reviews, parent testimonials, and campus search queries to maintain an active, positive brand image.',
+    title: 'Organic Social Media and Website Updates',
+    desc: 'Maintain active social handles, post regular brand updates, and keep institutional websites updated with SEO-friendly content.',
     icon: Shield,
     color: '#2563eb'
   },
   {
     id: 5,
-    title: 'Contextual Content Marketing',
-    desc: 'Develop value-driven newsletters, blogs, and campus stories that engage the student community and optimize search engine (SEO) rankings.',
+    title: 'Content Marketing',
+    desc: 'Develop value-driven campus blogs, newsletters, and engaging video stories to build authority and trust.',
     icon: FileText,
     color: '#0891b2'
-  },
-  {
-    id: 6,
-    title: 'Strategic Influencer & Alumni Engagement',
-    desc: 'Partner with campus ambassadors, high-achieving alumni, and academic experts to boost reach and digital authority.',
-    icon: Users,
-    color: '#8b5cf6'
   }
 ];
 

@@ -12,11 +12,11 @@ import Timeline from '../components/Timeline';
 import MarketingTimeline from '../components/MarketingTimeline';
 import TestimonialSlider from '../components/TestimonialSlider';
 import SEOMeta from '../components/SEOMeta';
-import schoolBuildingHero from '../assets/school_building_hero.png';
-import universityHero from '../assets/university_hero.png';
-import campusHero from '../assets/campus_hero.png';
-import managementCollegeHero from '../assets/management_college_hero.png';
-import preschoolHero from '../assets/preschool_hero.png';
+import schoolBuildingHero from '../assets/school_building_clean.png';
+import universityHero from '../assets/university_hero_clean.png';
+import campusHero from '../assets/campus_hero_clean.png';
+import managementCollegeHero from '../assets/management_college_clean.png';
+import preschoolHero from '../assets/preschool_hero_clean.png';
 
 const institutionsData = [
   {
@@ -199,16 +199,16 @@ const staticWhyChooseUsData = [
 
 const staticServicesPreview = [
   {
-    title: 'Website Development',
-    desc: 'Responsive, modern websites built for high performance, top-tier security, and optimized user conversions.'
-  },
-  {
-    title: 'Custom Software Development',
-    desc: 'Intelligent business software solutions tailored to automate manual operations and improve productivity.'
+    title: 'Digital Marketing',
+    desc: 'Data-driven SEO, Google & Meta Ads, and comprehensive multi-channel digital campaigns designed to increase conversions and brand growth.'
   },
   {
     title: 'Social Media Marketing',
-    desc: 'Data-driven social media management, organic strategy, paid ads, and targeted engagement campaigns to grow your brand.'
+    desc: 'Organic social media management, strategic content updates, visual post designs, and follower engagement campaigns.'
+  },
+  {
+    title: 'Event Management',
+    desc: 'Seamless campus event coverage, real-time storytelling, live updates, media setups, and student engagement campaigns.'
   }
 ];
 
@@ -267,12 +267,12 @@ const defaultHomepageData = {
     description: 'We partner with businesses to deploy scalable digital platforms, driving engagement and compounding search visibility.'
   },
   services: {
-    title: 'Core Engineering Capabilities',
-    description: 'We translate client specifications into robust websites, automated enterprise software, and scalable hosting frameworks.'
+    title: 'Core Marketing & Engineering Capabilities',
+    description: 'We deliver full-funnel digital marketing, social media strategies, event management, and robust web solutions.'
   },
   cta: {
-    title: 'Ready to Build Your Digital Future?',
-    description: 'Get in touch with our tech consultants today. Let us lock in a tailored blueprint and cost range for your custom software or enterprise portal.'
+    title: 'Transform Your Institute’s Digital Presence Today',
+    description: 'Get in touch with our marketing and tech consultants. Let us design a custom digital roadmap, live campus campaign proposal, and execution plan.'
   }
 };
 
@@ -415,15 +415,16 @@ const Home = () => {
               {/* Huge Titles */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', textAlign: 'left' }}>
                 <h1 style={{ 
-                  fontSize: '32px', 
-                  fontWeight: 800, 
+                  fontSize: 'clamp(24px, 5.5vw, 48px)', 
+                  fontWeight: 900, 
                   lineHeight: 1.15, 
                   margin: 0, 
                   letterSpacing: '-0.5px', 
                   color: '#ffffff',
                   fontFamily: 'system-ui, -apple-system, sans-serif',
                   textAlign: 'left',
-                  whiteSpace: 'nowrap'
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word'
                 }}>
                   DIGITAL PROMOTION PARTNERS
                 </h1>
@@ -436,13 +437,15 @@ const Home = () => {
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.4 }}
                     style={{ 
-                      fontSize: '30px', 
-                      fontWeight: 800, 
+                      fontSize: 'clamp(20px, 4.5vw, 42px)', 
+                      fontWeight: 900, 
                       margin: '5px 0 0 0', 
                       color: '#fef08a', // Yellow color matching screenshot
                       letterSpacing: '-0.5px',
                       fontFamily: 'system-ui, -apple-system, sans-serif',
-                      textAlign: 'left'
+                      textAlign: 'left',
+                      wordBreak: 'break-word',
+                      overflowWrap: 'break-word'
                     }}
                   >
                     {topicSlides[currentSlide].category}
@@ -465,20 +468,20 @@ const Home = () => {
                   WE PLAN AND EXECUTE
                 </h3>
 
-                <div style={{ 
+                <div className="hero-checklist-grid" style={{ 
                   display: 'grid', 
                   gridTemplateColumns: '1fr 1.1fr', 
                   gap: '10px 18px',
                   maxWidth: '600px'
                 }}>
                   {heroChecklist.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ color: '#ffffff', fontWeight: 900, fontSize: '13px', flexShrink: 0 }}>✓</span>
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span style={{ color: '#fef08a', fontWeight: 900, fontSize: '16px', flexShrink: 0 }}>✓</span>
                       <span style={{ 
-                        fontSize: '11px', 
-                        fontWeight: 600, 
+                        fontSize: '14.5px', 
+                        fontWeight: 700, 
                         color: '#ffffff', 
-                        letterSpacing: '0.3px',
+                        letterSpacing: '0.4px',
                         textAlign: 'left'
                       }}>
                         {item}
@@ -544,51 +547,94 @@ const Home = () => {
 
 
 
-      {/* Services Highlight Section */}
-      <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '60px', flexWrap: 'wrap', gap: '20px' }} className="service-header-flex">
-            <div style={{ textAlign: 'left' }}>
-              <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>{homepageData.services.title}</h2>
-              <p style={{ maxWidth: '550px', color: 'var(--text-secondary)', fontSize: '16px' }}>
-                {homepageData.services.description}
+      {/* 2nd Section: Brand Video Presentation (Youtube) */}
+      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--bg-primary)' }}>
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '500px',
+          height: '500px',
+          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%)',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }} />
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div className="video-section-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '50px', alignItems: 'center' }}>
+            <div className="video-content-block" style={{ textAlign: 'left' }}>
+              <span style={{ 
+                display: 'inline-block', 
+                backgroundColor: 'var(--primary-light)', 
+                color: 'var(--primary)', 
+                padding: '6px 16px', 
+                borderRadius: '20px', 
+                fontWeight: 600, 
+                fontSize: '13px',
+                marginBottom: '16px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                Discover Us
+              </span>
+              <h2 style={{ fontSize: '36px', marginBottom: '20px', fontWeight: 800, lineHeight: 1.25, textAlign: 'left' }}>
+                See How We Elevate Educational Brands
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '24px' }}>
+                Take a look inside our mission, campus activations, and client success stories in this short video presentation. Learn how we structure campaigns that drive admissions and branding.
               </p>
+              
+              <ul className="video-highlights-list" style={{ listStyle: 'none', padding: 0, margin: '0 0 30px 0', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {[
+                  'Strategic Admission Campaign Planning',
+                  'High-Impact Video Storytelling & Production',
+                  'Full-Funnel SEO & Digital Reputation Management'
+                ].map((item, index) => (
+                  <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: 'var(--text-primary)', fontWeight: 500 }}>
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', flexShrink: 0, fontWeight: 'bold' }}>✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <Link to="/contact" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                Get Free Consultation
+              </Link>
             </div>
-            <Link to="/services" className="btn btn-primary">
-              All Services <ArrowRight size={16} />
-            </Link>
-          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
-            {staticServicesPreview.map((service, idx) => (
-              <motion.div 
-                key={idx} 
-                className="card-glass" 
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.15 }}
-                whileHover={{ y: -8, scale: 1.02, boxShadow: 'var(--shadow-lg)' }}
-                style={{ backgroundColor: 'var(--bg-primary)', textAlign: 'left' }}
-              >
-                <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '24px' }}>
-                  {idx === 0 ? <Zap size={22} /> : idx === 1 ? <Cpu size={22} /> : <Share2 size={22} />}
-                </div>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{service.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: 0, lineHeight: 1.5 }}>{service.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <Link to="/services" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', fontSize: '15px', fontWeight: 600 }}>
-              View All Services <ArrowRight size={16} />
-            </Link>
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              style={{ 
+                width: '100%',
+                borderRadius: '18px', 
+                overflow: 'hidden', 
+                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.25)',
+                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-secondary)',
+                aspectRatio: '16/9'
+              }}
+              whileHover={{ scale: 1.01, boxShadow: '0 30px 70px rgba(37, 99, 235, 0.15)' }}
+            >
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/kpa9UiktETY"
+                title="Host2Unlimited Video Presentation"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{ display: 'block', border: 'none' }}
+              />
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Major Educational Institutions We Work With */}
+      {/* 3rd Section: Major Educational Institutions We Work With */}
       <section className="section-padding" style={{ position: 'relative' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '60px' }}>
@@ -613,7 +659,7 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="institutions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '25px' }}>
+          <div className="institutions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
             {institutionsData.slice(0, 3).map((inst, idx) => (
               <motion.a 
                 key={idx}
@@ -621,11 +667,11 @@ const Home = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="card-glass"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                whileHover={{ y: -8, scale: 1.02, boxShadow: 'var(--shadow-lg)', borderColor: 'var(--primary)' }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                whileHover={{ y: -10, scale: 1.03, boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.22)', borderColor: 'var(--primary)' }}
                 style={{ 
                   textAlign: 'left', 
                   display: 'flex', 
@@ -634,19 +680,43 @@ const Home = () => {
                   height: '100%',
                   textDecoration: 'none',
                   cursor: 'pointer',
-                  border: '1px solid var(--glass-border)',
-                  background: 'var(--glass-bg)',
-                  padding: '30px'
+                  border: '1px solid var(--border-color)',
+                  background: 'var(--bg-primary)',
+                  padding: '32px 28px',
+                  borderRadius: '20px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
                 }}
               >
+                {/* Accent top gradient line */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '4px',
+                  background: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 100%)'
+                }} />
+
                 <div>
-                  <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '20px' }}>
+                  <div className="card-icon-container" style={{ 
+                    width: '56px', 
+                    height: '56px', 
+                    borderRadius: '16px', 
+                    marginBottom: '22px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%)',
+                    color: 'var(--primary)'
+                  }}>
                     {getIconComponent(inst.iconName)}
                   </div>
-                  <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'left' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'left', letterSpacing: '-0.3px' }}>
                     {inst.title}
                   </h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5, marginBottom: 0 }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: 0, textAlign: 'left' }}>
                     {inst.desc}
                   </p>
                 </div>
@@ -662,12 +732,111 @@ const Home = () => {
         </div>
       </section>
 
-      {/* In-House Coordinator Section */}
+      {/* 4th Section: Core Services Highlight Section */}
       <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '60px', flexWrap: 'wrap', gap: '20px' }} className="service-header-flex">
+            <div style={{ textAlign: 'left' }}>
+              <h2 style={{ fontSize: '38px', marginBottom: '16px', textAlign: 'left' }}>{homepageData.services.title}</h2>
+              <p style={{ maxWidth: '550px', color: 'var(--text-secondary)', fontSize: '16px', textAlign: 'left' }}>
+                {homepageData.services.description}
+              </p>
+            </div>
+            <Link to="/services" className="btn btn-primary">
+              All Services <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+            {staticServicesPreview.map((service, idx) => (
+              <motion.div 
+                key={idx} 
+                className="card-glass" 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.15 }}
+                whileHover={{ 
+                  y: -10, 
+                  scale: 1.03, 
+                  boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.22)',
+                  borderColor: 'var(--primary)' 
+                }}
+                style={{ 
+                  backgroundColor: 'var(--bg-primary)', 
+                  textAlign: 'left',
+                  padding: '32px 28px',
+                  borderRadius: '20px',
+                  border: '1px solid var(--border-color)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
+                }}
+              >
+                {/* Top vibrant gradient line */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '4px',
+                  background: idx === 0 
+                    ? 'linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%)' 
+                    : idx === 1 
+                    ? 'linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%)' 
+                    : 'linear-gradient(90deg, #10b981 0%, #3b82f6 100%)'
+                }} />
+
+                <div>
+                  <div 
+                    className="card-icon-container" 
+                    style={{ 
+                      width: '56px', 
+                      height: '56px', 
+                      borderRadius: '16px', 
+                      marginBottom: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: idx === 0 
+                        ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%)' 
+                        : idx === 1 
+                        ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)' 
+                        : 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%)',
+                      border: '1px solid var(--border-color)'
+                    }}
+                  >
+                    {idx === 0 ? <Zap size={26} /> : idx === 1 ? <Share2 size={26} /> : <Camera size={26} />}
+                  </div>
+                  
+                  <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '14px', textAlign: 'left', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
+                    {service.title}
+                  </h3>
+                  
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: 0, lineHeight: 1.6, textAlign: 'left' }}>
+                    {service.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '40px' }}>
+            <Link to="/services" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', fontSize: '15px', fontWeight: 600 }}>
+              View All Services <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 5th Section: In-House Coordinator Section */}
+      <section className="section-padding">
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '50px', alignItems: 'center' }} className="coordinator-grid">
             
-            {/* Left Content Column */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -707,30 +876,44 @@ const Home = () => {
               </div>
             </motion.div>
 
-            {/* Right Benefits Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '22px' }}>
               {coordinatorBenefits.map((benefit, idx) => (
                 <motion.div
                   key={idx}
                   className="card-glass"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  whileHover={{ y: -6, scale: 1.02, boxShadow: '0 15px 35px -10px rgba(37, 99, 235, 0.2)', borderColor: 'var(--primary)' }}
                   style={{ 
-                    padding: '24px', 
+                    padding: '26px 22px', 
                     textAlign: 'left', 
                     backgroundColor: 'var(--bg-primary)',
-                    border: '1px solid var(--border-color)'
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '16px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
                   }}
                 >
-                  <div style={{ display: 'inline-flex', width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <div style={{ 
+                    display: 'inline-flex', 
+                    width: '46px', 
+                    height: '46px', 
+                    borderRadius: '12px', 
+                    background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%)', 
+                    color: 'var(--primary)', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    marginBottom: '16px' 
+                  }}>
                     {getIconComponent(benefit.iconName)}
                   </div>
-                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px', textAlign: 'left', lineHeight: 1.3 }}>
+                  <h3 style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px', textAlign: 'left', lineHeight: 1.35, letterSpacing: '-0.2px' }}>
                     {benefit.title}
                   </h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: 1.4, margin: 0 }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: 1.5, margin: 0, textAlign: 'left' }}>
                     {benefit.desc}
                   </p>
                 </motion.div>
@@ -741,112 +924,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Brand Video Presentation Section */}
-      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--bg-primary)' }}>
-        {/* Decorative circle glow */}
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%)',
-          zIndex: 0,
-          pointerEvents: 'none'
-        }} />
-
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="video-section-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '50px', alignItems: 'center' }}>
-            {/* Left Column: Descriptive Content & CTA */}
-            <div className="video-content-block" style={{ textAlign: 'left' }}>
-              <span style={{ 
-                display: 'inline-block', 
-                backgroundColor: 'var(--primary-light)', 
-                color: 'var(--primary)', 
-                padding: '6px 16px', 
-                borderRadius: '20px', 
-                fontWeight: 600, 
-                fontSize: '13px',
-                marginBottom: '16px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>
-                Discover Us
-              </span>
-              <h2 style={{ fontSize: '36px', marginBottom: '20px', fontWeight: 800, lineHeight: 1.25 }}>
-                See How We Elevate Educational Brands
-              </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '24px' }}>
-                Take a look inside our mission, campus activations, and client success stories in this short video presentation. Learn how we structure campaigns that drive admissions and branding.
-              </p>
-              
-              <ul className="video-highlights-list" style={{ listStyle: 'none', padding: 0, margin: '0 0 30px 0', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {[
-                  'Strategic Admission Campaign Planning',
-                  'High-Impact Video Storytelling & Production',
-                  'Full-Funnel SEO & Digital Reputation Management'
-                ].map((item, index) => (
-                  <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: 'var(--text-primary)', fontWeight: 500 }}>
-                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', flexShrink: 0, fontWeight: 'bold' }}>✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <Link to="/contact" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                Get Free Consultation
-              </Link>
-            </div>
-
-            {/* Right Column: Embedded Youtube Video */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              style={{ 
-                width: '100%',
-                borderRadius: '18px', 
-                overflow: 'hidden', 
-                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.25)',
-                border: '1px solid var(--border-color)',
-                backgroundColor: 'var(--bg-secondary)',
-                aspectRatio: '16/9'
-              }}
-              whileHover={{ scale: 1.01, boxShadow: '0 30px 70px rgba(37, 99, 235, 0.15)' }}
-            >
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/kpa9UiktETY"
-                title="Host2Unlimited Video Presentation"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                style={{ display: 'block', border: 'none' }}
-              />
-            </motion.div>
-          </div>
-        </div>
-
-        <style>{`
-          @media (max-width: 992px) {
-            .video-section-layout {
-              grid-template-columns: 1fr !important;
-              gap: 40px !important;
-            }
-            .video-content-block {
-              text-align: center !important;
-            }
-            .video-highlights-list {
-              align-items: center !important;
-            }
-          }
-        `}</style>
-      </section>
-
-      {/* Plan & Execute Marketing Process Section */}
+      {/* 6th Section: Plan & Execute Marketing Process Section */}
       <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '60px' }}>
@@ -872,34 +950,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Our Proven Process Section */}
-      <section className="section-padding">
-        <div className="container">
-          <div className="text-center" style={{ marginBottom: '60px' }}>
-            <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>Our Proven Development Process</h2>
-            <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px' }}>
-              From initial consultation to deployment and maintenance, we ensure transparency and alignment at every milestone.
-            </p>
-          </div>
-          
-          <Timeline />
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="section-padding">
-        <div className="container">
-          <div className="text-center" style={{ marginBottom: '60px' }}>
-            <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>What Our Clients Say</h2>
-            <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px' }}>
-              Real metrics and reviews from companies that scaled their operations with Host2Unlimited solutions.
-            </p>
-          </div>
-          <TestimonialSlider />
-        </div>
-      </section>
-
-      {/* Digital Marketing Course Section */}
+      {/* 7th Section: Digital Marketing Training + Internship Program Section */}
       <section className="section-padding" style={{ position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
@@ -922,7 +973,6 @@ const Home = () => {
           }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '50px', alignItems: 'center' }} className="course-grid">
               
-              {/* Left Column: Course Details */}
               <div style={{ textAlign: 'left' }}>
                 <span style={{ 
                   display: 'inline-block', 
@@ -934,13 +984,13 @@ const Home = () => {
                   fontSize: '14px',
                   marginBottom: '16px'
                 }}>
-                  Expert Career Training
+                  Digital Marketing Training + Internship Program
                 </span>
                 <h2 style={{ fontSize: '36px', fontWeight: 800, marginBottom: '16px', textAlign: 'left' }}>
-                  Master Digital Marketing with Expert Guidance
+                  Digital Marketing Training + Internship Program
                 </h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '30px' }}>
-                  At Host2Unlimited, we offer a comprehensive Digital Marketing Course in Mumbai designed for beginners, professionals, and entrepreneurs. Whether you want to start a career in digital marketing, grow your business online, or upskill for better job opportunities, our hands-on training will give you the skills you need to succeed.
+                  At Host2Unlimited, we offer a dedicated Digital Marketing Training + Internship Program designed for students, freshers, and professionals. Gain real-world agency experience, work on active campus campaigns, and build practical skills with guaranteed placement assistance.
                 </p>
 
                 <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -960,7 +1010,6 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Right Column: CTA Card */}
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className="card-glass" style={{ 
                   width: '100%', 
@@ -974,9 +1023,9 @@ const Home = () => {
                   <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                     <GraduationCap size={28} />
                   </div>
-                  <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '10px' }}>Join the Next Batch</h3>
+                  <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '10px' }}>Join Internship Batch</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
-                    Get hands-on training and mentorship from industry specialists. Batch sizes are limited.
+                    Get hands-on live project training and mentorship from industry specialists.
                   </p>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -998,9 +1047,9 @@ const Home = () => {
       {/* Why Choose Us Section */}
       <section className="section-padding">
         <div className="container">
-          <div className="text-center" style={{ marginBottom: '60px' }}>
-            <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>{homepageData.about.title}</h2>
-            <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px' }}>
+          <div style={{ marginBottom: '60px', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px', textAlign: 'center' }}>{homepageData.about.title}</h2>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px', textAlign: 'center' }}>
               {homepageData.about.description}
             </p>
           </div>
@@ -1010,17 +1059,47 @@ const Home = () => {
               <motion.div 
                 key={idx} 
                 className="card-glass"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                style={{ textAlign: 'left' }}
+                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.22)', borderColor: 'var(--primary)' }}
+                style={{ 
+                  textAlign: 'left',
+                  padding: '32px 28px',
+                  borderRadius: '20px',
+                  border: '1px solid var(--border-color)',
+                  backgroundColor: 'var(--bg-primary)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
+                }}
               >
-                <div className="card-icon-container" style={{ width: '48px', height: '48px', borderRadius: '12px', marginBottom: '20px' }}>
-                  <CheckCircle2 size={24} />
+                {/* Top accent line */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '4px',
+                  background: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 100%)'
+                }} />
+
+                <div className="card-icon-container" style={{ 
+                  width: '52px', 
+                  height: '52px', 
+                  borderRadius: '16px', 
+                  marginBottom: '22px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%)',
+                  color: 'var(--primary)'
+                }}>
+                  <CheckCircle2 size={26} />
                 </div>
-                <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>{item.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.5 }}>{item.desc}</p>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, marginBottom: '12px', textAlign: 'left', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>{item.title}</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, textAlign: 'left', margin: 0 }}>{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -1036,19 +1115,19 @@ const Home = () => {
       {/* Client Logos Section */}
       <section style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', padding: '40px 0' }}>
         <div className="container">
-          <p style={{ textAlign: 'center', fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '24px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+          <p style={{ textAlign: 'center', fontSize: '15px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '24px', letterSpacing: '1px', textTransform: 'uppercase' }}>
             Trusted by Educational Institutes & Brands Across Maharashtra
           </p>
-          <div className="carousel-track-container">
+          <div className="carousel-track-container" style={{ overflow: 'hidden', padding: '15px 0' }}>
             <div className="carousel-track">
               {clientLogos.concat(clientLogos).map((logo, idx) => (
-                <div key={idx} className="carousel-logo" style={{ display: 'flex', alignItems: 'center', height: '60px', padding: '0 25px' }}>
+                <div key={idx} className="carousel-logo" style={{ display: 'flex', alignItems: 'center', height: '80px', padding: '0 30px' }}>
                   <img 
                     src={logo} 
                     alt="Partner Logo" 
-                    style={{ maxHeight: '100%', maxWidth: '140px', objectFit: 'contain', opacity: 0.85, transition: 'all 0.3s ease' }} 
-                    onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.85'; }}
+                    style={{ height: '75px', maxWidth: '180px', objectFit: 'contain', opacity: 0.9, transition: 'all 0.3s ease' }} 
+                    onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1.08)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'scale(1)'; }}
                   />
                 </div>
               ))}
@@ -1060,25 +1139,93 @@ const Home = () => {
       {/* Bottom CTA Banner */}
       <section className="section-padding" style={{ padding: '80px 0', position: 'relative' }}>
         <div className="container">
-          <div className="card-glass" style={{ background: 'var(--grad-primary)', color: 'white', padding: '60px 40px', position: 'relative', overflow: 'hidden' }}>
+          <div className="card-glass" style={{ 
+            background: 'linear-gradient(135deg, #0b0f19 0%, #1e1b4b 50%, #0284c7 100%)', 
+            color: 'white', 
+            padding: '60px 40px', 
+            position: 'relative', 
+            overflow: 'hidden', 
+            borderRadius: '24px',
+            boxShadow: '0 25px 60px rgba(2, 132, 199, 0.25)',
+            border: '1px solid rgba(255, 255, 255, 0.15)'
+          }}>
             
             {/* Background SVG abstract lines */}
-            <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, pointerEvents: 'none' }}>
+            <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.12, pointerEvents: 'none' }}>
               <path d="M-100 200 C100 100, 300 300, 500 100 C700 200, 900 50, 1100 250" fill="none" stroke="white" strokeWidth="8" />
               <path d="M-100 250 C100 150, 300 350, 500 150 C700 250, 900 100, 1100 300" fill="none" stroke="white" strokeWidth="4" />
             </svg>
 
-            <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-              <h2 style={{ color: 'white', fontSize: '36px', fontWeight: 800, margin: 0 }}>{homepageData.cta.title}</h2>
-              <p style={{ color: 'rgba(255, 255, 255, 0.9)', maxWidth: '600px', fontSize: '16px', margin: 0 }}>
-                {homepageData.cta.description}
+            <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px', textAlign: 'center' }}>
+              
+              {/* Badge */}
+              <span className="badge" style={{ backgroundColor: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)', fontSize: '13px', padding: '6px 18px', fontWeight: 700, letterSpacing: '0.5px' }}>
+                🏆 #1 DIGITAL MARKETING PARTNER FOR EDUCATION SECTOR
+              </span>
+
+              {/* Title */}
+              <h2 style={{ color: 'white', fontSize: 'clamp(22px, 3.8vw, 34px)', fontWeight: 900, margin: 0, lineHeight: 1.3, maxWidth: '980px', letterSpacing: '-0.5px' }}>
+                BEST DIGITAL MARKETING AGENCY FOR EDUCATION SECTOR IN MUMBAI | NASHIK | PUNE | SATARA | PAN MAHARASHTRA
+              </h2>
+
+              {/* Regional Pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', margin: '4px 0' }}>
+                {['MUMBAI', 'NASHIK', 'PUNE', 'SATARA', 'PAN MAHARASHTRA'].map((region, ridx) => (
+                  <span key={ridx} style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    color: '#fef08a',
+                    padding: '4px 14px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.5px',
+                    border: '1px solid rgba(254, 240, 138, 0.3)'
+                  }}>
+                    📍 {region}
+                  </span>
+                ))}
+              </div>
+
+              {/* Bullet Highlights */}
+              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', margin: '6px 0' }}>
+                <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Dedicated Person at Campus
+                </span>
+                <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Quality Leads Generation Ads Campaigns
+                </span>
+                <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Strategic Admission Boosting
+                </span>
+              </div>
+
+              {/* Subtitle Paragraph */}
+              <p style={{ color: 'rgba(241, 245, 249, 0.95)', maxWidth: '850px', fontSize: '15.5px', margin: 0, lineHeight: 1.6, textAlign: 'center' }}>
+                Strategic Digital Marketing Services for Educational Institutes with our Dedicated Person at Campus! Boost Your Institute Admissions with our Quality Leads Generation Ads Campaigns.
               </p>
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '10px' }}>
-                <Link to="/contact" className="btn" style={{ backgroundColor: 'white', color: 'var(--primary)' }}>
-                  Get Free Consultation
-                </Link>
-                <Link to="/contact" className="btn btn-glass" style={{ color: 'white', borderColor: 'rgba(255, 255, 255, 0.4)' }}>
-                  <PhoneCall size={16} /> Contact Sales
+
+              {/* Action Button */}
+              <div style={{ marginTop: '12px' }}>
+                <Link 
+                  to="/contact" 
+                  className="btn" 
+                  style={{ 
+                    backgroundColor: '#ffffff', 
+                    color: '#0284c7', 
+                    fontWeight: 800, 
+                    padding: '16px 36px', 
+                    fontSize: '16px',
+                    borderRadius: '30px',
+                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
+                    transition: 'all 0.3s ease',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 15px 35px rgba(255, 255, 255, 0.3)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.25)'; }}
+                >
+                  Enquiry Form to Get Started <ArrowRight size={18} />
                 </Link>
               </div>
             </div>

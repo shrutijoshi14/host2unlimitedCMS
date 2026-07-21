@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import educationalHeroBg from '../assets/hero_bg/educational_hero.png';
+import educationalHeroBg from '../assets/hero_bg/educational_hero_art.svg';
 
 const sectors = [
   {

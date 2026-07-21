@@ -55,7 +55,7 @@ const Footer = () => {
           {/* Column 1: Brand Identity */}
           <div className="footer-identity-col">
             <Link to="/" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '38px', width: 'auto', objectFit: 'contain' }} />
+              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '54px', width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
               Host2Unlimited is Strategic Digital Partner for Educational Institutes in Maharashtra founded in 2010. We are Digital Partner for Educational Institutes like International Schools, Engineering/MBA Colleges, Educational Campus & Universities, etc.

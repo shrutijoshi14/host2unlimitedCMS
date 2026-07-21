@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import contactHeroBg from '../assets/hero_bg/contact_hero.png';
+import contactHeroBg from '../assets/hero_bg/contact_hero_art.svg';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 import pointingWomanImg from '../assets/h2u/host2new-contact-page-01 (1).png';

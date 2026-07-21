@@ -284,16 +284,20 @@ router.delete('/:id', async (req, res) => {
 });
 
 // POST upload file
-router.post('/upload', upload.single('image'), (req, res) => {
-  try {
+router.post('/upload', (req, res) => {
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'File size exceeds maximum allowed limit.' });
+      }
+      return res.status(400).json({ error: err.message || 'File upload failed.' });
+    }
     if (!req.file) {
       return res.status(400).json({ error: 'No file was uploaded.' });
     }
     const relativePath = `/uploads/${req.file.filename}`;
     res.json({ image_url: relativePath });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  });
 });
 
 export default router;

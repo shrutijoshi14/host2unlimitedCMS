@@ -6,7 +6,7 @@ import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 import founderImg from '../assets/h2u/RAM-SIR-01-1.png';
-import aboutHeroBg from '../assets/hero_bg/about_hero.png';
+import aboutHeroBg from '../assets/hero_bg/about_hero_art.svg';
 import visionImg from '../assets/about/vision.png';
 import missionImg from '../assets/about/mission.png';
 import valuesImg from '../assets/about/values.png';
@@ -54,7 +54,7 @@ const staticValues = [
 const staticStats = [
   { icon_name: 'Users', value: 35, suffix: '+', label: 'Skilled Experts' },
   { icon_name: 'Award', value: 16, suffix: '+', label: 'Years of Experience' },
-  { icon_name: 'School', value: 50, suffix: '+', label: 'Educational Partners' },
+  { icon_name: 'School', value: 70, suffix: '+', label: 'Educational Partners' },
   { icon_name: 'Briefcase', value: 300, suffix: '+', label: 'Campaigns Launched' }
 ];
 
@@ -199,12 +199,12 @@ const About = () => {
       <div className="container" style={{ marginTop: '40px' }}>
 
         {/* Subpage Header Content shifted below Hero Banner */}
-        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 50px auto' }}>
+        <div style={{ textAlign: 'left', maxWidth: '850px', margin: '0 auto 50px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>About Us</span>
-          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '20px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
+          <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '20px', letterSpacing: '-0.5px', lineHeight: 1.25, textAlign: 'left' }}>
             Digital Growth Partner for Education Institutes & Businesses
           </h1>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.7, marginBottom: '28px', textAlign: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.7, marginBottom: '28px', textAlign: 'left' }}>
             <p style={{ margin: 0 }}>
               🎓Founded in 2010 in Mumbai, our journey began with a deep focus on the education sector—supporting schools, colleges, coaching centers, and ed-tech platforms with creative, results-driven marketing. 🎓 Partner with Host2Unlimited – your trusted digital partner for educational institutes.
             </p>
@@ -228,61 +228,28 @@ const About = () => {
           </div>
         ) : (
           <>
-            {/* Corporate Summary section (Stacked layout) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '50px', marginBottom: '85px', textAlign: 'left' }}>
-              
-              {/* Who We Are & What We Do */}
-              <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-0.5px' }}>Empowering Digital Growth</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7, marginBottom: '20px' }}>
-                  Host2Unlimited is a Strategic Digital Partner for Educational Institutes in Maharashtra. We are the digital partner for preschools, primary and secondary schools, junior/degree colleges, engineering and management colleges, and deemed universities.
-                </p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7 }}>
-                  From boosting online presence to executing targeted school admission lead campaigns, and managing live event coverages, our team places a dedicated digital coordinator directly at your campus to track leads and build Follower growth organically.
-                </p>
-              </div>
-
-              {/* Stats Cards Row */}
-              <div style={{ marginTop: '10px' }} className="about-stats-grid">
-                {aboutData.stats.map((stat, idx) => {
-                  const Icon = Icons[stat.icon_name] || Globe;
-                  return (
-                    <motion.div 
-                      key={idx}
-                      className="card-glass" 
-                      whileHover={{ y: -6, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 12px 30px -10px rgba(14, 165, 233, 0.2)' }}
-                      style={{ backgroundColor: 'var(--bg-secondary)', padding: '24px 20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', textAlign: 'center', transition: 'border-color 0.2s, box-shadow 0.2s' }}
-                    >
-                      <Icon size={30} color="var(--primary)" style={{ marginBottom: '14px' }} />
-                      <h3 style={{ fontSize: '30px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
-                        <Counter value={stat.value} suffix={stat.suffix} />
-                      </h3>
-                      <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', fontWeight: 600, margin: 0 }}>{stat.label}</p>
-                    </motion.div>
-                  );
-                })}
-              </div>
+            {/* Stats Cards Row (Counters FIRST) */}
+            <div style={{ marginBottom: '60px' }} className="about-stats-grid">
+              {aboutData.stats.map((stat, idx) => {
+                const Icon = Icons[stat.icon_name] || Globe;
+                return (
+                  <motion.div 
+                    key={idx}
+                    className="card-glass" 
+                    whileHover={{ y: -6, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 12px 30px -10px rgba(14, 165, 233, 0.2)' }}
+                    style={{ backgroundColor: 'var(--bg-secondary)', padding: '24px 20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', textAlign: 'center', transition: 'border-color 0.2s, box-shadow 0.2s' }}
+                  >
+                    <Icon size={30} color="var(--primary)" style={{ marginBottom: '14px' }} />
+                    <h3 style={{ fontSize: '30px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                      <Counter value={stat.value} suffix={stat.suffix} />
+                    </h3>
+                    <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', fontWeight: 600, margin: 0 }}>{stat.label}</p>
+                  </motion.div>
+                );
+              })}
             </div>
 
-            {/* Award Winning Moment */}
-            <div className="card-glass" style={{ textAlign: 'left', marginBottom: '85px', padding: '40px', border: '1px solid var(--primary)' }}>
-              <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }} className="award-header">
-                <div style={{ display: 'flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icons.Trophy size={28} />
-                </div>
-                <div>
-                  <span style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>Award Winning Moment</span>
-                  <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'left' }}>
-                    Celebrating Excellence At The Indian School Awards 2025!
-                  </h2>
-                </div>
-              </div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, margin: 0 }}>
-                Recognized as the <strong>Best Digital Marketing Agency for the Education Sector</strong> in Mumbai, Nashik, Pune, Satara, and across Maharashtra. This prestigious milestone celebrates our commitment to introducing cutting-edge web tools and custom admissions campaigns for our partner campuses.
-              </p>
-            </div>
-
-            {/* Corporate Operating Values */}
+            {/* Our Core Pillars Section (SECOND) */}
             <div style={{ marginBottom: '85px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '40px', textAlign: 'center', letterSpacing: '-0.5px' }}>Our Core Pillars</h2>
               
@@ -324,59 +291,35 @@ const About = () => {
               </div>
             </div>
 
-            {/* Event Marketing section */}
-            <div style={{ textAlign: 'left', marginBottom: '90px', padding: '40px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-lg)', background: 'var(--glass-bg)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}>
+            {/* Empowering Digital Growth Section (THIRD) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '30px', marginBottom: '85px', textAlign: 'left' }}>
+              <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'left' }}>
+                <h2 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-0.5px', textAlign: 'left' }}>Empowering Digital Growth</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7, marginBottom: '20px', textAlign: 'left' }}>
+                  Host2Unlimited is a Strategic Digital Partner for Educational Institutes in Maharashtra. We are the digital partner for preschools, primary and secondary schools, junior/degree colleges, engineering and management colleges, and deemed universities.
+                </p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '16.5px', lineHeight: 1.7, textAlign: 'left' }}>
+                  From boosting online presence to executing targeted school admission lead campaigns, and managing live event coverages, our team places a dedicated digital coordinator directly at your campus to track leads and build Follower growth organically.
+                </p>
+              </div>
+            </div>
+
+            {/* Award Winning Moment */}
+            <div className="card-glass" style={{ textAlign: 'left', marginBottom: '85px', padding: '40px', border: '1px solid var(--primary)' }}>
               <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }} className="award-header">
-                <div className="card-icon-container" style={{ width: '56px', height: '56px', borderRadius: '50%', flexShrink: 0 }}>
-                  <Icons.Sparkles size={28} />
+                <div style={{ display: 'flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icons.Trophy size={28} />
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>Your Event, Elevated</span>
+                  <span style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>Award Winning Moment</span>
                   <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'left' }}>
-                    Event Marketing
+                    Celebrating Excellence At The Indian School Awards 2025!
                   </h2>
                 </div>
               </div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '30px' }}>
-                We structure customized brand exposure setups, visitor registration funnels, and real-time storytelling modules to capture and showcase institutional milestones:
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, margin: 0 }}>
+                Recognized as the <strong>Best Digital Marketing Agency for the Education Sector</strong> in Mumbai, Nashik, Pune, Satara, and across Maharashtra. This prestigious milestone celebrates our commitment to introducing cutting-edge web tools and custom admissions campaigns for our partner campuses.
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
-                {[
-                  { title: 'Brand Visibility', text: 'Showcase your brand dynamically to the right audience.', icon: 'Eye' },
-                  { title: 'Audience Engagement', text: 'Interactive sessions, live demonstrations, and setups.', icon: 'Users' },
-                  { title: 'Lead Generation', text: 'Capture potential student inquiries on-site instantly.', icon: 'Target' },
-                  { title: 'Customer Loyalty', text: 'Provide rich content archives for blogs and newsletters.', icon: 'Heart' },
-                  { title: 'Measurable ROI', text: 'Track attendance, active engagement, and conversions.', icon: 'TrendingUp' },
-                  { title: 'Data & Analytics', text: 'Measure attendee profiles and digital footprint ratios.', icon: 'BarChart' },
-                  { title: 'Seamless Execution', text: 'Handle logistics, layout parameters, and media setups.', icon: 'CheckCircle' },
-                  { title: 'Content & Storytelling', text: 'Craft compelling video stories that resonate with families.', icon: 'Video' }
-                ].map((item, i) => {
-                  const ItemIcon = Icons[item.icon] || Icons.CheckCircle2;
-                  return (
-                    <div 
-                      key={i} 
-                      className="card-glass" 
-                      style={{ 
-                        padding: '20px', 
-                        backgroundColor: 'var(--bg-secondary)', 
-                        border: '1px solid var(--border-color)', 
-                        borderRadius: 'var(--radius-md)', 
-                        display: 'flex', 
-                        flexDirection: 'column', 
-                        gap: '12px' 
-                      }}
-                    >
-                      <div className="card-icon-container" style={{ width: '36px', height: '36px', borderRadius: '8px' }}>
-                        <ItemIcon size={18} />
-                      </div>
-                      <div>
-                        <h4 style={{ fontSize: '14.5px', fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 4px 0' }}>{item.title}</h4>
-                        <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>{item.text}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
 
             {/* Team Members Grid Section */}
@@ -408,38 +351,74 @@ const About = () => {
 
               <h3 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '30px', textAlign: 'center', letterSpacing: '-0.5px' }}>Our Team Experts</h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
                 {membersList.map((member, idx) => (
                   <motion.div
                     key={member.id || idx}
                     className="card-glass"
-                    whileHover={{ y: -4, borderColor: 'var(--primary)' }}
-                    style={{ padding: '20px', border: '1px solid var(--border-color)', textAlign: 'center', transition: 'all var(--transition-fast)' }}
+                    whileHover={{ y: -8, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 12px 30px rgba(37, 99, 235, 0.15)' }}
+                    style={{ 
+                      padding: '24px 20px', 
+                      borderRadius: '16px',
+                      border: '1px solid var(--border-color)', 
+                      backgroundColor: 'var(--bg-secondary)',
+                      textAlign: 'center', 
+                      position: 'relative',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      transition: 'all 0.3s ease'
+                    }}
                   >
+                    <div style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '4px',
+                      background: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 100%)'
+                    }} />
+
                     <div style={{ 
-                      width: '80px', 
-                      height: '80px', 
+                      width: '90px', 
+                      height: '90px', 
                       borderRadius: '50%', 
                       overflow: 'hidden',
-                      margin: '0 auto 16px auto',
-                      border: '2px solid var(--border-color)',
-                      boxShadow: 'var(--shadow-sm)',
-                      backgroundColor: 'var(--bg-secondary)'
+                      margin: '10px auto 16px auto',
+                      padding: '3px',
+                      background: 'linear-gradient(135deg, var(--primary) 0%, #06b6d4 100%)',
+                      boxShadow: '0 8px 20px rgba(0,0,0,0.12)'
                     }}>
-                      {(member.image || member.image_url) ? (
-                        <img 
-                          src={member.image || member.image_url} 
-                          alt={member.name} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                        />
-                      ) : (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', fontSize: '20px', fontWeight: 700 }}>
-                          {member.name ? member.name.split(' ').map(n => n[0]).join('') : 'TM'}
-                        </div>
-                      )}
+                      <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--bg-primary)' }}>
+                        {(member.image || member.image_url) ? (
+                          <img 
+                            src={member.image || member.image_url} 
+                            alt={member.name} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                          />
+                        ) : (
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', fontSize: '22px', fontWeight: 700 }}>
+                            {member.name ? member.name.split(' ').map(n => n[0]).join('') : 'TM'}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '4px', color: 'var(--text-primary)' }}>{member.name}</h4>
-                    <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, fontWeight: 500 }}>{member.role}</p>
+
+                    <h4 style={{ fontSize: '17px', fontWeight: 800, marginBottom: '6px', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>{member.name}</h4>
+                    
+                    <span style={{
+                      display: 'inline-block',
+                      backgroundColor: 'var(--primary-light)',
+                      color: 'var(--primary)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      marginTop: '4px'
+                    }}>
+                      {member.role}
+                    </span>
                   </motion.div>
                 ))}
               </div>

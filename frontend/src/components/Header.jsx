@@ -92,7 +92,7 @@ const Header = () => {
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {/* Logo Left */}
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '42px', width: 'auto', objectFit: 'contain' }} />
+              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '58px', width: 'auto', objectFit: 'contain' }} />
             </Link>
 
             {/* Contact details Right */}
@@ -114,7 +114,7 @@ const Header = () => {
             {/* Mobile-only Logo */}
             <div className="mobile-only-logo" style={{ display: 'none' }}>
               <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+                <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '46px', width: 'auto', objectFit: 'contain' }} />
               </Link>
             </div>
 

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="careersGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="500" fill="url(#careersGrad)"/>
+  <!-- Team & Career Rocket Launch Graphic -->
+  <g opacity="0.35" transform="translate(150, 120)">
+    <circle cx="60" cy="60" r="30" fill="none" stroke="#a78bfa" stroke-width="4"/>
+    <circle cx="150" cy="40" r="35" fill="none" stroke="#c084fc" stroke-width="4"/>
+    <circle cx="240" cy="60" r="30" fill="none" stroke="#a78bfa" stroke-width="4"/>
+  </g>
+  <g opacity="0.35" transform="translate(1250, 100)">
+    <path d="M100,20 C140,50 160,110 160,160 L40,160 C40,110 60,50 100,20 Z" fill="none" stroke="#c084fc" stroke-width="4"/>
+    <circle cx="100" cy="90" r="20" fill="none" stroke="#c084fc" stroke-width="3"/>
+  </g>
+</svg>

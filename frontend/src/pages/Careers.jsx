@@ -4,7 +4,7 @@ import { useLeads } from '../context/LeadContext';
 import { Briefcase, MapPin, Clock, Send, CheckCircle2, ChevronRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import careersHeroBg from '../assets/hero_bg/careers_hero.png';
+import careersHeroBg from '../assets/hero_bg/careers_hero_art.svg';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 

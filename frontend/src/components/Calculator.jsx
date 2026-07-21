@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLeads } from '../context/LeadContext';
 import { Calculator as CalcIcon, Calendar, CheckCircle2, ChevronRight, Check } from 'lucide-react';
 
-const Calculator = () => {
+const Calculator = ({ defaultTab = 'web', hideTabs = false, allowedTabs }) => {
   const { addLead } = useLeads();
-  const [calcTab, setCalcTab] = useState('web'); // 'web' | 'webapp' | 'marketing'
+  const [calcTab, setCalcTab] = useState(defaultTab); // 'web' | 'webapp' | 'marketing'
+
+  useEffect(() => {
+    setCalcTab(defaultTab);
+  }, [defaultTab]);
 
   // ==========================================
   // WEBSITE CALCULATOR STATE
@@ -307,29 +311,37 @@ const Calculator = () => {
     <div className="card-glass" style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px' }}>
       
       {/* Switcher Tabs */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '35px', flexWrap: 'wrap' }}>
-        <button 
-          onClick={() => { setCalcTab('web'); setSubmitted(false); }}
-          className={`btn ${calcTab === 'web' ? 'btn-primary' : 'btn-secondary'}`}
-          style={{ fontSize: '13px', padding: '8px 20px', borderRadius: '20px' }}
-        >
-          💻 Website Calculator
-        </button>
-        <button 
-          onClick={() => { setCalcTab('webapp'); setSubmitted(false); }}
-          className={`btn ${calcTab === 'webapp' ? 'btn-primary' : 'btn-secondary'}`}
-          style={{ fontSize: '13px', padding: '8px 20px', borderRadius: '20px' }}
-        >
-          ⚙️ Web App Calculator
-        </button>
-        <button 
-          onClick={() => { setCalcTab('marketing'); setSubmitted(false); }}
-          className={`btn ${calcTab === 'marketing' ? 'btn-primary' : 'btn-secondary'}`}
-          style={{ fontSize: '13px', padding: '8px 20px', borderRadius: '20px' }}
-        >
-          📣 Digital Marketing Calculator
-        </button>
-      </div>
+      {!hideTabs && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '35px', flexWrap: 'wrap' }}>
+          {(!allowedTabs || allowedTabs.includes('web')) && (
+            <button 
+              onClick={() => { setCalcTab('web'); setSubmitted(false); }}
+              className={`btn ${calcTab === 'web' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ fontSize: '13px', padding: '8px 20px', borderRadius: '20px' }}
+            >
+              💻 Website Calculator
+            </button>
+          )}
+          {(!allowedTabs || allowedTabs.includes('webapp')) && (
+            <button 
+              onClick={() => { setCalcTab('webapp'); setSubmitted(false); }}
+              className={`btn ${calcTab === 'webapp' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ fontSize: '13px', padding: '8px 20px', borderRadius: '20px' }}
+            >
+              ⚙️ Web App Calculator
+            </button>
+          )}
+          {(!allowedTabs || allowedTabs.includes('marketing')) && (
+            <button 
+              onClick={() => { setCalcTab('marketing'); setSubmitted(false); }}
+              className={`btn ${calcTab === 'marketing' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ fontSize: '13px', padding: '8px 20px', borderRadius: '20px' }}
+            >
+              📣 Digital Marketing Calculator
+            </button>
+          )}
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr', gap: '40px' }} className="calc-grid">
         

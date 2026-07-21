@@ -684,10 +684,20 @@ const AdminDashboard = () => {
     }
   };
 
-  // Handle Team member photo upload
+  // Handle Team member photo upload (Max 1MB)
   const handleTeamImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validate 1MB limit
+    const MAX_SIZE_BYTES = 1 * 1024 * 1024;
+    if (file.size > MAX_SIZE_BYTES) {
+      const errMsg = `Selected photo size (${(file.size / (1024 * 1024)).toFixed(2)} MB) exceeds the 1MB limit. Please select a smaller image.`;
+      setTeamFormError(errMsg);
+      triggerToast(errMsg, 'error');
+      e.target.value = '';
+      return;
+    }
 
     const formData = new FormData();
     formData.append('image', file);
@@ -701,11 +711,11 @@ const AdminDashboard = () => {
         body: formData
       });
 
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error('Photo upload failed.');
+        throw new Error(data.error || 'Photo upload failed.');
       }
 
-      const data = await response.json();
       setTeamImageUrl(data.image_url);
       triggerToast('Photo uploaded successfully!', 'success');
     } catch (err) {
@@ -713,6 +723,7 @@ const AdminDashboard = () => {
       triggerToast(err.message, 'error');
     } finally {
       setUploadingTeamImage(false);
+      e.target.value = '';
     }
   };
 
@@ -2884,6 +2895,7 @@ const AdminDashboard = () => {
                       )
                       .map((member) => {
                         const statusVal = member.status || 'Active';
+                        const strokeColor = statusVal === 'Active' ? '%2310b981' : statusVal === 'Suspended' ? '%23f59e0b' : '%23ef4444';
                         const statusBadgeStyle = 
                           statusVal === 'Active' 
                             ? { backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)' }
@@ -2917,12 +2929,18 @@ const AdminDashboard = () => {
                                 value={statusVal}
                                 onChange={(e) => handleTeamStatusUpdate(member, e.target.value)}
                                 style={{ 
-                                  padding: '4px 10px', 
-                                  borderRadius: '12px', 
+                                  padding: '5px 30px 5px 14px', 
+                                  borderRadius: '20px', 
                                   fontSize: '12px', 
                                   fontWeight: 700, 
                                   cursor: 'pointer',
                                   outline: 'none',
+                                  appearance: 'none',
+                                  WebkitAppearance: 'none',
+                                  MozAppearance: 'none',
+                                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='${strokeColor}' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                                  backgroundRepeat: 'no-repeat',
+                                  backgroundPosition: 'right 10px center',
                                   ...statusBadgeStyle 
                                 }}
                               >
@@ -5006,7 +5024,7 @@ const AdminDashboard = () => {
 
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '6px', color: 'var(--text-muted)' }}>
-                      Photo Upload
+                      Photo Upload (Max 1MB)
                     </label>
                     <input 
                       type="file" 

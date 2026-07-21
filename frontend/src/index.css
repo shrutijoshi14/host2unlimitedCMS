@@ -122,6 +122,10 @@ body,
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
+p {
+  text-align: justify;
+}
+
 h1,
 h2,
 h3,
@@ -157,9 +161,121 @@ img {
   padding: 100px 0;
 }
 
+/* Responsive Typography & Mobile Layout Optimizations */
 @media (max-width: 768px) {
   .section-padding {
-    padding: 60px 0;
+    padding: 50px 0;
+  }
+  h1 {
+    font-size: clamp(24px, 6vw, 36px) !important;
+    line-height: 1.25 !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  h2 {
+    font-size: clamp(20px, 5vw, 30px) !important;
+    line-height: 1.3 !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  h3 {
+    font-size: clamp(17px, 4vw, 22px) !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .container {
+    padding: 0 16px !important;
+  }
+  .hero-content-wrapper {
+    padding-top: 15px !important;
+    padding-bottom: 25px !important;
+  }
+}
+
+/* 900px Breakpoint: Collapse all multi-column layouts into 1 column */
+@media (max-width: 900px) {
+  .hero-grid,
+  .video-section-layout,
+  .coordinator-grid,
+  .course-grid,
+  .details-grid,
+  .form-faq-grid,
+  .contact-grid,
+  .contact-map-grid,
+  .study-body-grid,
+  .form-grid-2,
+  .form-row-grid,
+  .form-row-2 {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* Subpage Header Banner background styling */
+.subpage-header,
+.page-hero-banner {
+  position: relative;
+  background: linear-gradient(135deg, #0b0f19 0%, #1e293b 50%, #0f172a 100%) !important;
+  border-bottom: 1px solid var(--border-color);
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.subpage-header::before,
+.page-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.18) 0%, rgba(11, 15, 25, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.subpage-header .container,
+.page-hero-banner .container,
+.subpage-header .hero-content-wrapper,
+.page-hero-banner .hero-content-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .subpage-header,
+  .page-hero-banner {
+    min-height: 180px;
+    padding: 35px 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  p {
+    text-align: left !important; /* Prevents awkward gaps from text justification on narrow mobile screens */
+  }
+  .hero-checklist-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .calc-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .coordinator-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .pricing-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .institutions-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
@@ -348,22 +464,24 @@ body.dark .card-glass:hover {
   justify-content: center;
   background-color: var(--primary-light);
   color: var(--primary);
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
 }
 
-.card-glass:hover > .card-icon-container,
-.card-glass:hover > div > .card-icon-container,
-.card-glass:hover > div > div > .card-icon-container {
-  background-color: var(--primary);
-  color: #ffffff !important;
-  transform: scale(1.12) translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(14, 165, 233, 0.45);
+.card-icon-container svg {
+  stroke: currentColor;
+  transition: stroke 0.3s ease, color 0.3s ease;
 }
 
-.card-glass:hover > .card-icon-container svg,
-.card-glass:hover > div > .card-icon-container svg,
-.card-glass:hover > div > div > .card-icon-container svg {
+.card-glass:hover .card-icon-container {
+  background: var(--primary) !important;
   color: #ffffff !important;
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.45);
+}
+
+.card-glass:hover .card-icon-container svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 /* Gradients text */

@@ -5,51 +5,66 @@ import { Check, Info, Server, Code, ShieldAlert, Cpu, Laptop, Database, Cloud } 
 import Calculator from '../components/Calculator';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import pricingHeroBg from '../assets/hero_bg/pricing_hero.png';
+import pricingHeroBg from '../assets/hero_bg/pricing_hero_art.svg';
+import armietLogo from '../assets/h2u logos/armiet_logo.jpeg';
+import pillaiLogo from '../assets/h2u logos/dr-pillai-global-academy.png';
+import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
+import somaiyaLogo from '../assets/h2u logos/somaiya_college.png';
+import uudaanLogo from '../assets/h2u logos/uudaan-montessori-preschool.jpg';
+import newHorizonLogo from '../assets/h2u logos/New-Horizon-logo.png';
+import dnyanGangaLogo from '../assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp';
+import gsgsLogo from '../assets/h2u logos/GSGS-logo@4x (1).png';
+import ulweLogo from '../assets/h2u logos/Ulwe-logo (1).png';
+import vsignLogo from '../assets/h2u logos/V-Sign-logo.png';
+
+const clientLogos = [
+  armietLogo, pillaiLogo, euroKidsLogo, somaiyaLogo, uudaanLogo,
+  newHorizonLogo, dnyanGangaLogo, gsgsLogo, ulweLogo, vsignLogo
+];
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
 const staticPackages = [
   {
-    name: 'Starter Website Package',
-    price: '₹15,000 – ₹25,000',
-    desc: 'Perfect for small businesses and startups seeking a professional landing page or online brochure.',
+    name: 'Website & Web App Package',
+    price: '₹25,000 – ₹75,000',
+    desc: 'Complete web development solution including custom UI/UX design, mobile responsive web apps, CMS modules, and API integrations.',
     features: [
-      'Up to 5 Pages development',
-      'Fully Mobile Responsive',
-      'Secure Contact Form',
-      'Basic SEO & Metadata config',
-      'SSL Certificate Setup',
-      '1 Month Support'
+      'Custom Responsive Pages & UI Design',
+      'Full Web Application & Admin Dashboard',
+      'Dynamic Content Management System (CMS)',
+      'API & Payment Gateway Integrations',
+      'Advanced SEO & Performance Optimization',
+      'Continuous Support & SLA Maintenance'
     ],
-    popular: false,
+    popular: true,
     cta: 'Get Started'
   },
   {
-    name: 'Business Website Package',
-    price: '₹35,000 – ₹60,000',
-    desc: 'Designed for scaling companies needing custom layout mockups, blogs, and marketing connections.',
+    name: 'Digital Marketing Package',
+    price: '₹15,000 – ₹45,000/mo',
+    desc: 'Full-funnel digital marketing campaigns, social media management, organic content creation, and lead generation.',
     features: [
-      'Up to 15 Custom Pages',
-      'Custom UI/UX Mockups',
-      'Dynamic Blog Module',
-      'Advanced SEO & Indexing',
-      'Google Analytics Setup',
-      '3 Months Support & Edits'
+      'Social Media Management (Meta, LinkedIn, YouTube)',
+      'Google Ads & Paid Meta Ad Campaigns',
+      'Search Engine Optimization (SEO)',
+      'Event Coverage & Campus Live Updates',
+      'Lead Tracking & Analytics Reporting',
+      'Dedicated Marketing Coordinator'
     ],
-    popular: true,
-    cta: 'Select Package'
+    popular: false,
+    cta: 'Select Marketing'
   },
   {
-    name: 'Enterprise Solution Package',
+    name: 'Enterprise ERP & Portal Package',
     price: 'Custom Pricing',
-    desc: 'Tailored systems built to automate operational processes and synchronize massive databases.',
+    desc: 'Tailored enterprise software built to automate educational institute processes, ERP databases, and large operational portals.',
     features: [
-      'Unlimited Pages & Code',
-      'Custom React Admin Dashboard',
-      'CRM & ERP API Integrations',
-      'Multi-gateway Payment support',
-      'Advanced Security Hardening',
+      'Custom ERP & Student Information Systems',
+      'Role-based Access & Campus Workflows',
+      'Multi-campus Database Synchronization',
+      'Custom Reporting & Analytics Engines',
+      'High Security & Cloud Data Backups',
       '1 Year Dedicated SLA Support'
     ],
     popular: false,
@@ -132,7 +147,29 @@ const Pricing = () => {
 
       <div className="container" style={{ marginTop: '40px' }}>
 
-        {/* Subpage Header Content shifted below Hero Banner */}
+        {/* Dedicated Digital Marketing Calculator Section (FIRST below Hero) */}
+        <div style={{ marginBottom: '100px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <h2 style={{ fontSize: '36px', marginBottom: '14px' }}>Digital Marketing Cost Estimator</h2>
+            <p style={{ maxWidth: '580px', margin: '0 auto', color: 'var(--text-secondary)' }}>
+              Estimate monthly digital marketing retainers, social media post frequencies, campus shoot days, and ad campaign budgets.
+            </p>
+          </div>
+          <Calculator defaultTab="marketing" hideTabs={true} />
+        </div>
+
+        {/* Web & Web App Calculator Section (SECOND) */}
+        <div style={{ marginBottom: '100px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <h2 style={{ fontSize: '36px', marginBottom: '14px' }}>Website & Web App Estimator</h2>
+            <p style={{ maxWidth: '580px', margin: '0 auto', color: 'var(--text-secondary)' }}>
+              Looking for custom website or web app specifications? Select add-on modules to generate price estimates and delivery expectations immediately.
+            </p>
+          </div>
+          <Calculator defaultTab="web" allowedTabs={['web', 'webapp']} />
+        </div>
+
+        {/* Flexible Investment Packages Header & Cards Grid (THIRD) */}
         <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>Clear Pricing</span>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
@@ -148,7 +185,6 @@ const Pricing = () => {
             Retrieving package pricing structures...
           </div>
         ) : (
-          /* Pricing Cards Grid */
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px', marginBottom: '100px' }} className="pricing-grid">
             {packages.map((pkg, idx) => (
               <div key={idx} style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
@@ -229,41 +265,25 @@ const Pricing = () => {
           </div>
         )}
 
-        {/* Dynamic Calculator Section */}
-        <div style={{ marginBottom: '100px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-            <h2 style={{ fontSize: '36px', marginBottom: '14px' }}>Interactive Cost Estimator</h2>
-            <p style={{ maxWidth: '580px', margin: '0 auto', color: 'var(--text-secondary)' }}>
-              Looking for custom counts? Select add-on modules to generate price estimates and delivery expectations immediately.
-            </p>
-          </div>
-          <Calculator />
-        </div>
-
-        {/* Technology Stack Grid */}
-        <div className="card-glass" style={{ textAlign: 'left', padding: '50px' }}>
-          <h2 style={{ fontSize: '30px', fontWeight: 800, marginBottom: '12px' }} className="text-center">Our Core Technology Stack</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px auto' }} className="text-center">
-            We use stable, high-performance, and standard programming frameworks to construct scalable systems.
+        {/* Enlarged Brand Logos Marquee Section */}
+        <div style={{ marginTop: '80px', marginBottom: '40px' }}>
+          <p style={{ textAlign: 'center', fontSize: '15px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '28px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+            Trusted by Educational Institutes & Brands Across Maharashtra
           </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '20px' }} className="tech-stack-grid">
-            {Object.keys(techStack).map((cat) => (
-              <div key={cat} style={{ backgroundColor: 'var(--bg-secondary)', padding: '24px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
-                <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  {cat === 'Frontend' ? <Laptop size={16} /> : cat === 'Backend' ? <Cpu size={16} /> : cat === 'Database' ? <Database size={16} /> : cat === 'Cloud' ? <Cloud size={16} /> : <Info size={16} />}
-                  {cat}
-                </h4>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14.5px', color: 'var(--text-primary)', fontWeight: 600 }}>
-                  {techStack[cat].map((t) => (
-                    <li key={t} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--text-muted)' }} />
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="carousel-track-container" style={{ overflow: 'hidden', padding: '20px 0' }}>
+            <div className="carousel-track">
+              {clientLogos.concat(clientLogos).map((logo, idx) => (
+                <div key={idx} className="carousel-logo" style={{ display: 'flex', alignItems: 'center', height: '80px', padding: '0 30px' }}>
+                  <img 
+                    src={logo} 
+                    alt="Partner Logo" 
+                    style={{ height: '75px', maxWidth: '180px', objectFit: 'contain', opacity: 0.9, transition: 'all 0.3s ease' }} 
+                    onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1.08)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'scale(1)'; }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
