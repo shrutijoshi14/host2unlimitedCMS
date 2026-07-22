@@ -133,8 +133,36 @@ const Counter = ({ value, suffix = "" }) => {
 };
 
 const About = () => {
+  const teamScrollRef = React.useRef(null);
   const [aboutData] = useState({ values: staticValues, stats: staticStats });
+  const [isTeamHovered, setIsTeamHovered] = useState(false);
+
+  const scrollTeam = (direction) => {
+    if (teamScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -320 : 320;
+      teamScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   const [membersList, setMembersList] = useState(teamMembers);
+
+  // Auto-scroll loop for Team Experts every 3.5s (pauses on hover)
+  useEffect(() => {
+    if (membersList.length === 0 || isTeamHovered) return;
+
+    const interval = setInterval(() => {
+      if (teamScrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = teamScrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 15) {
+          teamScrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          teamScrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [membersList, isTeamHovered]);
   const [banner] = useState({
     title: 'Digital Growth Partner for Education Institutes & Businesses',
     subtitle: 'About Us',
@@ -187,9 +215,24 @@ const About = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ backgroundImage: `url(${aboutHeroBg})` }}
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
-        <div className="container hero-content-wrapper">
+        <img 
+          src={aboutHeroBg} 
+          alt="About Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
@@ -197,8 +240,7 @@ const About = () => {
       </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-
-        {/* Subpage Header Content shifted below Hero Banner */}
+        {/* Subpage Header Content */}
         <div style={{ textAlign: 'left', maxWidth: '850px', margin: '0 auto 50px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>About Us</span>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '20px', letterSpacing: '-0.5px', lineHeight: 1.25, textAlign: 'left' }}>
@@ -206,7 +248,7 @@ const About = () => {
           </h1>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.7, marginBottom: '28px', textAlign: 'left' }}>
             <p style={{ margin: 0 }}>
-              🎓Founded in 2010 in Mumbai, our journey began with a deep focus on the education sector—supporting schools, colleges, coaching centers, and ed-tech platforms with creative, results-driven marketing. 🎓 Partner with Host2Unlimited – your trusted digital partner for educational institutes.
+              🎓Founded in 2010 in Mumbai, our journey began with a deep focus on the education sector—supporting schools, colleges, coaching centers, and ed-tech platforms with creative, results-driven marketing.
             </p>
             <p style={{ margin: 0 }}>
               🎓From boosting your online presence to social media management and school admission campaigns – we help you start early and stay ahead!
@@ -222,13 +264,7 @@ const About = () => {
           </div>
         </div>
 
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-muted)' }}>
-            Retrieving about us values...
-          </div>
-        ) : (
-          <>
-            {/* Stats Cards Row (Counters FIRST) */}
+        {/* Stats Cards Row (Counters FIRST) */}
             <div style={{ marginBottom: '60px' }} className="about-stats-grid">
               {aboutData.stats.map((stat, idx) => {
                 const Icon = Icons[stat.icon_name] || Globe;
@@ -237,13 +273,24 @@ const About = () => {
                     key={idx}
                     className="card-glass" 
                     whileHover={{ y: -6, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 12px 30px -10px rgba(14, 165, 233, 0.2)' }}
-                    style={{ backgroundColor: 'var(--bg-secondary)', padding: '24px 20px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', textAlign: 'center', transition: 'border-color 0.2s, box-shadow 0.2s' }}
+                    style={{ 
+                      backgroundColor: 'var(--bg-secondary)', 
+                      padding: '24px 20px', 
+                      borderRadius: 'var(--radius-lg)', 
+                      border: '1px solid var(--border-color)', 
+                      textAlign: 'center', 
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'border-color 0.2s, box-shadow 0.2s' 
+                    }}
                   >
                     <Icon size={30} color="var(--primary)" style={{ marginBottom: '14px' }} />
-                    <h3 style={{ fontSize: '30px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px' }}>
+                    <h3 style={{ fontSize: '30px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '6px', textAlign: 'center' }}>
                       <Counter value={stat.value} suffix={stat.suffix} />
                     </h3>
-                    <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', fontWeight: 600, margin: 0 }}>{stat.label}</p>
+                    <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', fontWeight: 600, margin: 0, textAlign: 'center' }}>{stat.label}</p>
                   </motion.div>
                 );
               })}
@@ -270,14 +317,14 @@ const About = () => {
                       )}
                       <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
                         <div>
-                          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)' }}>{v.title}</h3>
-                          <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: '20px' }}>{v.desc}</p>
+                          <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'left' }}>{v.title}</h3>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: '20px', textAlign: 'justify' }}>{v.desc}</p>
                         </div>
 
                         {v.points && (
                           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
                             {v.points.map((pt, pIdx) => (
-                              <li key={pIdx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                              <li key={pIdx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '8px', fontSize: '13px', color: 'var(--text-secondary)', textAlign: 'left' }}>
                                 <Icons.CheckCircle2 size={15} color="var(--primary)" style={{ flexShrink: 0 }} />
                                 {pt}
                               </li>
@@ -305,19 +352,19 @@ const About = () => {
             </div>
 
             {/* Award Winning Moment */}
-            <div className="card-glass" style={{ textAlign: 'left', marginBottom: '85px', padding: '40px', border: '1px solid var(--primary)' }}>
-              <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }} className="award-header">
+            <div className="card-glass" style={{ textAlign: 'center', marginBottom: '85px', padding: '40px', border: '1px solid var(--primary)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center', marginBottom: '20px' }} className="award-header">
                 <div style={{ display: 'flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <Icons.Trophy size={28} />
                 </div>
                 <div>
                   <span style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>Award Winning Moment</span>
-                  <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'left' }}>
+                  <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'center' }}>
                     Celebrating Excellence At The Indian School Awards 2025!
                   </h2>
                 </div>
               </div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, margin: 0 }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>
                 Recognized as the <strong>Best Digital Marketing Agency for the Education Sector</strong> in Mumbai, Nashik, Pune, Satara, and across Maharashtra. This prestigious milestone celebrates our commitment to introducing cutting-edge web tools and custom admissions campaigns for our partner campuses.
               </p>
             </div>
@@ -349,15 +396,81 @@ const About = () => {
                 </div>
               </div>
 
-              <h3 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '30px', textAlign: 'center', letterSpacing: '-0.5px' }}>Our Team Experts</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '15px' }}>
+                <h3 style={{ fontSize: '24px', fontWeight: 800, margin: 0, letterSpacing: '-0.5px' }}>Our Team Experts</h3>
+                
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    onClick={() => scrollTeam('left')} 
+                    aria-label="Scroll left"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-primary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: 'var(--shadow-sm)',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--primary)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                  >
+                    <Icons.ChevronLeft size={20} />
+                  </button>
+                  <button 
+                    onClick={() => scrollTeam('right')} 
+                    aria-label="Scroll right"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-primary)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: 'var(--shadow-sm)',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--primary)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                  >
+                    <Icons.ChevronRight size={20} />
+                  </button>
+                </div>
+              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
+              {/* Scrollable Team Experts Container */}
+              <div 
+                ref={teamScrollRef}
+                onMouseEnter={() => setIsTeamHovered(true)}
+                onMouseLeave={() => setIsTeamHovered(false)}
+                className="team-scroll-container hide-scrollbar" 
+                style={{ 
+                  display: 'flex', 
+                  gap: '24px', 
+                  overflowX: 'auto', 
+                  paddingBottom: '20px',
+                  paddingTop: '10px',
+                  scrollSnapType: 'x mandatory',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
                 {membersList.map((member, idx) => (
                   <motion.div
                     key={member.id || idx}
                     className="card-glass"
                     whileHover={{ y: -8, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 12px 30px rgba(37, 99, 235, 0.15)' }}
                     style={{ 
+                      flex: '0 0 240px',
+                      scrollSnapAlign: 'start',
                       padding: '24px 20px', 
                       borderRadius: '16px',
                       border: '1px solid var(--border-color)', 
@@ -423,12 +536,94 @@ const About = () => {
                 ))}
               </div>
             </div>
-          </>
-        )}
+
+            {/* Bottom CTA Banner with Unique Emerald Gradient */}
+            <section style={{ padding: '60px 0 20px 0', position: 'relative' }}>
+              <div className="card-glass" style={{ 
+                background: 'linear-gradient(135deg, #0f172a 0%, #064e3b 45%, #0d9488 100%)', 
+                color: 'white', 
+                padding: '65px 40px', 
+                position: 'relative', 
+                overflow: 'hidden', 
+                borderRadius: '28px',
+                boxShadow: '0 25px 60px rgba(13, 148, 136, 0.3)',
+                border: '1px solid rgba(45, 212, 191, 0.25)'
+              }}>
+                <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.15, pointerEvents: 'none' }}>
+                  <path d="M-100 200 C100 100, 300 300, 500 100 C700 200, 900 50, 1100 250" fill="none" stroke="#2dd4bf" strokeWidth="8" />
+                  <path d="M-100 250 C100 150, 300 350, 500 150 C700 250, 900 100, 1100 300" fill="none" stroke="#5eead4" strokeWidth="4" />
+                </svg>
+
+                <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px', textAlign: 'center' }}>
+                  <span className="badge" style={{ backgroundColor: 'rgba(45, 212, 191, 0.25)', color: '#5eead4', border: '1px solid rgba(94, 234, 212, 0.4)', fontSize: '13px', padding: '6px 20px', fontWeight: 800, letterSpacing: '0.8px' }}>
+                    🌟 TRUSTED SINCE 2010 ACROSS MAHARASHTRA
+                  </span>
+
+                  <h2 style={{ color: 'white', fontSize: 'clamp(22px, 3.8vw, 34px)', fontWeight: 900, margin: 0, lineHeight: 1.3, maxWidth: '980px', letterSpacing: '-0.5px' }}>
+                    Strategic Digital Marketing Services for Educational Institutes with our Dedicated Person at Campus!
+                  </h2>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', margin: '4px 0' }}>
+                    {['MUMBAI', 'NASHIK', 'PUNE', 'SATARA', 'PAN MAHARASHTRA'].map((region, ridx) => (
+                      <span key={ridx} style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        color: '#fef08a',
+                        padding: '4px 14px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        letterSpacing: '0.5px',
+                        border: '1px solid rgba(254, 240, 138, 0.3)'
+                      }}>
+                        📍 {region}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', margin: '6px 0' }}>
+                    <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Dedicated Person at Campus
+                    </span>
+                    <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Quality Leads Generation Ads Campaigns
+                    </span>
+                    <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Strategic Admission Boosting
+                    </span>
+                  </div>
+
+                  <p style={{ color: 'rgba(241, 245, 249, 0.95)', maxWidth: '850px', fontSize: '15.5px', margin: 0, lineHeight: 1.6, textAlign: 'center' }}>
+                    Strategic Digital Marketing Services for Educational Institutes with our Dedicated Person at Campus! Boost Your Institute Admissions with our Quality Leads Generation Ads Campaigns.
+                  </p>
+
+                  <div style={{ marginTop: '12px' }}>
+                    <Link 
+                      to="/contact" 
+                      className="btn" 
+                      style={{ 
+                        backgroundColor: '#ffffff', 
+                        color: '#0284c7', 
+                        fontWeight: 800, 
+                        padding: '16px 36px', 
+                        fontSize: '16px',
+                        borderRadius: '30px',
+                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
+                        transition: 'all 0.3s ease',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                      }}
+                    >
+                      Enquiry Form to Get Started <Icons.ArrowRight size={18} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </section>
 
       </div>
 
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 992px) {
           .about-founder-grid {
             grid-template-columns: 1fr !important;
@@ -441,7 +636,7 @@ const About = () => {
             text-align: center !important;
           }
         }
-      `}</style>
+      ` }} />
     </div>
   );
 };

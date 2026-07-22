@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User, Clock, Tag } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import blogHeroBg from '../assets/hero_bg/blog_hero_art.svg';
 
 const API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -115,7 +116,7 @@ const BlogPost = () => {
   ];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div>
       <SEOMeta
         title={blog.seo_title || blog.title}
         description={blog.meta_description || blog.title}
@@ -124,7 +125,18 @@ const BlogPost = () => {
         schemaType="Article"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${blogHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
+        </div>
+      </section>
 
       <div className="container" style={{ maxWidth: '850px', marginTop: '40px' }}>
         

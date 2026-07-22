@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Shield, Zap, Globe, Server, Award, ChevronDown, ChevronUp, AlertCircle, RefreshCw, Layers } from 'lucide-react';
 import SEOMeta from '../../components/SEOMeta';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import blogHeroBg from '../../assets/hero_bg/blog_hero_art.svg';
 
 const WordPressHosting = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -113,7 +114,7 @@ const WordPressHosting = () => {
       </div>
 
       {/* Hero Header */}
-      <section className="section-padding" style={{ padding: '80px 0', position: 'relative', background: 'var(--grad-hero)' }}>
+      <section className="section-padding" style={{ padding: '80px 0', position: 'relative', backgroundImage: `url(${blogHeroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '50px', alignItems: 'center' }} className="hero-grid">
             <div style={{ textAlign: 'left' }}>

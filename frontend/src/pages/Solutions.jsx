@@ -5,6 +5,7 @@ import { Globe, Building2, Rocket, ShoppingBag, GraduationCap, Check, ArrowRight
 import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import servicesHeroBg from '../assets/hero_bg/services_hero_art.svg';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -101,7 +102,7 @@ const Solutions = () => {
   const breadcrumbs = [{ name: 'Solutions', path: '/solutions' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div>
       <SEOMeta
         title="Solutions"
         description="Scalable technical solutions: Enterprise digitalization, CRM/ERP database development, WooCommerce structures, and public sector portal portals."
@@ -109,10 +110,35 @@ const Solutions = () => {
         canonical="https://host2unlimited.com/solutions"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+      >
+        <img 
+          src={servicesHeroBg} 
+          alt="Solutions Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
+        </div>
+      </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-        
         {/* Top Header */}
         <div style={{ textAlign: 'center', marginBottom: '80px' }}>
           <span style={{ 

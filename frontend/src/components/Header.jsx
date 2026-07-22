@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Sun, Moon, Menu, X, ShieldAlert } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
-import logoWebp from '../assets/logo.webp';
+import logoPng from '../assets/logo.png';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -92,7 +92,7 @@ const Header = () => {
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {/* Logo Left */}
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '58px', width: 'auto', objectFit: 'contain' }} />
+              <img src={logoPng} alt="Host2Unlimited Logo" style={{ height: '58px', width: 'auto', objectFit: 'contain' }} />
             </Link>
 
             {/* Contact details Right */}
@@ -114,7 +114,7 @@ const Header = () => {
             {/* Mobile-only Logo */}
             <div className="mobile-only-logo" style={{ display: 'none' }}>
               <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '46px', width: 'auto', objectFit: 'contain' }} />
+                <img src={logoPng} alt="Host2Unlimited Logo" style={{ height: '46px', width: 'auto', objectFit: 'contain' }} />
               </Link>
             </div>
 

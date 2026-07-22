@@ -61,14 +61,56 @@ const staticTestimonials = [
 ];
 
 const TestimonialSlider = () => {
+  const testimonialScrollRef = React.useRef(null);
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const scrollTestimonials = (direction) => {
+    if (testimonialScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -380 : 380;
+      testimonialScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  // Auto-scroll loop every 3.5s (pauses when user hovers or interacts)
+  useEffect(() => {
+    if (loading || testimonials.length === 0 || isHovered) return;
+
+    const interval = setInterval(() => {
+      if (testimonialScrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = testimonialScrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 15) {
+          testimonialScrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          testimonialScrollRef.current.scrollBy({ left: 380, behavior: 'smooth' });
+        }
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [loading, testimonials, isHovered]);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
         setLoading(true);
-        // 1. Check module toggle status
+        // 1. Try Google Reviews endpoint first
+        try {
+          const googleRes = await fetch(`${CURRENT_API_BASE}/api/google-reviews`);
+          if (googleRes.ok) {
+            const googleData = await googleRes.json();
+            if (Array.isArray(googleData.reviews) && googleData.reviews.length > 0) {
+              setTestimonials(googleData.reviews);
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (gErr) {
+          console.warn('Google Reviews endpoint offline/unconfigured, checking CMS.', gErr);
+        }
+
+        // 2. Check module toggle status
         const modulesResponse = await fetch(`${CURRENT_API_BASE}/api/modules`);
         let cmsActive = false;
         if (modulesResponse.ok) {
@@ -80,25 +122,39 @@ const TestimonialSlider = () => {
         }
 
         if (cmsActive) {
-          // 2. Fetch reviews array from dynamic CMS page
           const response = await fetch(`${CURRENT_API_BASE}/api/pages/testimonials`);
           if (response.ok) {
             const data = await response.json();
-            setTestimonials(data);
+            if (Array.isArray(data) && data.length > 0) {
+              setTestimonials(data);
+            } else {
+              setTestimonials(staticTestimonials);
+            }
           } else {
-            throw new Error('Testimonials data not populated.');
+            setTestimonials(staticTestimonials);
           }
         } else {
           setTestimonials(staticTestimonials);
         }
       } catch (err) {
-        console.warn('Testimonials CMS failed, loading static slider reviews.', err);
+        console.warn('Testimonials fetch fallback triggered.', err);
         setTestimonials(staticTestimonials);
       } finally {
         setLoading(false);
       }
     };
+
     fetchTestimonials();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'testimonials' || e.detail?.type === 'module_update') {
+        fetchTestimonials();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => {
+      window.removeEventListener('cmsPageUpdate', handleUpdate);
+    };
   }, []);
 
   if (loading) {
@@ -114,29 +170,88 @@ const TestimonialSlider = () => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
       
-      {/* Testimonials Grid (3 columns on desktop, responsive) */}
-      <div className="testimonials-grid" style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(3, 1fr)', 
-        gap: '24px', 
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto'
-      }}>
+      {/* Navigation Arrows Controls */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', width: '100%', marginBottom: '10px' }}>
+        <button 
+          onClick={() => scrollTestimonials('left')} 
+          aria-label="Scroll testimonials left"
+          style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: 'var(--shadow-sm)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--primary)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <button 
+          onClick={() => scrollTestimonials('right')} 
+          aria-label="Scroll testimonials right"
+          style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: 'var(--shadow-sm)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--primary)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+        >
+          <ChevronRight size={20} />
+        </button>
+      </div>
+
+      {/* Scrollable Testimonials Container */}
+      <div 
+        ref={testimonialScrollRef}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="testimonials-scroll-container hide-scrollbar" 
+        style={{ 
+          display: 'flex', 
+          gap: '24px', 
+          overflowX: 'auto', 
+          width: '100%',
+          paddingBottom: '20px',
+          paddingTop: '10px',
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         {testimonials.map((testimony, idx) => (
           <div 
             key={testimony.id || idx} 
             className="card-glass testimonial-card" 
             style={{ 
+              flex: '0 0 360px',
+              maxWidth: '85vw',
+              scrollSnapAlign: 'start',
               position: 'relative', 
               overflow: 'hidden', 
-              padding: '32px', 
+              padding: '28px 24px', 
               display: 'flex', 
               flexDirection: 'column', 
               justifyContent: 'space-between',
-              gap: '24px',
+              gap: '20px',
               backgroundColor: 'var(--bg-secondary)',
               border: '1px solid var(--border-color)',
               borderRadius: 'var(--radius-lg)',
@@ -154,49 +269,52 @@ const TestimonialSlider = () => {
               }} 
             />
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* Star Rating */}
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {[...Array(testimony.rating || 5)].map((_, i) => (
-                  <Star key={i} size={16} fill="var(--secondary)" color="var(--secondary)" />
-                ))}
-              </div>
-
-              {/* Testimonial Review Content */}
-              <p style={{ 
-                fontSize: '15px', 
-                lineHeight: 1.6, 
-                color: 'var(--text-primary)', 
-                fontWeight: 500, 
-                fontStyle: 'italic',
-                margin: 0
-              }}>
-                "{testimony.review}"
-              </p>
-            </div>
-
-            {/* User Profile Info */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+            {/* Profile Header: Photo (Increased size), Name, Designation & Company, Yellow Stars */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <img 
                 src={testimony.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150'} 
                 alt={testimony.name} 
                 style={{ 
-                  width: '44px', 
-                  height: '44px', 
+                  width: '65px', 
+                  height: '65px', 
                   borderRadius: '50%', 
                   objectFit: 'cover',
-                  border: '2px solid var(--primary-light)' 
+                  flexShrink: 0,
+                  border: '2.5px solid var(--primary)',
+                  boxShadow: '0 6px 16px rgba(0, 0, 0, 0.12)' 
                 }} 
               />
-              <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <h4 style={{ fontSize: '14.5px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '4px', flexGrow: 1 }}>
+                <h4 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {testimony.name}
-                  <CheckCircle size={13} color="#10b981" />
+                  <CheckCircle size={15} color="#10b981" />
                 </h4>
-                <span style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.2 }}>
+                <span style={{ fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: 1.3 }}>
                   {testimony.designation}, <strong>{testimony.company}</strong>
                 </span>
+
+                {/* Yellow Stars */}
+                <div style={{ display: 'flex', gap: '3px', marginTop: '4px' }}>
+                  {[...Array(testimony.rating || 5)].map((_, i) => (
+                    <Star key={i} size={17} fill="#eab308" color="#eab308" />
+                  ))}
+                </div>
               </div>
+            </div>
+
+            {/* Message / Review Content */}
+            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+              <p style={{ 
+                fontSize: '14.5px', 
+                lineHeight: 1.65, 
+                color: 'var(--text-primary)', 
+                fontWeight: 500, 
+                fontStyle: 'italic',
+                margin: 0,
+                textAlign: 'justify'
+              }}>
+                "{testimony.review}"
+              </p>
             </div>
           </div>
         ))}

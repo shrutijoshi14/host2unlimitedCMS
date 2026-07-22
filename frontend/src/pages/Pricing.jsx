@@ -136,9 +136,24 @@ const Pricing = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ backgroundImage: `url(${pricingHeroBg})` }}
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
-        <div className="container hero-content-wrapper">
+        <img 
+          src={pricingHeroBg} 
+          alt="Pricing Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>

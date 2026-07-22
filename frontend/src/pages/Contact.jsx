@@ -11,36 +11,40 @@ import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle, 
 
 const faqs = [
   {
-    q: 'What services do you provide?',
-    a: 'We provide full-scale digital solutions: responsive website development, custom CRM/ERP software development, managed cloud hosting (AWS/GCP), search engine optimization (SEO), digital marketing campaigns, and specialized IT consulting.'
+    q: "What does Host2Unlimited do?",
+    a: "Host2Unlimited is a digital marketing partner specializing in the education sector, working with schools, colleges, universities, and educational campuses across Maharashtra."
   },
   {
-    q: 'How long does a website project take?',
-    a: 'A standard corporate or landing page project usually takes 10 to 18 days. Custom enterprise solutions, API database setups, and large ecommerce systems can take 4 to 8 weeks depending on specifications.'
+    q: "What services does Host2Unlimited offer?",
+    a: "Their core services include digital marketing, admission marketing, website development, content marketing and branding, public relations, influencer engagement, SEO, social media management, reputation management, video storytelling, and event marketing."
   },
   {
-    q: 'Do you provide website maintenance?',
-    a: 'Yes, we offer ongoing maintenance SLA contracts that cover weekly automated security patches, cloud database backups, core performance updates, and immediate page text/image edits.'
+    q: "Which types of educational institutions does Host2Unlimited work with?",
+    a: "They serve preschools & daycare centers, primary & secondary schools, international schools (CBSE/ICSE/IB), private coaching institutes, junior and degree colleges, engineering & technology institutes, management studies institutes, and public/private/deemed universities."
   },
   {
-    q: 'Can you redesign an existing website?',
-    a: 'Absolutely. We specialize in migratng slow legacy platforms to modern React.js frameworks to optimize speed, responsive UI interfaces, and keyword search conversions.'
+    q: "Does Host2Unlimited provide a dedicated person for my campus?",
+    a: "Yes — they offer a dedicated in-house Digital Marketing Coordinator at your campus for tasks like event coverage, admission lead tracking, social media monitoring, content creation, SEO-updated websites, and analytics reporting."
   },
   {
-    q: 'Do you provide SEO services?',
-    a: 'Yes, our team handles technical SEO audits, site speed updates, keyword mappings, local business indexing, and ongoing content link-building reports to drive organic traffic.'
+    q: "Where is Host2Unlimited located and where do they operate?",
+    a: "Their head office is in Mulund West, Mumbai, and they serve clients across Mumbai, Nashik, Pune, Chhatrapati Sambhajinagar, Satara, Jalgaon, Sangli, and Kolhapur."
   },
   {
-    q: 'What industries do you work with?',
-    a: 'We work across multiple industries: E-commerce retailers, healthcare/diagnostic labs, educational setups, public government agencies, financial advisors, and SaaS startup platforms.'
+    q: "When was Host2Unlimited founded?",
+    a: "The company was founded in 2010 as a strategic digital partner for educational institutes in Maharashtra."
   },
   {
-    q: 'How much does a website cost?',
-    a: 'A starter portfolio package ranges from ₹15,000 to ₹25,000. Custom corporate databases range from ₹35,000 to ₹60,000. Large multi-vendor scale platforms or SaaS dashboards require custom pricing blueprints.'
+    q: "Does Host2Unlimited offer any training or courses?",
+    a: "Yes, they offer a comprehensive Digital Marketing Course in Mumbai covering SEO, social media marketing, Google Ads, email marketing, content marketing/blogging, and analytics — designed for beginners, professionals, and entrepreneurs, with 3-month and 6-month program options."
   },
   {
-    q: 'Do you offer hosting solutions?',
-    a: 'Yes. We provision secure virtual hosting structures on Google Cloud and AWS nodes. This includes free SSL setup, CDN installations, and active threat scans.'
+    q: "How can I get in touch with Host2Unlimited?",
+    a: "You can contact them via phone for different needs — new enquiries/sales, existing client support, digital marketing & training, or careers/placements — or email them at info@host2unlimited.com, or fill out their online enquiry form."
+  },
+  {
+    q: "Has Host2Unlimited received any industry recognition?",
+    a: 'Yes — founder Rampratap Bugalia was honored with the "Award of Innovative Digital Solutions Partner for Educational Institutes" at the Indian School Awards 2025.'
   }
 ];
 
@@ -249,9 +253,24 @@ const Contact = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ backgroundImage: `url(${contactHeroBg})` }}
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
-        <div className="container hero-content-wrapper">
+        <img 
+          src={contactHeroBg} 
+          alt="Contact Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
@@ -259,8 +278,7 @@ const Contact = () => {
       </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-
-        {/* Subpage Header Content shifted below Hero Banner */}
+        {/* Subpage Header Content */}
         <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>Get In Touch</span>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
@@ -355,19 +373,6 @@ const Contact = () => {
 
 
 
-            </div>
-
-            {/* Quick map integration block */}
-            <div style={{ height: '220px', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--border-color)', position: 'relative' }}>
-              <iframe 
-                src="https://maps.google.com/maps?q=Runwal%20R-Square%2C%20Mulund%20West%2C%20Mumbai&t=&z=14&ie=UTF8&iwloc=&output=embed" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen="" 
-                loading="lazy"
-                title="Office Map Location"
-              />
             </div>
           </div>
 

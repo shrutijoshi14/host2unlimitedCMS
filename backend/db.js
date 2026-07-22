@@ -158,7 +158,7 @@ export async function initializeDatabase() {
       const initConnection = await mysql.createConnection({
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || 'Shruti@1408',
+        password: process.env.DB_PASSWORD || '',
         port: parseInt(process.env.DB_PORT || '3306')
       });
 
@@ -168,7 +168,7 @@ export async function initializeDatabase() {
       mysqlPool = mysql.createPool({
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || 'Shruti@1408',
+        password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'host2unlimited',
         port: parseInt(process.env.DB_PORT || '3306'),
         waitForConnections: true,

@@ -1,20 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 280" width="1600" height="280">
   <defs>
-    <linearGradient id="careersGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0b0f19"/>
-      <stop offset="50%" stop-color="#7c3aed"/>
+    <linearGradient id="carGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#4c1d95"/>
       <stop offset="100%" stop-color="#0f172a"/>
     </linearGradient>
+    <linearGradient id="pinkGlowCar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0.95"/>
+    </linearGradient>
+    <filter id="glowCar" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
-  <rect width="1600" height="500" fill="url(#careersGrad)"/>
-  <!-- Team & Career Rocket Launch Graphic -->
-  <g opacity="0.35" transform="translate(150, 120)">
-    <circle cx="60" cy="60" r="30" fill="none" stroke="#a78bfa" stroke-width="4"/>
-    <circle cx="150" cy="40" r="35" fill="none" stroke="#c084fc" stroke-width="4"/>
-    <circle cx="240" cy="60" r="30" fill="none" stroke="#a78bfa" stroke-width="4"/>
+
+  <rect width="1600" height="280" fill="url(#carGrad)"/>
+
+  <!-- Orbs -->
+  <circle cx="360" cy="140" r="150" fill="#ec4899" opacity="0.35" filter="url(#glowCar)"/>
+  <circle cx="800" cy="140" r="160" fill="#a855f7" opacity="0.25" filter="url(#glowCar)"/>
+  <circle cx="1240" cy="140" r="150" fill="#f472b6" opacity="0.35" filter="url(#glowCar)"/>
+
+  <!-- Grid -->
+  <g stroke="#f472b6" stroke-width="1" opacity="0.2">
+    <line x1="0" y1="70" x2="1600" y2="70"/>
+    <line x1="0" y1="140" x2="1600" y2="140"/>
+    <line x1="0" y1="210" x2="1600" y2="210"/>
+    <line x1="300" y1="0" x2="300" y2="280"/>
+    <line x1="550" y1="0" x2="550" y2="280"/>
+    <line x1="800" y1="0" x2="800" y2="280"/>
+    <line x1="1050" y1="0" x2="1050" y2="280"/>
+    <line x1="1300" y1="0" x2="1300" y2="280"/>
   </g>
-  <g opacity="0.35" transform="translate(1250, 100)">
-    <path d="M100,20 C140,50 160,110 160,160 L40,160 C40,110 60,50 100,20 Z" fill="none" stroke="#c084fc" stroke-width="4"/>
-    <circle cx="100" cy="90" r="20" fill="none" stroke="#c084fc" stroke-width="3"/>
+
+  <!-- Waves -->
+  <path d="M 0 110 Q 400 170 800 110 T 1600 130" fill="none" stroke="#ec4899" stroke-width="3" opacity="0.75" filter="url(#glowCar)"/>
+  <path d="M 0 170 Q 450 100 900 170 T 1600 120" fill="none" stroke="#c084fc" stroke-width="2.5" opacity="0.8" filter="url(#glowCar)"/>
+
+  <!-- Left Side Rocket Icon (Safe Position X=320, Y=92) -->
+  <g transform="translate(320, 92)">
+    <circle cx="48" cy="48" r="45" fill="#0f172a" stroke="#ec4899" stroke-width="2.5" opacity="0.95"/>
+    <path d="M48,14 C58,26 61,46 58,60 L48,53 L38,60 C35,46 38,26 48,14 Z" fill="url(#pinkGlowCar)" filter="url(#glowCar)"/>
   </g>
+
+  <!-- Right Side Hexagon Network Icon (Safe Position X=1120, Y=94) -->
+  <g transform="translate(1120, 94)">
+    <polygon points="50,6 82,25 82,67 50,86 18,67 18,25" fill="#0f172a" stroke="#c084fc" stroke-width="2.5" opacity="0.95"/>
+    <circle cx="50" cy="46" r="12" fill="url(#pinkGlowCar)" filter="url(#glowCar)"/>
+  </g>
+
+  <!-- Particles -->
+  <circle cx="500" cy="110" r="5" fill="#ec4899" filter="url(#glowCar)"/>
+  <circle cx="680" cy="180" r="6" fill="#c084fc" filter="url(#glowCar)"/>
+  <circle cx="950" cy="110" r="5" fill="#f472b6" filter="url(#glowCar)"/>
 </svg>

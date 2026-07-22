@@ -173,9 +173,24 @@ const Services = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ backgroundImage: `url(${servicesHeroBg})` }}
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
-        <div className="container hero-content-wrapper">
+        <img 
+          src={servicesHeroBg} 
+          alt="Services Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
@@ -183,8 +198,7 @@ const Services = () => {
       </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-
-        {/* Subpage Header Content shifted below Hero Banner */}
+        {/* Subpage Header Content */}
         <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>{banner.subtitle || 'Our Capabilities'}</span>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
@@ -215,21 +229,21 @@ const Services = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: idx * 0.08 }}
-                  style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                  style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
                 >
                   <div>
                     {/* Icon wrap */}
-                    <div className="card-icon-container" style={{ width: '56px', height: '56px', borderRadius: '14px', marginBottom: '24px' }}>
+                    <div className="card-icon-container" style={{ width: '56px', height: '56px', borderRadius: '14px', margin: '0 auto 24px auto' }}>
                       <Icon size={26} />
                     </div>
-                    <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '16px' }}>{service.title}</h3>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: '24px', lineHeight: 1.6 }}>{service.desc || service.description}</p>
+                    <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '16px', textAlign: 'center' }}>{service.title}</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: '24px', lineHeight: 1.6, textAlign: 'center' }}>{service.desc || service.description}</p>
                     
                     {/* Features list */}
                     {service.features && service.features.length > 0 && (
-                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px' }}>
+                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '32px', padding: 0 }}>
                         {service.features.map((feat, fidx) => (
-                          <li key={fidx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                          <li key={fidx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '14px', color: 'var(--text-secondary)' }}>
                             <CheckCircle size={16} className="text-gradient" style={{ flexShrink: 0 }} />
                             <span>{feat}</span>
                           </li>
@@ -258,10 +272,89 @@ const Services = () => {
           </div>
         )}
 
-        {/* Development & Execution Roadmap */}
-        <div style={{ marginTop: '80px', marginBottom: '40px' }}>
-          <Timeline />
-        </div>
+        {/* Bottom CTA Banner from Homepage */}
+        <section style={{ padding: '60px 0 20px 0', position: 'relative' }}>
+          <div className="card-glass" style={{ 
+            background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #2563eb 100%)', 
+            color: 'white', 
+            padding: '65px 40px', 
+            position: 'relative', 
+            overflow: 'hidden', 
+            borderRadius: '28px',
+            boxShadow: '0 25px 60px rgba(37, 99, 235, 0.3)',
+            border: '1px solid rgba(147, 197, 253, 0.25)'
+          }}>
+            <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.15, pointerEvents: 'none' }}>
+              <path d="M-100 200 C100 100, 300 300, 500 100 C700 200, 900 50, 1100 250" fill="none" stroke="#60a5fa" strokeWidth="8" />
+              <path d="M-100 250 C100 150, 300 350, 500 150 C700 250, 900 100, 1100 300" fill="none" stroke="#93c5fd" strokeWidth="4" />
+            </svg>
+
+            <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px', textAlign: 'center' }}>
+              <span className="badge" style={{ backgroundColor: 'rgba(96, 165, 250, 0.25)', color: '#93c5fd', border: '1px solid rgba(147, 197, 253, 0.4)', fontSize: '13px', padding: '6px 20px', fontWeight: 800, letterSpacing: '0.8px' }}>
+                🚀 CORE SERVICES GROWTH PARTNER FOR CAMPUSES
+              </span>
+
+              <h2 style={{ color: 'white', fontSize: 'clamp(22px, 3.8vw, 34px)', fontWeight: 900, margin: 0, lineHeight: 1.3, maxWidth: '980px', letterSpacing: '-0.5px' }}>
+                Strategic Digital Marketing Services for Educational Institutes with our Dedicated Person at Campus!
+              </h2>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', margin: '4px 0' }}>
+                {['MUMBAI', 'NASHIK', 'PUNE', 'SATARA', 'PAN MAHARASHTRA'].map((region, ridx) => (
+                  <span key={ridx} style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    color: '#fef08a',
+                    padding: '4px 14px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.5px',
+                    border: '1px solid rgba(254, 240, 138, 0.3)'
+                  }}>
+                    📍 {region}
+                  </span>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', justifyContent: 'center', margin: '6px 0' }}>
+                <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Dedicated Person at Campus
+                </span>
+                <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Quality Leads Generation Ads Campaigns
+                </span>
+                <span style={{ fontSize: '14.5px', color: '#e2e8f0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ color: '#4ade80', fontWeight: 900 }}>✓</span> Strategic Admission Boosting
+                </span>
+              </div>
+
+              <p style={{ color: 'rgba(241, 245, 249, 0.95)', maxWidth: '850px', fontSize: '15.5px', margin: 0, lineHeight: 1.6, textAlign: 'center' }}>
+                Strategic Digital Marketing Services for Educational Institutes with our Dedicated Person at Campus! Boost Your Institute Admissions with our Quality Leads Generation Ads Campaigns.
+              </p>
+
+              <div style={{ marginTop: '12px' }}>
+                <Link 
+                  to="/contact" 
+                  className="btn" 
+                  style={{ 
+                    backgroundColor: '#ffffff', 
+                    color: '#0284c7', 
+                    fontWeight: 800, 
+                    padding: '16px 36px', 
+                    fontSize: '16px',
+                    borderRadius: '30px',
+                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.25)',
+                    transition: 'all 0.3s ease',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}
+                >
+                  Enquiry Form to Get Started <ArrowRight size={18} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
 
       </div>
     </div>

@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, CheckCircle, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
+import Breadcrumbs from '../components/Breadcrumbs';
+import servicesHeroBg from '../assets/hero_bg/services_hero_art.svg';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -120,6 +122,19 @@ const ServiceDetail = () => {
         faqList={service.faqs ? (typeof service.faqs === 'string' ? JSON.parse(service.faqs) : service.faqs) : []}
         breadcrumbPaths={breadcrumbs}
       />
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ backgroundImage: `url(${servicesHeroBg})` }}
+      >
+        <div className="container hero-content-wrapper">
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
+        </div>
+      </section>
+
       {/* Dynamic Service Banner Header */}
       <div 
         style={{

@@ -172,28 +172,28 @@ const clientLogos = [
 
 const staticWhyChooseUsData = [
   {
-    title: 'Custom Solutions',
-    desc: 'Every business is unique. We build tailored systems that align perfectly with your organizational goals.'
+    title: '360° Digital Expertise',
+    desc: 'From marketing and branding to websites and automation, we provide complete digital solutions under one roof.'
+  },
+  {
+    title: 'Industry-Focused Strategies',
+    desc: 'We understand different industries and create customized strategies that connect with your audience and deliver results.'
+  },
+  {
+    title: 'Creative & Data-Driven Approach',
+    desc: 'Combining creative ideas with analytics to create campaigns that improve visibility, engagement and conversions.'
   },
   {
     title: 'Experienced Team',
-    desc: 'Skilled developers, UI/UX designers, certified marketers, and systems consultants working in alignment.'
+    desc: 'A skilled team of marketers, designers, developers and content creators working together to grow your brand.'
   },
   {
-    title: 'Growth Focused',
-    desc: 'Our engineering designs focus on improving operational efficiency, search visibility, and revenue streams.'
+    title: 'Transparent Process',
+    desc: 'Clear communication, regular updates and a structured workflow keep you informed at every stage.'
   },
   {
-    title: 'Reliable Support',
-    desc: 'Dedicated support before, during, and after project completion to ensure uninterrupted operations.'
-  },
-  {
-    title: 'Scalable Technology',
-    desc: 'Future-ready architectures that scale seamlessly as your userbase and inventory databases grow.'
-  },
-  {
-    title: 'Transparent Communication',
-    desc: 'Regular updates, visual staging links, clear Slack reports, and structured progress timelines.'
+    title: 'Results That Matter',
+    desc: 'Focused on generating meaningful outcomes, stronger brand presence, better reach and business growth.'
   }
 ];
 
@@ -267,7 +267,7 @@ const defaultHomepageData = {
     description: 'We partner with businesses to deploy scalable digital platforms, driving engagement and compounding search visibility.'
   },
   services: {
-    title: 'Core Marketing & Engineering Capabilities',
+    title: 'Our Digital Growth Solutions',
     description: 'We deliver full-funnel digital marketing, social media strategies, event management, and robust web solutions.'
   },
   cta: {
@@ -363,13 +363,14 @@ const Home = () => {
           boxSizing: 'border-box'
         }}
       >
-        {/* Dynamic Background Image on the Right */}
+        {/* Dynamic Background Image - Full Width Hero Section */}
         <div style={{
           position: 'absolute',
           top: 0,
+          left: 0,
           right: 0,
           bottom: 0,
-          width: '55%',
+          width: '100%',
           zIndex: 1,
           overflow: 'hidden'
         }} className="hero-right-img-container">
@@ -576,7 +577,7 @@ const Home = () => {
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px'
               }}>
-                Discover Us
+                Journey
               </span>
               <h2 style={{ fontSize: '36px', marginBottom: '20px', fontWeight: 800, lineHeight: 1.25, textAlign: 'left' }}>
                 See How We Elevate Educational Brands
@@ -648,13 +649,13 @@ const Home = () => {
               fontSize: '14px',
               marginBottom: '16px'
             }}>
-              Academic Verticals
+              Building Partnerships for Future.
             </span>
             <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>Major Educational Institutions We Work With</h2>
             <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '24px', maxWidth: '800px', margin: '0 auto 24px auto', lineHeight: 1.4 }}>
               WISH TO BE AN EDUCATIONAL INSTITUTE WITH A MAGNIFICENT BRAND IMAGE ONLINE?
             </h3>
-            <p style={{ maxWidth: '900px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6 }}>
+            <p style={{ maxWidth: '900px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, textAlign: 'center' }}>
               We are Digital Marketing Partner of Educational Institutes like International Schools, Colleges, Campuses, Universities, etc. Our Major Activities include Digital Marketing Activities, Admission Marketing, Website development, Branding, Content Marketing, Public Relations, Influencer Engagements, Search Engine Optimization (SEO), Social Media Management, Reputation Management, Powerful Video Stories & Maximizing Event Success.
             </p>
           </div>
@@ -673,7 +674,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 whileHover={{ y: -10, scale: 1.03, boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.22)', borderColor: 'var(--primary)' }}
                 style={{ 
-                  textAlign: 'left', 
+                  textAlign: 'center', 
                   display: 'flex', 
                   flexDirection: 'column', 
                   justifyContent: 'space-between',
@@ -704,7 +705,7 @@ const Home = () => {
                     width: '56px', 
                     height: '56px', 
                     borderRadius: '16px', 
-                    marginBottom: '22px',
+                    margin: '0 auto 22px auto',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -713,10 +714,10 @@ const Home = () => {
                   }}>
                     {getIconComponent(inst.iconName)}
                   </div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'left', letterSpacing: '-0.3px' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'center', letterSpacing: '-0.3px' }}>
                     {inst.title}
                   </h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: 0, textAlign: 'left' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: 0, textAlign: 'center' }}>
                     {inst.desc}
                   </p>
                 </div>
@@ -764,7 +765,7 @@ const Home = () => {
                 }}
                 style={{ 
                   backgroundColor: 'var(--bg-primary)', 
-                  textAlign: 'left',
+                  textAlign: 'center',
                   padding: '32px 28px',
                   borderRadius: '20px',
                   border: '1px solid var(--border-color)',
@@ -797,7 +798,7 @@ const Home = () => {
                       width: '56px', 
                       height: '56px', 
                       borderRadius: '16px', 
-                      marginBottom: '24px',
+                      margin: '0 auto 24px auto',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -812,11 +813,11 @@ const Home = () => {
                     {idx === 0 ? <Zap size={26} /> : idx === 1 ? <Share2 size={26} /> : <Camera size={26} />}
                   </div>
                   
-                  <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '14px', textAlign: 'left', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
+                  <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '14px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
                     {service.title}
                   </h3>
                   
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: 0, lineHeight: 1.6, textAlign: 'left' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: 0, lineHeight: 1.6, textAlign: 'center' }}>
                     {service.desc}
                   </p>
                 </div>
@@ -984,7 +985,7 @@ const Home = () => {
                   fontSize: '14px',
                   marginBottom: '16px'
                 }}>
-                  Digital Marketing Training + Internship Program
+                  Digital Marketing Course in Mumbai
                 </span>
                 <h2 style={{ fontSize: '36px', fontWeight: 800, marginBottom: '16px', textAlign: 'left' }}>
                   Digital Marketing Training + Internship Program
@@ -1089,7 +1090,7 @@ const Home = () => {
                   width: '52px', 
                   height: '52px', 
                   borderRadius: '16px', 
-                  marginBottom: '22px',
+                  margin: '0 auto 22px auto',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1098,8 +1099,8 @@ const Home = () => {
                 }}>
                   <CheckCircle2 size={26} />
                 </div>
-                <h3 style={{ fontSize: '21px', fontWeight: 800, marginBottom: '12px', textAlign: 'left', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>{item.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, textAlign: 'left', margin: 0 }}>{item.desc}</p>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, marginBottom: '12px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>{item.title}</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.6, textAlign: 'center', margin: 0 }}>{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -1109,6 +1110,34 @@ const Home = () => {
               Read More About Us <ArrowRight size={16} />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="container">
+          <div className="text-center" style={{ marginBottom: '50px' }}>
+            <span style={{ 
+              display: 'inline-block', 
+              backgroundColor: 'var(--primary-light)', 
+              color: 'var(--primary)', 
+              padding: '6px 16px', 
+              borderRadius: '20px', 
+              fontWeight: 600, 
+              fontSize: '14px',
+              marginBottom: '16px'
+            }}>
+              Client Reviews & Google Ratings
+            </span>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px', textAlign: 'center' }}>
+              What Educational Leaders Say About Host2Unlimited
+            </h2>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px', textAlign: 'center' }}>
+              Real reviews from school heads, trustees, and institute directors across Maharashtra.
+            </p>
+          </div>
+
+          <TestimonialSlider />
         </div>
       </section>
 
@@ -1165,7 +1194,7 @@ const Home = () => {
 
               {/* Title */}
               <h2 style={{ color: 'white', fontSize: 'clamp(22px, 3.8vw, 34px)', fontWeight: 900, margin: 0, lineHeight: 1.3, maxWidth: '980px', letterSpacing: '-0.5px' }}>
-                BEST DIGITAL MARKETING AGENCY FOR EDUCATION SECTOR IN MUMBAI | NASHIK | PUNE | SATARA | PAN MAHARASHTRA
+                Strategic Digital Marketing Services for Educational Institutes with our Dedicated Person at Campus!
               </h2>
 
               {/* Regional Pills */}

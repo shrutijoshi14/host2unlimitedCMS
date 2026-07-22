@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import educationalHeroBg from '../assets/hero_bg/educational_hero_art.svg';
 
 const sectorsData = {
   preschools: {
@@ -371,7 +372,7 @@ const EducationalInstituteDetail = () => {
   ];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div>
       <SEOMeta
         title={`${sector.title} Digital Marketing | Host2Unlimited`}
         description={sector.lead}
@@ -379,7 +380,33 @@ const EducationalInstituteDetail = () => {
         canonical={`https://host2unlimited.com/educational-institutes/${id}`}
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+      >
+        <img 
+          src={educationalHeroBg} 
+          alt={`${sector.title} Hero Background`} 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
+        </div>
+      </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
         

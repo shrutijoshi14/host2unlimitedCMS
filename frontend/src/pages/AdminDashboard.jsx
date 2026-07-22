@@ -9,7 +9,7 @@ import {
   ChevronLeft, ChevronRight, Check, X, AlertCircle
 } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import logoWebp from '../assets/logo.webp';
+import logoPng from '../assets/logo.png';
 
 const ACTIVE_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -1167,7 +1167,7 @@ const AdminDashboard = () => {
         gap: '24px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', animation: 'pulse 1.8s infinite ease-in-out' }}>
-          <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
+          <img src={logoPng} alt="Host2Unlimited Logo" style={{ height: '48px', width: 'auto', objectFit: 'contain' }} />
         </div>
         
         {/* Smooth Loader Ring */}

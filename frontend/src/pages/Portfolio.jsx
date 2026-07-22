@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
+import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_art.svg';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -115,7 +116,7 @@ const Portfolio = () => {
   const breadcrumbs = [{ name: 'Portfolio', path: '/portfolio' }];
 
   return (
-    <div style={{ padding: '100px 0 100px 0' }}>
+    <div>
       <SEOMeta
         title="Our Enterprise Engineering Portfolio | Host2Unlimited"
         description="Browse through the websites, custom databases, CRM portals, and high-availability cloud configurations constructed by Host2Unlimited."
@@ -123,10 +124,35 @@ const Portfolio = () => {
         canonical="https://host2unlimited.com/portfolio"
         breadcrumbPaths={breadcrumbs}
       />
-      <Breadcrumbs paths={breadcrumbs} />
+      
+      {/* Hero Banner Section */}
+      <section 
+        className="page-hero-banner"
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+      >
+        <img 
+          src={caseStudiesHeroBg} 
+          alt="Portfolio Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+            <Breadcrumbs paths={breadcrumbs} />
+          </div>
+        </div>
+      </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-        
         {/* Header Block */}
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <span style={{ 
@@ -143,7 +169,7 @@ const Portfolio = () => {
           </span>
           <h1 style={{ fontSize: '46px', fontWeight: 800, marginBottom: '20px' }}>Featured Projects</h1>
           <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '17px' }}>
-            Explore a collection of high-performance portals, ecommerce systems, and custom software architectures built for growth.
+            High-performance web applications, enterprise systems, and custom digital marketing solutions delivered for our clients.
           </p>
         </div>
 

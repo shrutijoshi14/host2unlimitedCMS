@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Shield, Zap, Globe, Server, Award, ChevronDown, ChevronUp, AlertCircle, Users, Settings } from 'lucide-react';
 import SEOMeta from '../../components/SEOMeta';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import servicesHeroBg from '../../assets/hero_bg/services_hero_art.svg';
 
 const ResellerHosting = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -113,7 +114,7 @@ const ResellerHosting = () => {
       </div>
 
       {/* Hero Header */}
-      <section className="section-padding" style={{ padding: '80px 0', position: 'relative', background: 'var(--grad-hero)' }}>
+      <section className="section-padding" style={{ padding: '80px 0', position: 'relative', backgroundImage: `url(${servicesHeroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '50px', alignItems: 'center' }} className="hero-grid">
             <div style={{ textAlign: 'left' }}>

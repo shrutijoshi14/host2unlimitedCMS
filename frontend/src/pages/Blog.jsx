@@ -247,9 +247,24 @@ const Blog = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ backgroundImage: `url(${blogHeroBg})` }}
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
-        <div className="container hero-content-wrapper">
+        <img 
+          src={blogHeroBg} 
+          alt="Blog Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
@@ -257,8 +272,7 @@ const Blog = () => {
       </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-
-        {/* Subpage Header Content shifted below Hero Banner */}
+        {/* Subpage Header Content */}
         <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>Technical Articles {isCMSActive && '• Live'}</span>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>

@@ -27,7 +27,7 @@ import ResellerHosting from './pages/hosting/ResellerHosting';
 import { ThemeProvider } from './context/ThemeContext';
 import { LeadProvider } from './context/LeadContext';
 import { Phone, Mail } from 'lucide-react';
-import logoWebp from './assets/logo.webp';
+import logoPng from './assets/logo.png';
 
 // Scroll to top helper on route transition
 const ScrollToTop = () => {
@@ -258,7 +258,7 @@ function AppContent() {
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
+              <img src={logoPng} alt="Host2Unlimited Logo" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
               <span style={{ fontSize: '11px', letterSpacing: '3px', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase', fontWeight: 700 }}>
                 Initializing {loadProgress}%
               </span>
@@ -274,7 +274,7 @@ function AppContent() {
       <div className="main-layout-wrap" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', justifyContent: 'space-between', overflowX: 'hidden' }}>
         {location.pathname !== '/admin' && <Header />}
         
-        <main style={{ flexGrow: 1 }}>
+        <main style={{ flexGrow: 1, paddingTop: location.pathname === '/admin' ? '0px' : '100px' }}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />

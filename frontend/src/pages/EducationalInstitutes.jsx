@@ -90,40 +90,40 @@ const caseStudiesData = {
 
 const faqs = [
   {
-    q: 'What is Host2Unlimited?',
-    a: 'Host2Unlimited is a reliable web hosting provider and digital partner offering unlimited hosting solutions and dedicated digital marketing for educational institutes.'
+    q: "What does Host2Unlimited do?",
+    a: "Host2Unlimited is a digital marketing partner specializing in the education sector, working with schools, colleges, universities, and educational campuses across Maharashtra."
   },
   {
-    q: 'Which hosting plans do you offer?',
-    a: 'We offer Shared NVMe, KVM VPS, Cloud, and Dedicated Hosting plans optimized for speed and high availability.'
+    q: "What services does Host2Unlimited offer?",
+    a: "Their core services include digital marketing, admission marketing, website development, content marketing and branding, public relations, influencer engagement, SEO, social media management, reputation management, video storytelling, and event marketing."
   },
   {
-    q: 'Can I host multiple websites on one account?',
-    a: 'Absolutely. Our unlimited hosting plans allow you to host multiple domains and web portals on a single dashboard.'
+    q: "Which types of educational institutions does Host2Unlimited work with?",
+    a: "They serve preschools & daycare centers, primary & secondary schools, international schools (CBSE/ICSE/IB), private coaching institutes, junior and degree colleges, engineering & technology institutes, management studies institutes, and public/private/deemed universities."
   },
   {
-    q: 'Do you provide daily backups?',
-    a: 'Yes, we perform automatic daily backups to safeguard your databases, file systems, and emails from data loss.'
+    q: "Does Host2Unlimited provide a dedicated person for my campus?",
+    a: "Yes — they offer a dedicated in-house Digital Marketing Coordinator at your campus for tasks like event coverage, admission lead tracking, social media monitoring, content creation, SEO-updated websites, and analytics reporting."
   },
   {
-    q: 'Do you offer website migration services?',
-    a: 'Yes, we provide 100% free website migration services with zero downtime for all new customers.'
+    q: "Where is Host2Unlimited located and where do they operate?",
+    a: "Their head office is in Mulund West, Mumbai, and they serve clients across Mumbai, Nashik, Pune, Chhatrapati Sambhajinagar, Satara, Jalgaon, Sangli, and Kolhapur."
   },
   {
-    q: 'Can I upgrade my hosting plan later?',
-    a: 'Yes, you can upgrade your virtual hosting or CPU resources instantly as your platform traffic grows.'
+    q: "When was Host2Unlimited founded?",
+    a: "The company was founded in 2010 as a strategic digital partner for educational institutes in Maharashtra."
   },
   {
-    q: 'Which control panel do you use?',
-    a: 'We use cPanel, providing a clean, standard dashboard interface to configure databases, file directories, and SSL.'
+    q: "Does Host2Unlimited offer any training or courses?",
+    a: "Yes, they offer a comprehensive Digital Marketing Course in Mumbai covering SEO, social media marketing, Google Ads, email marketing, content marketing/blogging, and analytics — designed for beginners, professionals, and entrepreneurs, with 3-month and 6-month program options."
   },
   {
-    q: 'Do you support WordPress and other CMS platforms?',
-    a: 'Yes, our servers fully support WordPress, Joomla, Drupal, Moodle LMS, and other open-source learning management tools.'
+    q: "How can I get in touch with Host2Unlimited?",
+    a: "You can contact them via phone for different needs — new enquiries/sales, existing client support, digital marketing & training, or careers/placements — or email them at info@host2unlimited.com, or fill out their online enquiry form."
   },
   {
-    q: 'Is technical support available 24/7?',
-    a: 'Absolutely. Our technical support experts are available 24/7/365 via live chat, email ticket desks, and phone.'
+    q: "Has Host2Unlimited received any industry recognition?",
+    a: 'Yes — founder Rampratap Bugalia was honored with the "Award of Innovative Digital Solutions Partner for Educational Institutes" at the Indian School Awards 2025.'
   }
 ];
 
@@ -178,9 +178,24 @@ const EducationalInstitutes = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ backgroundImage: `url(${educationalHeroBg})` }}
+        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
-        <div className="container hero-content-wrapper">
+        <img 
+          src={educationalHeroBg} 
+          alt="Educational Institutes Hero Background" 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            objectPosition: 'center center',
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }} 
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
@@ -188,8 +203,7 @@ const EducationalInstitutes = () => {
       </section>
 
       <div className="container" style={{ marginTop: '40px' }}>
-
-        {/* Subpage Header Content shifted below Hero Banner */}
+        {/* Subpage Header Content */}
         <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 45px auto' }}>
           <span className="badge" style={{ marginBottom: '12px' }}>Future-Ready Digital Education</span>
           <h1 style={{ fontSize: '36px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.25 }}>
@@ -222,8 +236,8 @@ const EducationalInstitutes = () => {
                 <div className="card-icon-container" style={{ width: '40px', height: '40px', borderRadius: '10px', marginBottom: '16px' }}>
                   <Icon size={20} />
                 </div>
-                <h3 style={{ fontSize: '15.5px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>{sector.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '12.5px', lineHeight: 1.4, marginBottom: 0 }}>{sector.desc}</p>
+                <h3 style={{ fontSize: '15.5px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)', textAlign: 'left' }}>{sector.title}</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '12.5px', lineHeight: 1.4, marginBottom: 0, textAlign: 'left' }}>{sector.desc}</p>
               </Link>
             );
           })}

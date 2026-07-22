@@ -1,31 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 280" width="1600" height="280">
   <defs>
-    <linearGradient id="servicesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0b0f19"/>
-      <stop offset="50%" stop-color="#0284c7"/>
-      <stop offset="100%" stop-color="#0f172a"/>
+    <linearGradient id="servGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#041f3d"/>
+      <stop offset="50%" stop-color="#0f2b48"/>
+      <stop offset="100%" stop-color="#0a192f"/>
     </linearGradient>
-    <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#818cf8" stop-opacity="0.8"/>
+    <linearGradient id="cyanGlowServ" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.95"/>
     </linearGradient>
+    <filter id="glowServ" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
-  <rect width="1600" height="500" fill="url(#servicesGrad)"/>
-  <!-- Abstract Digital Grid & Nodes -->
-  <g opacity="0.25">
-    <path d="M 0,100 L 1600,100 M 0,200 L 1600,200 M 0,300 L 1600,300 M 0,400 L 1600,400" stroke="#38bdf8" stroke-width="1" stroke-dasharray="8 8"/>
-    <path d="M 200,0 L 200,500 M 400,0 L 400,500 M 600,0 L 600,500 M 800,0 L 800,500 M 1000,0 L 1000,500 M 1200,0 L 1200,500 M 1400,0 L 1400,500" stroke="#38bdf8" stroke-width="1" stroke-dasharray="8 8"/>
+
+  <rect width="1600" height="280" fill="url(#servGrad)"/>
+
+  <!-- Orbs -->
+  <circle cx="360" cy="140" r="150" fill="#06b6d4" opacity="0.35" filter="url(#glowServ)"/>
+  <circle cx="800" cy="140" r="160" fill="#0284c7" opacity="0.25" filter="url(#glowServ)"/>
+  <circle cx="1240" cy="140" r="150" fill="#3b82f6" opacity="0.35" filter="url(#glowServ)"/>
+
+  <!-- Grid -->
+  <g stroke="#38bdf8" stroke-width="1" opacity="0.2">
+    <line x1="0" y1="70" x2="1600" y2="70"/>
+    <line x1="0" y1="140" x2="1600" y2="140"/>
+    <line x1="0" y1="210" x2="1600" y2="210"/>
+    <line x1="300" y1="0" x2="300" y2="280"/>
+    <line x1="550" y1="0" x2="550" y2="280"/>
+    <line x1="800" y1="0" x2="800" y2="280"/>
+    <line x1="1050" y1="0" x2="1050" y2="280"/>
+    <line x1="1300" y1="0" x2="1300" y2="280"/>
   </g>
-  <!-- Floating Tech Icons & Circuit Nodes -->
-  <g transform="translate(150, 100)" opacity="0.7">
-    <circle cx="100" cy="150" r="40" fill="none" stroke="#38bdf8" stroke-width="3"/>
-    <path d="M70,150 L130,150 M100,120 L100,180" stroke="#38bdf8" stroke-width="3"/>
-    <circle cx="400" cy="80" r="30" fill="none" stroke="#818cf8" stroke-width="3"/>
-    <rect x="385" y="65" width="30" height="30" fill="none" stroke="#818cf8" stroke-width="3" rx="6"/>
+
+  <!-- Waves -->
+  <path d="M 0 110 Q 400 170 800 110 T 1600 130" fill="none" stroke="#22d3ee" stroke-width="3" opacity="0.7" filter="url(#glowServ)"/>
+  <path d="M 0 170 Q 450 100 900 170 T 1600 120" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.8" filter="url(#glowServ)"/>
+
+  <!-- Left Side Gear Icon (Safe Position X=320, Y=95) -->
+  <g transform="translate(320, 95)">
+    <circle cx="45" cy="45" r="36" fill="url(#cyanGlowServ)" opacity="0.85" filter="url(#glowServ)"/>
+    <circle cx="45" cy="45" r="15" fill="#041f3d"/>
+    <path d="M45,3 V11 M45,79 V87 M3,45 H11 M79,45 H87 M15,15 L21,21 M69,69 L75,75 M15,75 L21,69 M69,21 L75,15" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
   </g>
-  <g transform="translate(1100, 80)" opacity="0.7">
-    <polygon points="150,50 200,150 100,150" fill="none" stroke="#38bdf8" stroke-width="3"/>
-    <circle cx="150" cy="110" r="20" fill="#38bdf8" opacity="0.3"/>
-    <path d="M300,100 C350,50 400,150 450,100" fill="none" stroke="#818cf8" stroke-width="4" stroke-dasharray="10 6"/>
+
+  <!-- Right Side Platform Cube Icon (Safe Position X=1120, Y=96) -->
+  <g transform="translate(1120, 96)">
+    <polygon points="52,9 90,28 52,47 14,28" fill="url(#cyanGlowServ)" filter="url(#glowServ)"/>
+    <polygon points="14,28 52,47 52,87 14,68" fill="#0284c7" opacity="0.85"/>
+    <polygon points="90,28 52,47 52,87 90,68" fill="#0369a1" opacity="0.95"/>
   </g>
+
+  <!-- Particles -->
+  <circle cx="500" cy="110" r="5" fill="#22d3ee" filter="url(#glowServ)"/>
+  <circle cx="680" cy="180" r="6" fill="#60a5fa" filter="url(#glowServ)"/>
+  <circle cx="950" cy="110" r="5" fill="#38bdf8" filter="url(#glowServ)"/>
 </svg>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Briefcase, GraduationCap, TrendingUp, Headphones, ArrowRight, Globe } from 'lucide-react';
 
-import logoWebp from '../assets/logo.webp';
+import logoPng from '../assets/logo.png';
 
 const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
 
@@ -55,7 +55,7 @@ const Footer = () => {
           {/* Column 1: Brand Identity */}
           <div className="footer-identity-col">
             <Link to="/" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-              <img src={logoWebp} alt="Host2Unlimited Logo" style={{ height: '54px', width: 'auto', objectFit: 'contain' }} />
+              <img src={logoPng} alt="Host2Unlimited Logo" style={{ height: '54px', width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
               Host2Unlimited is Strategic Digital Partner for Educational Institutes in Maharashtra founded in 2010. We are Digital Partner for Educational Institutes like International Schools, Engineering/MBA Colleges, Educational Campus & Universities, etc.
