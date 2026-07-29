@@ -644,7 +644,7 @@ const CaseStudies = () => {
 
         {/* CTA Banner */}
         <div
-          className="card-glass"
+          className="card-glass dark-cta-banner"
           style={{
             background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #2563eb 100%)',
             padding: '60px 40px',

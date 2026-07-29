@@ -1168,7 +1168,7 @@ const Home = () => {
       {/* Bottom CTA Banner */}
       <section className="section-padding" style={{ padding: '80px 0', position: 'relative' }}>
         <div className="container">
-          <div className="card-glass" style={{ 
+          <div className="card-glass dark-cta-banner" style={{ 
             background: 'linear-gradient(135deg, #0b0f19 0%, #1e1b4b 50%, #0284c7 100%)', 
             color: 'white', 
             padding: '60px 40px', 

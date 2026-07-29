@@ -983,3 +983,21 @@ table-wrapper {
     font-size: 28px;
   }
 }
+
+/* Dark CTA Banner typography lock (ensures text is crisp white in Light Mode and Dark Mode) */
+.dark-cta-banner,
+.dark-cta-banner h1,
+.dark-cta-banner h2,
+.dark-cta-banner h3,
+.dark-cta-banner h4,
+body:not(.dark) .dark-cta-banner h1,
+body:not(.dark) .dark-cta-banner h2,
+body:not(.dark) .dark-cta-banner h3,
+body:not(.dark) .dark-cta-banner h4 {
+  color: #ffffff !important;
+}
+
+.dark-cta-banner p,
+body:not(.dark) .dark-cta-banner p {
+  color: rgba(241, 245, 249, 0.95) !important;
+}

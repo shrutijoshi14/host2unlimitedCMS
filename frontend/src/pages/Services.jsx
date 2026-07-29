@@ -274,7 +274,7 @@ const Services = () => {
 
         {/* Bottom CTA Banner from Homepage */}
         <section style={{ padding: '60px 0 20px 0', position: 'relative' }}>
-          <div className="card-glass" style={{ 
+          <div className="card-glass dark-cta-banner" style={{ 
             background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #2563eb 100%)', 
             color: 'white', 
             padding: '65px 40px', 
