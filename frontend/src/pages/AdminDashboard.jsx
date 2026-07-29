@@ -28,10 +28,23 @@ const AdminDashboard = () => {
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   
   // Auth state variables
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return !!localStorage.getItem('h2u_admin_user');
+    } catch {
+      return false;
+    }
+  });
   const [adminExists, setAdminExists] = useState(false);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('h2u_admin_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
 
   // Form states for login/register
   const [username, setUsername] = useState('');
@@ -309,6 +322,11 @@ const AdminDashboard = () => {
         throw new Error(data.error || 'Authentication failed.');
       }
 
+      try {
+        localStorage.setItem('h2u_admin_user', JSON.stringify(data.user));
+      } catch (e) {
+        console.error('Error saving session:', e);
+      }
       setLoggedInUser(data.user);
       setIsAuthenticated(true);
       setError('');
@@ -359,6 +377,11 @@ const AdminDashboard = () => {
         throw new Error(data.error || 'Registration failed.');
       }
 
+      try {
+        localStorage.setItem('h2u_admin_user', JSON.stringify(data.user));
+      } catch (e) {
+        console.error('Error saving session:', e);
+      }
       setLoggedInUser(data.user);
       setIsAuthenticated(true);
       setAdminExists(true);
@@ -454,6 +477,11 @@ const AdminDashboard = () => {
 
   // Logout admin
   const handleLogout = () => {
+    try {
+      localStorage.removeItem('h2u_admin_user');
+    } catch (e) {
+      console.error('Error clearing session:', e);
+    }
     setIsAuthenticated(false);
     setLoggedInUser(null);
     setUsernameOrEmail('');

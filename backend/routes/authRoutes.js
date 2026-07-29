@@ -14,7 +14,8 @@ router.get('/check', async (req, res) => {
   try {
     const db = getPool();
     const [rows] = await db.query('SELECT COUNT(*) as count FROM admins');
-    const exists = rows[0].count > 0;
+    const countVal = rows && rows[0] ? Number(rows[0].count) : 0;
+    const exists = countVal > 0;
     res.json({ exists });
   } catch (error) {
     res.status(500).json({ error: error.message });
