@@ -381,14 +381,16 @@ export async function initializeDatabase() {
     if (moduleRows[0].count === 0) {
       const modules = [
         ['blog', 'Blog Management', 1],
-        ['services', 'Services Management', 0],
+        ['services', 'Services Management', 1],
         ['contact_leads', 'Contact Leads Log', 1],
-        ['solutions', 'Solutions Management', 0],
-        ['portfolio', 'Portfolio Management', 0],
-        ['case_studies', 'Case Studies Management', 0],
-        ['pricing', 'Pricing Management', 0],
-        ['careers', 'Careers Management', 0],
-        ['about', 'About Us Management', 0]
+        ['solutions', 'Solutions Management', 1],
+        ['portfolio', 'Portfolio Management', 1],
+        ['case_studies', 'Case Studies Management', 1],
+        ['pricing', 'Pricing Management', 1],
+        ['careers', 'Careers Management', 1],
+        ['about', 'About Us Management', 1],
+        ['team', 'Team Members Management', 1],
+        ['testimonials', 'Client Testimonials Management', 1]
       ];
 
       for (const mod of modules) {
@@ -401,12 +403,14 @@ export async function initializeDatabase() {
     } else {
       // Ensure the newer modules exist in case the database was already partially seeded
       const newModules = [
-        ['solutions', 'Solutions Management', 0],
-        ['portfolio', 'Portfolio Management', 0],
-        ['case_studies', 'Case Studies Management', 0],
-        ['pricing', 'Pricing Management', 0],
-        ['careers', 'Careers Management', 0],
-        ['about', 'About Us Management', 0]
+        ['solutions', 'Solutions Management', 1],
+        ['portfolio', 'Portfolio Management', 1],
+        ['case_studies', 'Case Studies Management', 1],
+        ['pricing', 'Pricing Management', 1],
+        ['careers', 'Careers Management', 1],
+        ['about', 'About Us Management', 1],
+        ['team', 'Team Members Management', 1],
+        ['testimonials', 'Client Testimonials Management', 1]
       ];
       for (const [id, name, enabled] of newModules) {
         await pool.query(

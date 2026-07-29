@@ -1797,25 +1797,27 @@ const AdminDashboard = () => {
             </button>
           )}
 
-          <button 
-            onClick={() => setActiveTab('team')}
-            style={{
-              padding: '10px 20px',
-              borderRadius: 'var(--radius-sm)',
-              border: 'none',
-              backgroundColor: activeTab === 'team' ? 'var(--primary-light)' : 'transparent',
-              color: activeTab === 'team' ? 'var(--primary)' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '14.5px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all var(--transition-fast)'
-            }}
-          >
-            <Icons.Users size={16} /> Team Members
-          </button>
+          {isModuleEnabled('team') && (
+            <button 
+              onClick={() => setActiveTab('team')}
+              style={{
+                padding: '10px 20px',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                backgroundColor: activeTab === 'team' ? 'var(--primary-light)' : 'transparent',
+                color: activeTab === 'team' ? 'var(--primary)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: '14.5px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all var(--transition-fast)'
+              }}
+            >
+              <Icons.Users size={16} /> Team Members
+            </button>
+          )}
 
           {isModuleEnabled('testimonials') && (
             <button 
@@ -2444,6 +2446,8 @@ const AdminDashboard = () => {
                            mod.id === 'pricing' ? 'Enable/Disable dynamic product pricing plans catalog.' :
                            mod.id === 'careers' ? 'Enable/Disable dynamic recruitment listings and applications.' :
                            mod.id === 'about' ? 'Enable/Disable custom company values and counter stats.' :
+                           mod.id === 'team' ? 'Enable/Disable team members directory and leadership profiles.' :
+                           mod.id === 'testimonials' ? 'Enable/Disable client testimonials and review slider.' :
                            'CMS panel.'}
                         </span>
                       </div>
