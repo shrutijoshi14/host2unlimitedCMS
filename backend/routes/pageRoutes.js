@@ -191,6 +191,16 @@ const DEFAULT_PAGE_CONTENTS = {
   }
 };
 
+// Helper for cross-database safe upsert (MySQL & PostgreSQL compatible)
+const savePageToDB = async (db, id, stringified) => {
+  const [existing] = await db.query('SELECT id FROM cms_pages WHERE id = ?', [id]);
+  if (existing && existing.length > 0) {
+    return await db.query('UPDATE cms_pages SET content_data = ? WHERE id = ?', [stringified, id]);
+  } else {
+    return await db.query('INSERT INTO cms_pages (id, content_data) VALUES (?, ?)', [id, stringified]);
+  }
+};
+
 // GET page content
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -205,11 +215,7 @@ router.get('/:id', async (req, res) => {
         
         // Auto-seed into DB if missing
         try {
-          await db.query(
-            `INSERT INTO cms_pages (id, content_data) VALUES (?, ?) 
-             ON DUPLICATE KEY UPDATE content_data = ?`,
-            [id, stringified, stringified]
-          );
+          await savePageToDB(db, id, stringified);
         } catch (e) {
           console.warn(`Could not auto-seed ${id}:`, e.message);
         }
@@ -239,12 +245,7 @@ router.post('/:id', async (req, res) => {
     const db = getPool();
     const stringified = JSON.stringify(contentData);
 
-    // Upsert behavior: update if exists, insert if not
-    const [result] = await db.query(
-      `INSERT INTO cms_pages (id, content_data) VALUES (?, ?) 
-       ON DUPLICATE KEY UPDATE content_data = ?`,
-      [id, stringified, stringified]
-    );
+    await savePageToDB(db, id, stringified);
 
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'page_update', page: id });
@@ -252,7 +253,7 @@ router.post('/:id', async (req, res) => {
 
     res.json({
       message: `Universal page content for '${id}' saved successfully.`,
-      updated: result ? result.affectedRows > 0 : true
+      updated: true
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -272,17 +273,15 @@ router.put('/:id', async (req, res) => {
     const db = getPool();
     const stringified = JSON.stringify(contentData);
 
-    await db.query(
-      'UPDATE cms_pages SET content_data = ? WHERE id = ?',
-      [stringified, id]
-    );
+    await savePageToDB(db, id, stringified);
 
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'page_update', page: id });
     }
 
     res.json({
-      message: `Universal page content for '${id}' updated successfully.`
+      message: `Universal page content for '${id}' updated successfully.`,
+      updated: true
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
