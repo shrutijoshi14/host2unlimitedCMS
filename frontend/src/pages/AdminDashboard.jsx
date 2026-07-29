@@ -2484,13 +2484,15 @@ const ALL_DEFAULT_MODULES = [
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
+                        flexWrap: 'wrap',
+                        gap: '14px',
                         padding: '16px 20px',
                         backgroundColor: 'var(--bg-secondary)',
                         border: '1px solid var(--border-color)',
                         borderRadius: 'var(--radius-md)'
                       }}
                     >
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', flex: '1 1 240px' }}>
                         <span style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
                           {mod.name}
                         </span>
@@ -2510,7 +2512,7 @@ const ALL_DEFAULT_MODULES = [
                         </span>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', flexShrink: 0 }}>
                         <span 
                           style={{ 
                             fontSize: '11px', 
@@ -2518,7 +2520,7 @@ const ALL_DEFAULT_MODULES = [
                             padding: '5px 12px', 
                             borderRadius: '12px', 
                             letterSpacing: '0.5px',
-                            minWidth: '160px',
+                            minWidth: '150px',
                             textAlign: 'center',
                             display: 'inline-block',
                             backgroundColor: isEnabled ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)', 
