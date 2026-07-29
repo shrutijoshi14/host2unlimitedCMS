@@ -107,6 +107,14 @@ const Portfolio = () => {
       }
     };
     fetchPortfolio();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'portfolio' || e.detail?.page === 'banner') {
+        fetchPortfolio();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => window.removeEventListener('cmsPageUpdate', handleUpdate);
   }, []);
 
   const filteredProjects = filter === 'All' 

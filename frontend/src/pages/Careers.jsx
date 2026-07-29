@@ -128,6 +128,14 @@ const Careers = () => {
       }
     };
     fetchCareers();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'careers' || e.detail?.page === 'banner') {
+        fetchCareers();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => window.removeEventListener('cmsPageUpdate', handleUpdate);
   }, []);
 
   const handleApplyClick = (title) => {

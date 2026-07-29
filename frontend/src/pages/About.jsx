@@ -134,7 +134,7 @@ const Counter = ({ value, suffix = "" }) => {
 
 const About = () => {
   const teamScrollRef = React.useRef(null);
-  const [aboutData] = useState({ values: staticValues, stats: staticStats });
+  const [aboutData, setAboutData] = useState({ values: staticValues, stats: staticStats });
   const [isTeamHovered, setIsTeamHovered] = useState(false);
 
   const scrollTeam = (direction) => {
@@ -163,7 +163,7 @@ const About = () => {
 
     return () => clearInterval(interval);
   }, [membersList, isTeamHovered]);
-  const [banner] = useState({
+  const [banner, setBanner] = useState({
     title: 'Digital Growth Partner for Education Institutes & Businesses',
     subtitle: 'About Us',
     desc: 'Founded in 2010 in Mumbai, our journey began with a deep focus on the education sector—supporting schools, colleges, coaching centers, and ed-tech platforms with creative, results-driven marketing. Partner with Host2Unlimited – your trusted digital partner for educational institutes.',
@@ -188,15 +188,35 @@ const About = () => {
     };
     fetchTeam();
 
+    const fetchAboutPage = async () => {
+      try {
+        const response = await fetch(`${CURRENT_API_BASE}/api/pages/about`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data && (data.values || data.stats)) {
+            setAboutData(data);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load dynamic about page content', err);
+      }
+    };
+    fetchAboutPage();
+
     const handleUpdate = (e) => {
       if (e.detail?.type === 'team_update' || e.type === 'cmsTeamUpdate') {
         fetchTeam();
       }
+      if (e.detail?.page === 'about' || e.detail?.page === 'banner') {
+        fetchAboutPage();
+      }
     };
 
     window.addEventListener('cmsTeamUpdate', handleUpdate);
+    window.addEventListener('cmsPageUpdate', handleUpdate);
     return () => {
       window.removeEventListener('cmsTeamUpdate', handleUpdate);
+      window.removeEventListener('cmsPageUpdate', handleUpdate);
     };
   }, []);
 

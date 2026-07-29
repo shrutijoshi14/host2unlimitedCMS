@@ -119,6 +119,14 @@ const Pricing = () => {
       }
     };
     fetchPricing();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'pricing' || e.detail?.page === 'banner') {
+        fetchPricing();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => window.removeEventListener('cmsPageUpdate', handleUpdate);
   }, []);
 
   const breadcrumbs = [{ name: 'Pricing', path: '/pricing' }];

@@ -582,16 +582,38 @@ const AdminDashboard = () => {
 
   // Listen to SSE live update events in Admin Dashboard
   useEffect(() => {
-    const handleUpdate = (e) => {
-      if (e.detail?.type === 'team_update' || e.type === 'cmsTeamUpdate') {
-        fetchTeam();
-      }
+    if (!isAuthenticated) return;
+
+    const handlePageUpdate = (e) => {
+      fetchPageContent(activeTab);
     };
-    window.addEventListener('cmsTeamUpdate', handleUpdate);
+    const handleBlogUpdate = () => {
+      fetchBlogs();
+    };
+    const handleServiceUpdate = () => {
+      fetchServices();
+    };
+    const handleTeamUpdate = () => {
+      fetchTeam();
+    };
+    const handleModuleUpdate = () => {
+      fetchModules();
+    };
+
+    window.addEventListener('cmsPageUpdate', handlePageUpdate);
+    window.addEventListener('cmsBlogUpdate', handleBlogUpdate);
+    window.addEventListener('cmsServiceUpdate', handleServiceUpdate);
+    window.addEventListener('cmsTeamUpdate', handleTeamUpdate);
+    window.addEventListener('cmsModuleUpdate', handleModuleUpdate);
+
     return () => {
-      window.removeEventListener('cmsTeamUpdate', handleUpdate);
+      window.removeEventListener('cmsPageUpdate', handlePageUpdate);
+      window.removeEventListener('cmsBlogUpdate', handleBlogUpdate);
+      window.removeEventListener('cmsServiceUpdate', handleServiceUpdate);
+      window.removeEventListener('cmsTeamUpdate', handleTeamUpdate);
+      window.removeEventListener('cmsModuleUpdate', handleModuleUpdate);
     };
-  }, [fetchTeam]);
+  }, [isAuthenticated, activeTab, fetchPageContent, fetchBlogs, fetchServices, fetchTeam, fetchModules]);
 
   // Open Create Team modal
   const openCreateTeamModal = () => {
