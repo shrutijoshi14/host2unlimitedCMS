@@ -1,5 +1,6 @@
 import express from 'express';
 import { getPool } from '../db.js';
+import { cacheInvalidate } from '../cache.js';
 
 const router = express.Router();
 
@@ -55,6 +56,7 @@ router.post('/', async (req, res) => {
 
     const newId = result.insertId;
 
+    cacheInvalidate('/api/team');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'team_update', action: 'create', id: newId });
     }
@@ -96,6 +98,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: `Team member with ID ${id} not found.` });
     }
 
+    cacheInvalidate('/api/team');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'team_update', action: 'update', id: Number(id) });
     }
@@ -127,6 +130,7 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: `Team member with ID ${id} not found.` });
     }
 
+    cacheInvalidate('/api/team');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'team_update', action: 'delete', id: Number(id) });
     }

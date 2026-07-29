@@ -1,5 +1,6 @@
 import express from 'express';
 import { getPool } from '../db.js';
+import { cacheInvalidate } from '../cache.js';
 
 const router = express.Router();
 
@@ -247,6 +248,8 @@ router.post('/:id', async (req, res) => {
 
     await savePageToDB(db, id, stringified);
 
+    cacheInvalidate('/api/pages');
+
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'page_update', page: id });
     }
@@ -274,6 +277,8 @@ router.put('/:id', async (req, res) => {
     const stringified = JSON.stringify(contentData);
 
     await savePageToDB(db, id, stringified);
+
+    cacheInvalidate('/api/pages');
 
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'page_update', page: id });

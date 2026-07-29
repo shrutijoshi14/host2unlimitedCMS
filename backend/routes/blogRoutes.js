@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { getPool } from '../db.js';
+import { cacheInvalidate } from '../cache.js';
 
 const router = express.Router();
 
@@ -176,6 +177,7 @@ router.post('/', async (req, res) => {
       ]
     );
 
+    cacheInvalidate('/api/blogs');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'blog_update' });
     }
@@ -252,6 +254,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Blog post not found' });
     }
 
+    cacheInvalidate('/api/blogs');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'blog_update' });
     }
@@ -273,6 +276,7 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Blog post not found' });
     }
 
+    cacheInvalidate('/api/blogs');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'blog_update' });
     }

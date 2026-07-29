@@ -1,5 +1,6 @@
 import express from 'express';
 import { getPool } from '../db.js';
+import { cacheInvalidate } from '../cache.js';
 
 const router = express.Router();
 
@@ -34,6 +35,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: `Module with ID "${id}" not found.` });
     }
 
+    cacheInvalidate('/api/modules');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'module_update', id, enabled: !!enabled });
     }

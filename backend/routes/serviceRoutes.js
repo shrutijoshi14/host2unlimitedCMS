@@ -1,5 +1,6 @@
 import express from 'express';
 import { getPool } from '../db.js';
+import { cacheInvalidate } from '../cache.js';
 
 const router = express.Router();
 
@@ -99,6 +100,7 @@ router.post('/', async (req, res) => {
       ]
     );
 
+    cacheInvalidate('/api/services');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'service_update' });
     }
@@ -165,6 +167,7 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Service not found.' });
     }
 
+    cacheInvalidate('/api/services');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'service_update' });
     }
@@ -186,6 +189,7 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Service not found.' });
     }
 
+    cacheInvalidate('/api/services');
     if (global.broadcastSSE) {
       global.broadcastSSE({ type: 'service_update' });
     }
