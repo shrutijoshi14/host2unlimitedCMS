@@ -2475,7 +2475,7 @@ const ALL_DEFAULT_MODULES = [
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {modules.map((mod) => {
+                {[...modules].sort((a, b) => (a.name || '').localeCompare(b.name || '')).map((mod) => {
                   const isEnabled = mod.enabled === 1 || mod.enabled === true || mod.enabled === '1';
                   return (
                     <div 
