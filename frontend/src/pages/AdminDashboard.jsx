@@ -59,9 +59,28 @@ const AdminDashboard = () => {
   // Tab Selection: 'leads', 'blogs', 'services', 'modules'
   const [activeTab, setActiveTab] = useState('leads');
 
+// Default Module List with 100% enabled fallback
+const ALL_DEFAULT_MODULES = [
+  { id: 'blog', name: 'Blog Management', enabled: 1 },
+  { id: 'services', name: 'Services Management', enabled: 1 },
+  { id: 'contact_leads', name: 'Contact Leads Log', enabled: 1 },
+  { id: 'solutions', name: 'Solutions Management', enabled: 1 },
+  { id: 'portfolio', name: 'Portfolio Management', enabled: 1 },
+  { id: 'case_studies', name: 'Case Studies Management', enabled: 1 },
+  { id: 'pricing', name: 'Pricing Management', enabled: 1 },
+  { id: 'careers', name: 'Careers Management', enabled: 1 },
+  { id: 'about', name: 'About Us Management', enabled: 1 },
+  { id: 'team', name: 'Team Members Management', enabled: 1 },
+  { id: 'testimonials', name: 'Client Testimonials Management', enabled: 1 },
+  { id: 'settings', name: 'Website Global Settings', enabled: 1 },
+  { id: 'homepage', name: 'Homepage Content', enabled: 1 },
+  { id: 'banner', name: 'Page Hero Banners', enabled: 1 },
+  { id: 'seo', name: 'SEO & Metadata Tags', enabled: 1 }
+];
+
   // Module Configuration State
-  const [modules, setModules] = useState([]);
-  const [modulesLoading, setModulesLoading] = useState(true);
+  const [modules, setModules] = useState(ALL_DEFAULT_MODULES);
+  const [modulesLoading, setModulesLoading] = useState(false);
 
   // Blogs Management State
   const [blogs, setBlogs] = useState([]);
@@ -503,7 +522,18 @@ const AdminDashboard = () => {
       const response = await fetch(`${ACTIVE_API_BASE}/api/modules`);
       if (response.ok) {
         const data = await response.json();
-        setModules(data);
+        if (Array.isArray(data) && data.length > 0) {
+          const merged = ALL_DEFAULT_MODULES.map(def => {
+            const found = data.find(m => m.id === def.id);
+            return found ? { ...def, ...found, enabled: Number(found.enabled) } : def;
+          });
+          data.forEach(dbMod => {
+            if (!merged.some(m => m.id === dbMod.id)) {
+              merged.push({ ...dbMod, enabled: Number(dbMod.enabled) });
+            }
+          });
+          setModules(merged);
+        }
       }
     } catch (err) {
       console.error('Error fetching CMS modules:', err);
@@ -796,28 +826,37 @@ const AdminDashboard = () => {
     };
   }, []);
 
-  // Toggle module state
+  // Toggle module state with optimistic instant feedback
   const toggleModule = async (moduleId, currentStatus) => {
+    const isCurrentlyEnabled = Number(currentStatus) === 1;
+    const nextStatus = isCurrentlyEnabled ? 0 : 1;
+
+    setModules(prev => {
+      const exists = prev.some(m => m.id === moduleId);
+      if (exists) {
+        return prev.map(m => m.id === moduleId ? { ...m, enabled: nextStatus } : m);
+      }
+      return [...prev, { id: moduleId, name: moduleId, enabled: nextStatus }];
+    });
+
     try {
       const response = await fetch(`${ACTIVE_API_BASE}/api/modules/${moduleId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ enabled: !currentStatus })
+        body: JSON.stringify({ enabled: nextStatus })
       });
       if (response.ok) {
-        setModules(prev =>
-          prev.map(m => m.id === moduleId ? { ...m, enabled: !currentStatus ? 1 : 0 } : m)
-        );
+        triggerToast(`Module "${moduleId}" ${nextStatus === 1 ? 'enabled' : 'disabled'} successfully.`, 'success');
       }
     } catch (err) {
       console.error('Error toggling module:', err);
     }
   };
 
-  // Helper to check if a module is enabled
+  // Helper to check if a module is enabled (defaults to true so all admin pages remain 100% accessible)
   const isModuleEnabled = (moduleId) => {
     const mod = modules.find(m => m.id === moduleId);
-    return mod ? mod.enabled === 1 : false;
+    return mod ? Number(mod.enabled) === 1 : true;
   };
 
   // Handle Blog Slug generation
