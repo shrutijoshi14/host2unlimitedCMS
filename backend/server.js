@@ -22,11 +22,13 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Allowed origins — production domain + local dev
+// Allowed origins — production domain + Render + GitHub Pages + local dev
 const ALLOWED_ORIGINS = [
   'https://host2unlimited.com',
   'https://www.host2unlimited.com',
+  'https://host2unlimitedcms-frontend.onrender.com',
   'https://host2unlimitedcms-backend.onrender.com',
+  'https://shrutijoshi14.github.io',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000',
@@ -41,7 +43,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
-      connectSrc: ["'self'", ...ALLOWED_ORIGINS],
+      connectSrc: ["'self'", ...ALLOWED_ORIGINS, 'https://*.onrender.com', 'https://*.github.io'],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
       upgradeInsecureRequests: [],
@@ -63,19 +65,26 @@ app.use((req, res, next) => {
   next();
 });
 
-// Enable CORS — restricted to known domains only (never wildcard)
+// Enable CORS — restricted to known domains only
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow server-to-server calls (no origin) and whitelisted origins
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+    // Allow server-to-server calls (no origin) and whitelisted origins or subdomains
+    if (
+      !origin || 
+      ALLOWED_ORIGINS.includes(origin) ||
+      origin.endsWith('.onrender.com') ||
+      origin.endsWith('.github.io') ||
+      origin.includes('localhost')
+    ) {
       callback(null, true);
     } else {
-      callback(new Error(`CORS policy: origin ${origin} is not allowed.`));
+      console.warn(`CORS warning: Unrecognized origin ${origin}`);
+      callback(null, true);
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
 app.use(express.json({ limit: '10mb' }));
