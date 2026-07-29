@@ -1660,313 +1660,285 @@ const ALL_DEFAULT_MODULES = [
             <ClipboardCheck size={16} /> Inbox Leads
           </button>
 
-          {isModuleEnabled('blog') && (
-            <button 
-              onClick={() => setActiveTab('blogs')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'blogs' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'blogs' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <FileText size={16} /> Blog Articles CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('blogs')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'blogs' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'blogs' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <FileText size={16} /> Blog Articles CMS
+          </button>
 
-          {isModuleEnabled('services') && (
-            <button 
-              onClick={() => setActiveTab('services')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'services' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'services' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Briefcase size={16} /> Services CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('services')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'services' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'services' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Briefcase size={16} /> Services CMS
+          </button>
 
-          {isModuleEnabled('solutions') && (
-            <button 
-              onClick={() => setActiveTab('solutions')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'solutions' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'solutions' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Cpu size={16} /> Solutions CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('solutions')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'solutions' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'solutions' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Cpu size={16} /> Solutions CMS
+          </button>
 
-          {isModuleEnabled('portfolio') && (
-            <button 
-              onClick={() => setActiveTab('portfolio')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'portfolio' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'portfolio' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Layers size={16} /> Portfolio CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('portfolio')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'portfolio' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'portfolio' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Layers size={16} /> Portfolio CMS
+          </button>
 
-          {isModuleEnabled('case_studies') && (
-            <button 
-              onClick={() => setActiveTab('case_studies')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'case_studies' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'case_studies' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.LineChart size={16} /> Case Studies CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('case_studies')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'case_studies' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'case_studies' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.LineChart size={16} /> Case Studies CMS
+          </button>
 
-          {isModuleEnabled('pricing') && (
-            <button 
-              onClick={() => setActiveTab('pricing')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'pricing' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'pricing' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.DollarSign size={16} /> Pricing CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('pricing')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'pricing' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'pricing' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.DollarSign size={16} /> Pricing CMS
+          </button>
 
-          {isModuleEnabled('careers') && (
-            <button 
-              onClick={() => setActiveTab('careers')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'careers' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'careers' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Briefcase size={16} /> Careers CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('careers')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'careers' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'careers' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Briefcase size={16} /> Careers CMS
+          </button>
 
-          {isModuleEnabled('about') && (
-            <button 
-              onClick={() => setActiveTab('about')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'about' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'about' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Info size={16} /> About CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('about')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'about' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'about' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Info size={16} /> About CMS
+          </button>
 
-          {isModuleEnabled('team') && (
-            <button 
-              onClick={() => setActiveTab('team')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'team' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'team' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Users size={16} /> Team Members
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('team')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'team' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'team' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Users size={16} /> Team Members
+          </button>
 
-          {isModuleEnabled('testimonials') && (
-            <button 
-              onClick={() => setActiveTab('testimonials')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'testimonials' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'testimonials' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.MessageSquare size={16} /> Testimonials CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('testimonials')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'testimonials' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'testimonials' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.MessageSquare size={16} /> Testimonials CMS
+          </button>
 
-          {isModuleEnabled('settings') && (
-            <button 
-              onClick={() => setActiveTab('website_settings')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'website_settings' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'website_settings' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Sliders size={16} /> Website Settings
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('website_settings')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'website_settings' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'website_settings' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Sliders size={16} /> Website Settings
+          </button>
 
-          {isModuleEnabled('homepage') && (
-            <button 
-              onClick={() => setActiveTab('homepage')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'homepage' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'homepage' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Home size={16} /> Homepage CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('homepage')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'homepage' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'homepage' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Home size={16} /> Homepage CMS
+          </button>
 
-          {isModuleEnabled('banner') && (
-            <button 
-              onClick={() => setActiveTab('banner')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'banner' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'banner' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Image size={16} /> Banner CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('banner')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'banner' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'banner' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Image size={16} /> Banner CMS
+          </button>
 
-          {isModuleEnabled('seo') && (
-            <button 
-              onClick={() => setActiveTab('seo')}
-              style={{
-                padding: '10px 20px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                backgroundColor: activeTab === 'seo' ? 'var(--primary-light)' : 'transparent',
-                color: activeTab === 'seo' ? 'var(--primary)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '14.5px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              <Icons.Globe size={16} /> SEO CMS
-            </button>
-          )}
+          <button 
+            onClick={() => setActiveTab('seo')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'seo' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'seo' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.Globe size={16} /> SEO & Metadata
+          </button>
 
           <button 
             onClick={() => setActiveTab('modules')}
@@ -2174,7 +2146,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- BLOGS TAB -------------------- */}
-        {activeTab === 'blogs' && isModuleEnabled('blog') && (
+        {activeTab === 'blogs' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             
             {/* Sub-header actions */}
@@ -2326,7 +2298,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- SERVICES TAB -------------------- */}
-        {activeTab === 'services' && isModuleEnabled('services') && (
+        {activeTab === 'services' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             
             {/* Header controls */}
@@ -2456,7 +2428,7 @@ const ALL_DEFAULT_MODULES = [
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {modules.map((mod) => {
-                  const isManageable = true;
+                  const isEnabled = mod.enabled === 1 || mod.enabled === true || mod.enabled === '1';
                   return (
                     <div 
                       key={mod.id}
@@ -2467,8 +2439,7 @@ const ALL_DEFAULT_MODULES = [
                         padding: '16px 20px',
                         backgroundColor: 'var(--bg-secondary)',
                         border: '1px solid var(--border-color)',
-                        borderRadius: 'var(--radius-md)',
-                        opacity: isManageable ? 1 : 0.65
+                        borderRadius: 'var(--radius-md)'
                       }}
                     >
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -2476,34 +2447,47 @@ const ALL_DEFAULT_MODULES = [
                           {mod.name}
                         </span>
                         <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                          {mod.id === 'blog' ? 'Enable/Disable dynamic blog database CRUD endpoints.' :
-                           mod.id === 'services' ? 'Enable/Disable dynamic services catalog and accordion details.' :
+                          {mod.id === 'blog' ? 'Enable/Disable dynamic blog database CRUD endpoints on website.' :
+                           mod.id === 'services' ? 'Enable/Disable dynamic services catalog and accordion details on website.' :
                            mod.id === 'contact_leads' ? 'Lead submission logging panel.' :
-                           mod.id === 'solutions' ? 'Enable/Disable custom solutions verticals dynamic CMS.' :
-                           mod.id === 'portfolio' ? 'Enable/Disable dynamic project portfolio listing.' :
-                           mod.id === 'case_studies' ? 'Enable/Disable dynamic success metrics and case study documents.' :
-                           mod.id === 'pricing' ? 'Enable/Disable dynamic product pricing plans catalog.' :
-                           mod.id === 'careers' ? 'Enable/Disable dynamic recruitment listings and applications.' :
-                           mod.id === 'about' ? 'Enable/Disable custom company values and counter stats.' :
-                           mod.id === 'team' ? 'Enable/Disable team members directory and leadership profiles.' :
-                           mod.id === 'testimonials' ? 'Enable/Disable client testimonials and review slider.' :
+                           mod.id === 'solutions' ? 'Enable/Disable custom solutions verticals dynamic CMS on website.' :
+                           mod.id === 'portfolio' ? 'Enable/Disable dynamic project portfolio listing on website.' :
+                           mod.id === 'case_studies' ? 'Enable/Disable dynamic success metrics and case study documents on website.' :
+                           mod.id === 'pricing' ? 'Enable/Disable dynamic product pricing plans catalog on website.' :
+                           mod.id === 'careers' ? 'Enable/Disable dynamic recruitment listings and applications on website.' :
+                           mod.id === 'about' ? 'Enable/Disable custom company values and counter stats on website.' :
+                           mod.id === 'team' ? 'Enable/Disable team members directory and leadership profiles on website.' :
+                           mod.id === 'testimonials' ? 'Enable/Disable client testimonials and review slider on website.' :
                            'CMS panel.'}
                         </span>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <span 
+                          style={{ 
+                            fontSize: '11px', 
+                            fontWeight: 800, 
+                            padding: '4px 10px', 
+                            borderRadius: '12px', 
+                            letterSpacing: '0.5px',
+                            backgroundColor: isEnabled ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)', 
+                            color: isEnabled ? '#10b981' : '#ef4444' 
+                          }}
+                        >
+                          {isEnabled ? 'ACTIVE ON WEBSITE' : 'DISABLED ON WEBSITE'}
+                        </span>
                         <button
-                          disabled={!isManageable}
-                          onClick={() => toggleModule(mod.id, mod.enabled)}
+                          type="button"
+                          onClick={() => toggleModule(mod.id, isEnabled ? 1 : 0)}
                           style={{
                             width: '54px',
                             height: '28px',
                             borderRadius: '14px',
-                            backgroundColor: mod.enabled ? '#10b981' : 'var(--border-color)',
+                            backgroundColor: isEnabled ? '#10b981' : 'var(--border-color)',
                             border: 'none',
                             position: 'relative',
-                            cursor: isManageable ? 'pointer' : 'not-allowed',
-                            transition: 'background-color var(--transition-fast)'
+                            cursor: 'pointer',
+                            transition: 'background-color 0.2s ease'
                           }}
                         >
                           <div 
@@ -2514,8 +2498,8 @@ const ALL_DEFAULT_MODULES = [
                               backgroundColor: 'white',
                               position: 'absolute',
                               top: '4px',
-                              left: mod.enabled ? '30px' : '4px',
-                              transition: 'left var(--transition-fast)'
+                              left: isEnabled ? '30px' : '4px',
+                              transition: 'left 0.2s ease'
                             }}
                           />
                         </button>
@@ -2529,7 +2513,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- UNIVERSAL CMS PAGES -------------------- */}
-        {['solutions', 'portfolio', 'case_studies', 'pricing', 'careers', 'testimonials'].includes(activeTab) && isModuleEnabled(activeTab) && (
+        {['solutions', 'portfolio', 'case_studies', 'pricing', 'careers', 'testimonials'].includes(activeTab) && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '20px' }}>
               <div>
@@ -2684,7 +2668,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- BANNER MANAGEMENT CMS EDITOR -------------------- */}
-        {activeTab === 'banner' && isModuleEnabled('banner') && (
+        {activeTab === 'banner' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>Global Banner Management</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: '30px' }}>
@@ -2785,7 +2769,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- ABOUT US CMS EDITOR -------------------- */}
-        {activeTab === 'about' && isModuleEnabled('about') && (
+        {activeTab === 'about' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>About Us CMS Editor</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: '30px' }}>
@@ -3077,7 +3061,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- WEBSITE SETTINGS CMS EDITOR -------------------- */}
-        {activeTab === 'website_settings' && isModuleEnabled('settings') && (
+        {activeTab === 'website_settings' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>Website General Settings</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: '30px' }}>
@@ -3251,7 +3235,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- HOMEPAGE CMS EDITOR -------------------- */}
-        {activeTab === 'homepage' && isModuleEnabled('homepage') && (
+        {activeTab === 'homepage' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>Homepage Section Layout</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: '30px' }}>
@@ -3435,7 +3419,7 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- SEO SETTINGS CMS EDITOR -------------------- */}
-        {activeTab === 'seo' && isModuleEnabled('seo') && (
+        {activeTab === 'seo' && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>Global Search Engine Optimization (SEO) CMS</h3>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', marginBottom: '30px' }}>
