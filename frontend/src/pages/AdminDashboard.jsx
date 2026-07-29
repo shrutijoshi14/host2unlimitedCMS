@@ -35,7 +35,7 @@ const AdminDashboard = () => {
       return false;
     }
   });
-  const [adminExists, setAdminExists] = useState(false);
+  const [adminExists, setAdminExists] = useState(true);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [loggedInUser, setLoggedInUser] = useState(() => {
     try {
@@ -277,10 +277,13 @@ const AdminDashboard = () => {
       const response = await fetch(`${ACTIVE_API_BASE}/api/auth/check`);
       if (response.ok) {
         const data = await response.json();
-        setAdminExists(data.exists);
+        setAdminExists(!!data.exists);
+      } else {
+        setAdminExists(true);
       }
     } catch (err) {
       console.error('Error checking admin registration:', err);
+      setAdminExists(true);
     } finally {
       setCheckingAdmin(false);
     }
