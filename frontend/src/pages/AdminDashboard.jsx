@@ -162,6 +162,7 @@ const ALL_DEFAULT_MODULES = [
   const [uploadingTeamImage, setUploadingTeamImage] = useState(false);
 
   // Universal Pages CMS States
+  const pageCacheRef = useRef({});
   const [pageContent, setPageContent] = useState([]);
   const [pageContentLoading, setPageContentLoading] = useState(false);
   const [showPageModal, setShowPageModal] = useState(false);
@@ -196,28 +197,39 @@ const ALL_DEFAULT_MODULES = [
   }, []);
 
   const fetchPageContent = useCallback(async (pageId) => {
-    try {
+    // Instant 0ms cache display if data was loaded previously
+    if (pageCacheRef.current[pageId]) {
+      setPageContent(pageCacheRef.current[pageId]);
+    } else {
       setPageContentLoading(true);
+    }
+
+    try {
       const response = await fetch(`${ACTIVE_API_BASE}/api/pages/${pageId}`);
       if (response.ok) {
         const data = await response.json();
+        pageCacheRef.current[pageId] = data;
         setPageContent(data);
       } else if (pageId === 'banner') {
-        setPageContent({
+        const fallbackBanner = {
           about: { title: 'About Host2Unlimited', subtitle: 'Our Background', desc: 'We are a dedicated team of software developers, database managers, systems architects, and digital marketing consultants who help brands scale their systems.' },
           services: { title: 'Our Services & Solutions', subtitle: 'Capabilities', desc: 'We offer robust custom website design, cloud database configuration, Google organic search SEO sprints, and scalable VPS architectures.' },
           careers: { title: 'Careers at Host2Unlimited', subtitle: 'Join Our Team', desc: 'Explore opportunities to build scalable portals, launch digital marketing campaigns, and craft visual graphics with our collaborative engineering desk.' },
           portfolio: { title: 'Selected Projects & Portfolios', subtitle: 'Our Work', desc: 'Explore our track record of custom e-commerce engines, public sector portals, compliance directories, and interactive software suites.' },
           case_studies: { title: 'Success Metrics & Case Studies', subtitle: 'Client Outcomes', desc: 'Real-world blueprints detailing how our systems engineers scale database transactions, improve page loads, and cut cloud hosting overheads.' }
-        });
+        };
+        pageCacheRef.current[pageId] = fallbackBanner;
+        setPageContent(fallbackBanner);
       } else if (pageId === 'seo') {
-        setPageContent({
+        const fallbackSeo = {
           homepage: { meta_title: 'Host2Unlimited | Digital Innovation & Technology Solutions', meta_desc: 'We are your digital marketing partner for educational institutes and modern businesses, providing professional website development, secure cloud hosting, and custom ERP databases.', keywords: 'Website Development, Cloud Hosting, SEO, ERP databases, Education Portal', canonical_url: 'https://host2unlimited.com/', og_image: '/assets/school_marketing_hero.png' },
           about: { meta_title: 'About Us | Host2Unlimited Technologies', meta_desc: 'Learn about our corporate journey, team coordinates, and values transparency.', keywords: 'Host2Unlimited about, software architects team, corporate values', canonical_url: 'https://host2unlimited.com/about', og_image: '' },
           services: { meta_title: 'Our Capabilities & Services | Host2Unlimited', meta_desc: 'Browse our full suite of professional services including custom software programming, technical SEO audits, and managed AWS cloud instances.', keywords: 'technical SEO, custom software development, managed hosting AWS', canonical_url: 'https://host2unlimited.com/services', og_image: '' },
           careers: { meta_title: 'Careers & Positions | Host2Unlimited Team', meta_desc: 'Explore open engineering job listings and submit dynamic resume links to join our collaborative technical desk.', keywords: 'hiring software engineers, developer jobs remote, UI designer vacancy', canonical_url: 'https://host2unlimited.com/careers', og_image: '' },
           portfolio: { meta_title: 'Selected Client Portfolios | Host2Unlimited', meta_desc: 'Explore our track record of custom e-commerce apps, compliance public directories, and interactive platforms.', keywords: 'our projects, SaaS catalog portfolio, e-commerce case study', canonical_url: 'https://host2unlimited.com/portfolio', og_image: '' }
-        });
+        };
+        pageCacheRef.current[pageId] = fallbackSeo;
+        setPageContent(fallbackSeo);
       }
     } catch (err) {
       console.error('Error fetching page content:', err);
@@ -239,6 +251,7 @@ const ALL_DEFAULT_MODULES = [
       if (!response.ok) {
         throw new Error(data.error || 'Failed to save page configuration.');
       }
+      pageCacheRef.current[activeTab] = updatedData;
       setPageContent(updatedData);
       setPageSuccess('Page configuration updated successfully.');
       triggerToast('Page configuration updated successfully!');
