@@ -95,8 +95,10 @@ let sseClients = [];
 
 app.get('/api/events', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Content-Encoding', 'none');
+  res.setHeader('X-Accel-Buffering', 'no');
   res.flushHeaders();
 
   // Send initial ping connection check
@@ -108,6 +110,17 @@ app.get('/api/events', (req, res) => {
     sseClients = sseClients.filter(c => c !== res);
   });
 });
+
+// Send periodic keep-alive heartbeat every 15s so Render/proxies don't close idle SSE streams
+setInterval(() => {
+  sseClients.forEach(client => {
+    try {
+      client.write('data: {"type":"ping"}\n\n');
+    } catch (err) {
+      // client connection closed
+    }
+  });
+}, 15000);
 
 global.broadcastSSE = (data) => {
   sseClients.forEach(client => {

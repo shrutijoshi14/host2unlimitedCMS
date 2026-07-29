@@ -195,32 +195,82 @@ function AppContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Server-Sent Events subscriber for real-time updates
+  // Server-Sent Events subscriber for real-time updates across all open browsers without refresh
   useEffect(() => {
     const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
-    const eventSource = new EventSource(`${apiBase}/api/events`);
+    
+    let eventSource = null;
+    let reconnectTimer = null;
 
-    eventSource.onmessage = (event) => {
+    const connectSSE = () => {
       try {
-        const data = JSON.parse(event.data);
-        if (data.type === 'page_update') {
-          window.dispatchEvent(new CustomEvent('cmsPageUpdate', { detail: data }));
-        } else if (data.type === 'module_update') {
-          window.dispatchEvent(new CustomEvent('cmsModuleUpdate', { detail: data }));
-        } else if (data.type === 'service_update') {
-          window.dispatchEvent(new CustomEvent('cmsServiceUpdate', { detail: data }));
-        } else if (data.type === 'blog_update') {
-          window.dispatchEvent(new CustomEvent('cmsBlogUpdate', { detail: data }));
-        } else if (data.type === 'team_update') {
-          window.dispatchEvent(new CustomEvent('cmsTeamUpdate', { detail: data }));
+        if (eventSource) {
+          eventSource.close();
         }
-      } catch (err) {
-        console.warn('Real-time event parse error:', err);
+
+        eventSource = new EventSource(`${apiBase}/api/events`);
+
+        eventSource.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'ping' || data.type === 'init') return;
+
+            if (data.type === 'page_update') {
+              window.dispatchEvent(new CustomEvent('cmsPageUpdate', { detail: data }));
+            } else if (data.type === 'module_update') {
+              window.dispatchEvent(new CustomEvent('cmsModuleUpdate', { detail: data }));
+            } else if (data.type === 'service_update') {
+              window.dispatchEvent(new CustomEvent('cmsServiceUpdate', { detail: data }));
+            } else if (data.type === 'blog_update') {
+              window.dispatchEvent(new CustomEvent('cmsBlogUpdate', { detail: data }));
+            } else if (data.type === 'team_update') {
+              window.dispatchEvent(new CustomEvent('cmsTeamUpdate', { detail: data }));
+            }
+          } catch (err) {
+            console.warn('Real-time event parse error:', err);
+          }
+        };
+
+        eventSource.onerror = () => {
+          if (eventSource) {
+            eventSource.close();
+          }
+          if (!reconnectTimer) {
+            reconnectTimer = setTimeout(() => {
+              reconnectTimer = null;
+              connectSSE();
+            }, 3000);
+          }
+        };
+      } catch (e) {
+        console.warn('SSE connection init error:', e);
       }
     };
 
+    connectSSE();
+
+    // Re-sync on window focus/visibility change for zero-lag updates when switching tabs/browsers
+    const handleFocus = () => {
+      window.dispatchEvent(new CustomEvent('cmsPageUpdate', { detail: { type: 'page_update', force: true } }));
+      window.dispatchEvent(new CustomEvent('cmsBlogUpdate', { detail: { force: true } }));
+      window.dispatchEvent(new CustomEvent('cmsServiceUpdate', { detail: { force: true } }));
+      window.dispatchEvent(new CustomEvent('cmsTeamUpdate', { detail: { force: true } }));
+      window.dispatchEvent(new CustomEvent('cmsModuleUpdate', { detail: { force: true } }));
+    };
+
+    window.addEventListener('focus', handleFocus);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        handleFocus();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
-      eventSource.close();
+      if (eventSource) eventSource.close();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
