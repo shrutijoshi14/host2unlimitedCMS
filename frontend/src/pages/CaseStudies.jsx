@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Building2, GraduationCap, Scale, Stethoscope, ShoppingBag, Globe, ArrowRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_art.svg';
+
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 // ── Logo images ──────────────────────────────────────────────
 import newHorizonPanvel from '../assets/h2u logos/new-horizon-public-school-panvel.png';
@@ -360,11 +362,62 @@ const allCategories = ['All', ...new Set(detailedClients.map(c => c.category))];
 
 const CaseStudies = () => {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [dynamicStudies, setDynamicStudies] = useState([]);
+  const [bannerContent, setBannerContent] = useState(null);
   const breadcrumbs = [{ name: 'Case Studies', path: '/case-studies' }];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${CURRENT_API_BASE}/api/pages/case_studies`);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            setDynamicStudies(data);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load dynamic case studies', err);
+      }
+      try {
+        const bannerRes = await fetch(`${CURRENT_API_BASE}/api/pages/banner`);
+        if (bannerRes.ok) {
+          const bannerData = await bannerRes.json();
+          if (bannerData && bannerData.case_studies) {
+            setBannerContent(bannerData.case_studies);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load banner content', err);
+      }
+    };
+    fetchData();
+
+    const handleUpdate = (e) => {
+      if (e.detail?.page === 'case_studies' || e.detail?.page === 'banner') {
+        fetchData();
+      }
+    };
+    window.addEventListener('cmsPageUpdate', handleUpdate);
+    return () => window.removeEventListener('cmsPageUpdate', handleUpdate);
+  }, []);
+
+  const mappedDynamic = dynamicStudies.map((ds, index) => ({
+    id: `dynamic-${index}`,
+    name: ds.title || ds.client || 'Case Study',
+    client: ds.client || 'Client Partnership',
+    category: ds.category || 'Case Study',
+    icon: Building2,
+    color: 'var(--primary)',
+    link: '/contact?service=case-studies',
+    description: `${ds.challenge ? 'Challenge: ' + ds.challenge + ' ' : ''}${ds.solution ? 'Solution: ' + ds.solution + ' ' : ''}${ds.results ? 'Results: ' + ds.results : ''}`.trim() || ds.title
+  }));
+
+  const allCombinedClients = [...mappedDynamic, ...detailedClients];
+
   const filtered = activeCategory === 'All'
-    ? detailedClients
-    : detailedClients.filter(c => c.category === activeCategory);
+    ? allCombinedClients
+    : allCombinedClients.filter(c => c.category === activeCategory);
 
   return (
     <div style={{ paddingTop: '80px' }}>
@@ -397,12 +450,14 @@ const CaseStudies = () => {
 
         {/* Page Header */}
         <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 50px auto' }}>
-          <span className="badge" style={{ marginBottom: '12px' }}>Partnerships That Drive Growth</span>
+          <span className="badge" style={{ marginBottom: '12px' }}>{bannerContent?.subtitle || 'Partnerships That Drive Growth'}</span>
           <h1 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
-            Client Case Studies &amp; Success Stories
+            {bannerContent?.title || 'Client Case Studies & Success Stories'}
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.7 }}>
-            Over <strong>35+ educational institutes, colleges, schools, and businesses</strong> across Maharashtra trust Host2Unlimited as their strategic digital growth partner.
+            {bannerContent?.desc || (
+              <>Over <strong>35+ educational institutes, colleges, schools, and businesses</strong> across Maharashtra trust Host2Unlimited as their strategic digital growth partner.</>
+            )}
           </p>
         </div>
 
