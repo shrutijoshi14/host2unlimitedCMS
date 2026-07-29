@@ -1660,25 +1660,27 @@ const ALL_DEFAULT_MODULES = [
             scrollbarWidth: 'none'
           }}
         >
-          <button 
-            onClick={() => setActiveTab('leads')}
-            style={{
-              padding: '10px 20px',
-              borderRadius: 'var(--radius-sm)',
-              border: 'none',
-              backgroundColor: activeTab === 'leads' ? 'var(--primary-light)' : 'transparent',
-              color: activeTab === 'leads' ? 'var(--primary)' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontWeight: 600,
-              fontSize: '14.5px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all var(--transition-fast)'
-            }}
-          >
-            <ClipboardCheck size={16} /> Inbox Leads
-          </button>
+          {isModuleEnabled('contact_leads') && (
+            <button 
+              onClick={() => setActiveTab('leads')}
+              style={{
+                padding: '10px 20px',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                backgroundColor: activeTab === 'leads' ? 'var(--primary-light)' : 'transparent',
+                color: activeTab === 'leads' ? 'var(--primary)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: '14.5px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all var(--transition-fast)'
+              }}
+            >
+              <ClipboardCheck size={16} /> Contact Leads Log
+            </button>
+          )}
 
           {isModuleEnabled('blog') && (
             <button 
