@@ -4511,58 +4511,56 @@ const AdminDashboard = () => {
                 <>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Study Title *</label>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Client / Institute Name *</label>
                       <input 
                         type="text" 
-                        value={pageItemData.title || ''} 
-                        onChange={(e) => setPageItemData({ ...pageItemData, title: e.target.value })} 
+                        value={pageItemData.name || pageItemData.title || pageItemData.client || ''} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, name: e.target.value, title: e.target.value, client: e.target.value })} 
                         className="form-control" 
-                        placeholder="e.g. Scaling Database Syncing to 1M Daily Transactions"
+                        placeholder="e.g. PODDAR BRIO SCHOOL"
                         required 
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Client Name *</label>
-                      <input 
-                        type="text" 
-                        value={pageItemData.client || ''} 
-                        onChange={(e) => setPageItemData({ ...pageItemData, client: e.target.value })} 
-                        className="form-control" 
-                        placeholder="e.g. SwiftBuy Financials"
-                        required 
-                      />
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Category *</label>
+                      <select 
+                        value={pageItemData.category || 'Education'} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, category: e.target.value })} 
+                        className="form-control"
+                      >
+                        <option value="Education">Education</option>
+                        <option value="Higher Education">Higher Education</option>
+                        <option value="Preschool">Preschool</option>
+                        <option value="Coaching">Coaching</option>
+                        <option value="Business">Business</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="E-Commerce">E-Commerce</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Legal">Legal</option>
+                      </select>
                     </div>
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Challenge Overview *</label>
-                    <textarea 
-                      value={pageItemData.challenge || ''} 
-                      onChange={(e) => setPageItemData({ ...pageItemData, challenge: e.target.value })} 
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Target Page Link</label>
+                    <input 
+                      type="text" 
+                      value={pageItemData.link || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, link: e.target.value })} 
                       className="form-control" 
-                      style={{ minHeight: '60px' }}
-                      placeholder="Detail the technical or architectural challenge/bottleneck that the client faced (e.g. legacy monolithic server locks)..."
-                      required 
+                      placeholder="e.g. /educational-institutes/international"
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Solution Implemented *</label>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Description / Case Study Overview *</label>
                     <textarea 
-                      value={pageItemData.solution || ''} 
-                      onChange={(e) => setPageItemData({ ...pageItemData, solution: e.target.value })} 
+                      value={pageItemData.description || pageItemData.challenge || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, description: e.target.value, challenge: e.target.value })} 
                       className="form-control" 
-                      style={{ minHeight: '60px' }}
-                      placeholder="Detail the strategy and technical stack deployed to solve this challenge (e.g. migrated database to a master-replica configuration)..."
-                      required 
-                    />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Results Deployed *</label>
-                    <textarea 
-                      value={pageItemData.results || ''} 
-                      onChange={(e) => setPageItemData({ ...pageItemData, results: e.target.value })} 
-                      className="form-control" 
-                      style={{ minHeight: '60px' }}
-                      placeholder="Detail the metrics, efficiency gains, and improvements achieved (e.g. database sync time reduced by 85%)..."
+                      style={{ minHeight: '80px' }}
+                      placeholder="Enter detailed description of the partnership, achievements, or project scope..."
                       required 
                     />
                   </div>

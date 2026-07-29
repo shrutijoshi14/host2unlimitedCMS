@@ -402,18 +402,21 @@ const CaseStudies = () => {
     return () => window.removeEventListener('cmsPageUpdate', handleUpdate);
   }, []);
 
-  const mappedDynamic = dynamicStudies.map((ds, index) => ({
-    id: `dynamic-${index}`,
-    name: ds.title || ds.client || 'Case Study',
-    client: ds.client || 'Client Partnership',
-    category: ds.category || 'Case Study',
-    icon: Building2,
-    color: 'var(--primary)',
-    link: '/contact?service=case-studies',
-    description: `${ds.challenge ? 'Challenge: ' + ds.challenge + ' ' : ''}${ds.solution ? 'Solution: ' + ds.solution + ' ' : ''}${ds.results ? 'Results: ' + ds.results : ''}`.trim() || ds.title
-  }));
+  const mappedDynamic = dynamicStudies.map((ds, index) => {
+    // Preserve matching icon/color/logo from detailedClients if available by name
+    const match = detailedClients.find(c => c.name?.toLowerCase() === (ds.name || ds.title || ds.client)?.toLowerCase());
+    return {
+      id: ds.id || match?.id || `dynamic-${index}`,
+      name: ds.name || ds.title || ds.client || 'Case Study',
+      category: ds.category || match?.category || 'Education',
+      icon: match?.icon || GraduationCap,
+      color: match?.color || categoryColors[ds.category] || '#2563eb',
+      link: ds.link || match?.link || '/contact',
+      description: ds.description || ds.challenge || ds.desc || match?.description || ''
+    };
+  });
 
-  const allCombinedClients = [...mappedDynamic, ...detailedClients];
+  const allCombinedClients = dynamicStudies.length > 0 ? mappedDynamic : detailedClients;
 
   const filtered = activeCategory === 'All'
     ? allCombinedClients
