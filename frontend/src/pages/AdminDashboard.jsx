@@ -1645,7 +1645,21 @@ const ALL_DEFAULT_MODULES = [
         </div>
 
         {/* Modular Tabs Navigation */}
-        <div style={{ display: 'flex', gap: '10px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '30px', flexWrap: 'wrap' }}>
+        <div 
+          style={{ 
+            display: 'flex', 
+            gap: '10px', 
+            borderBottom: '1px solid var(--border-color)', 
+            paddingBottom: '12px', 
+            marginBottom: '30px', 
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            minHeight: '52px',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none'
+          }}
+        >
           <button 
             onClick={() => setActiveTab('leads')}
             style={{
@@ -2496,16 +2510,20 @@ const ALL_DEFAULT_MODULES = [
                         </span>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
                         <span 
                           style={{ 
                             fontSize: '11px', 
                             fontWeight: 800, 
-                            padding: '4px 10px', 
+                            padding: '5px 12px', 
                             borderRadius: '12px', 
                             letterSpacing: '0.5px',
+                            minWidth: '160px',
+                            textAlign: 'center',
+                            display: 'inline-block',
                             backgroundColor: isEnabled ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)', 
-                            color: isEnabled ? '#10b981' : '#ef4444' 
+                            color: isEnabled ? '#10b981' : '#ef4444',
+                            transition: 'all 0.2s ease'
                           }}
                         >
                           {isEnabled ? 'ACTIVE ON WEBSITE' : 'DISABLED ON WEBSITE'}
