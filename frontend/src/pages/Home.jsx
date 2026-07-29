@@ -133,7 +133,7 @@ const getIconComponent = (name) => {
   }
 };
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const Counter = ({ value, suffix = "" }) => {
   const count = useMotionValue(0);

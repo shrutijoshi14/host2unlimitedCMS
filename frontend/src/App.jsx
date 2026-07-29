@@ -84,7 +84,7 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
     const fetchSettings = async () => {
       try {
         const response = await fetch(`${apiBase}/api/pages/website_settings`);
@@ -113,7 +113,7 @@ function AppContent() {
   useEffect(() => {
     const applySEO = async () => {
       try {
-        const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+        const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
         const response = await fetch(`${apiBase}/api/pages/seo`);
         if (response.ok) {
           const seoData = await response.json();
@@ -197,7 +197,7 @@ function AppContent() {
 
   // Server-Sent Events subscriber for real-time updates
   useEffect(() => {
-    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
     const eventSource = new EventSource(`${apiBase}/api/events`);
 
     eventSource.onmessage = (event) => {

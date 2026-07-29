@@ -6,7 +6,7 @@ import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 import blogHeroBg from '../assets/hero_bg/blog_hero_art.svg';
 
-const API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || window.location.origin).replace(/\/+$/, '');
+const API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const BlogPost = () => {
   const { slug } = useParams();
