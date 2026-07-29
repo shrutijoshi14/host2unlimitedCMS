@@ -828,7 +828,7 @@ const ALL_DEFAULT_MODULES = [
 
   // Toggle module state with optimistic instant feedback
   const toggleModule = async (moduleId, currentStatus) => {
-    const isCurrentlyEnabled = Number(currentStatus) === 1;
+    const isCurrentlyEnabled = currentStatus === 1 || currentStatus === true || currentStatus === '1';
     const nextStatus = isCurrentlyEnabled ? 0 : 1;
 
     setModules(prev => {
@@ -846,7 +846,10 @@ const ALL_DEFAULT_MODULES = [
         body: JSON.stringify({ enabled: nextStatus })
       });
       if (response.ok) {
-        triggerToast(`Module "${moduleId}" ${nextStatus === 1 ? 'enabled' : 'disabled'} successfully.`, 'success');
+        const data = await response.json();
+        const serverStatus = (data.enabled === 1 || data.enabled === true || data.enabled === '1' || data.enabled === 'true') ? 1 : 0;
+        setModules(prev => prev.map(m => m.id === moduleId ? { ...m, enabled: serverStatus } : m));
+        triggerToast(`Module "${moduleId}" ${serverStatus === 1 ? 'enabled' : 'disabled'} successfully.`, 'success');
       }
     } catch (err) {
       console.error('Error toggling module:', err);

@@ -9,7 +9,11 @@ router.get('/', async (req, res) => {
   try {
     const db = getPool();
     const [rows] = await db.query('SELECT * FROM cms_modules');
-    res.json(rows);
+    const formatted = Array.isArray(rows) ? rows.map(r => ({
+      ...r,
+      enabled: (r.enabled === 1 || r.enabled === true || r.enabled === '1') ? 1 : 0
+    })) : [];
+    res.json(formatted);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -42,7 +46,7 @@ router.put('/:id', async (req, res) => {
       global.broadcastSSE({ type: 'module_update', id, enabled: numericVal === 1 });
     }
 
-    res.json({ message: `Module "${id}" status updated.`, id, enabled: numericVal === 1 });
+    res.json({ message: `Module "${id}" ${numericVal === 1 ? 'enabled' : 'disabled'} successfully.`, id, enabled: numericVal });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

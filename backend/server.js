@@ -140,8 +140,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use('/uploads', express.static(uploadsDir));
 
 // API Routing Setup
-// Apply cache middleware to public read-only API routes (5 min TTL = 300s)
-app.use('/api/modules', cacheMiddleware(300), moduleRoutes);
+app.use('/api/modules', moduleRoutes); // Dynamic real-time module configs (no cache delay)
 app.use('/api/blogs', cacheMiddleware(300), blogRoutes);
 app.use('/api/services', cacheMiddleware(300), serviceRoutes);
 app.use('/api/auth', authRoutes); // No cache for auth routes
