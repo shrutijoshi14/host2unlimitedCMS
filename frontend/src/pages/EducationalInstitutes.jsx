@@ -355,6 +355,27 @@ const EducationalInstitutes = () => {
                     <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: 1.6, marginBottom: 0, textAlign: 'left' }}>
                       {sector.desc}
                     </p>
+
+                    {/* Featured Institutions & Partners List */}
+                    {caseStudiesData[sector.id] && caseStudiesData[sector.id].length > 0 && (
+                      <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--primary)', letterSpacing: '0.5px', display: 'block', marginBottom: '8px', textAlign: 'left' }}>
+                          Featured Institutions & Partners:
+                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {caseStudiesData[sector.id].map((inst, iIdx) => (
+                            <div key={iIdx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12.5px', gap: '8px' }}>
+                              <span style={{ fontWeight: 600, color: 'var(--text-primary)', textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                • {inst.name}
+                              </span>
+                              <span style={{ fontSize: '11px', color: '#60a5fa', fontWeight: 700, backgroundColor: 'rgba(59, 130, 246, 0.15)', padding: '2px 7px', borderRadius: '6px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                                {inst.metric}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div 
