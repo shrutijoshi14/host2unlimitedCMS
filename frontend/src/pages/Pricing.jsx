@@ -5,7 +5,7 @@ import { Check, Info, Server, Code, ShieldAlert, Cpu, Laptop, Database, Cloud } 
 import Calculator from '../components/Calculator';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import pricingHeroBg from '../assets/hero_bg/pricing_hero_art.svg';
+import pricingHeroBg from '../assets/hero_bg/pricing_hero_clean.png';
 import armietLogo from '../assets/h2u logos/armiet_logo.jpeg';
 import pillaiLogo from '../assets/h2u logos/dr-pillai-global-academy.png';
 import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
@@ -22,7 +22,7 @@ const clientLogos = [
   newHorizonLogo, dnyanGangaLogo, gsgsLogo, ulweLogo, vsignLogo
 ];
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const staticPackages = [
   {
@@ -132,7 +132,7 @@ const Pricing = () => {
   const breadcrumbs = [{ name: 'Pricing', path: '/pricing' }];
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
         title="Pricing Plans"
         description="Transparent pricing structures at Host2Unlimited. Review shared hosting, custom software development, and interactive calculator options."
@@ -144,7 +144,7 @@ const Pricing = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ position: 'relative', height: '190px', minHeight: '190px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
         <img 
           src={pricingHeroBg} 

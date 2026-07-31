@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 
 import logoPng from '../assets/logo.png';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,6 +59,11 @@ const Header = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
+  const isActiveLink = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
 
   const otherNavLinks = [
     { name: 'Home', path: '/' },
@@ -128,38 +133,16 @@ const Header = () => {
                     fontWeight: 600, 
                     fontSize: '14px'
                   }} 
-                  className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                  className={`nav-link ${isActiveLink(link.path) ? 'active' : ''}`}
                 >
                   {link.name}
                 </Link>
               ))}
             </nav>
 
-            {/* Actions: Get Quote, Theme Toggle & Mobile Menu button */}
+            {/* Actions: Get Quote & Mobile Menu button */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               
-              {/* Theme toggle */}
-              <button 
-                onClick={toggleTheme} 
-                aria-label="Toggle light and dark themes"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: 'var(--text-primary)',
-                  padding: '8px',
-                  borderRadius: 'var(--radius-sm)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: 'var(--bg-tertiary)',
-                  transition: 'background-color var(--transition-fast)'
-                }}
-              >
-                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-
-              {/* Get Quote CTA */}
               <Link to="/contact" className="btn btn-primary cta-btn-header" style={{ padding: '10px 24px', fontSize: '14px' }}>
                 Get Started
               </Link>
@@ -216,7 +199,7 @@ const Header = () => {
               style={{ 
                 fontSize: '16px', 
                 fontWeight: 600, 
-                color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-primary)', 
+                color: isActiveLink(link.path) ? 'var(--primary)' : 'var(--text-primary)', 
                 borderBottom: '1px solid var(--border-color)', 
                 paddingBottom: '8px' 
               }}

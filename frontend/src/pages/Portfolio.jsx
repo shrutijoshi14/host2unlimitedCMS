@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_art.svg';
+import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_clean.png';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const staticProjects = [
   {
@@ -136,7 +136,7 @@ const Portfolio = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ position: 'relative', height: '190px', minHeight: '190px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
         <img 
           src={caseStudiesHeroBg} 
@@ -256,8 +256,8 @@ const Portfolio = () => {
                       )}
                     </div>
 
-                    <Link to="/case-studies" className="btn btn-secondary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                      View Case Study <ArrowRight size={14} />
+                    <Link to="/case-studies" className="btn btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                      View Case Study
                     </Link>
                   </div>
                 </motion.div>

@@ -406,6 +406,8 @@ export async function initializeDatabase() {
         ['solutions', 'Solutions Management', 1],
         ['portfolio', 'Portfolio Management', 1],
         ['case_studies', 'Case Studies Management', 1],
+        ['case_study_details', 'Case Study Details Management', 1],
+        ['educational_institutes', 'Educational Institutes Management', 1],
         ['pricing', 'Pricing Management', 1],
         ['careers', 'Careers Management', 1],
         ['about', 'About Us Management', 1],
@@ -420,73 +422,400 @@ export async function initializeDatabase() {
       }
     }
 
-    // 5. Seed initial blogs if table is empty
-    const [blogRows] = await pool.query('SELECT COUNT(*) as count FROM blogs');
-    if (blogRows[0].count === 0) {
-      const initialBlogs = [
-        [
-          'Leveraging Vite React for Rapid Website Deployments',
-          '<h2>The Shift to Faster Build Cycles</h2><p>In modern web agency environments, waiting for build times represents lost revenue. Rebuilding old-school pipelines with Vite has streamlined execution...</p>',
-          'Website Development',
-          'vite, react, frontend',
-          '/uploads/school_marketing_hero.png',
-          'leveraging-vite-react-rapid-deployments',
-          'Vite React Web Development Guide | Host2Unlimited',
-          'Learn how Host2Unlimited integrates Vite React with custom designs to construct fast loading, secure corporate portals.',
-          'Lead Architect',
-          'Published',
-          '4 min read'
-        ],
-        [
-          'Optimizing Core Web Vitals to Rise Google Ranks',
-          '<h2>Understanding LCP and CLS Metrics</h2><p>Getting traffic represents half the marketing battle. rise to the top of Google searches requires meeting Core Web Vitals guidelines. We optimize resource compression...</p>',
-          'SEO',
-          'seo, speed, google',
-          '/uploads/development_process_visual.png',
-          'optimizing-core-web-vitals-google-ranks',
-          'Core Web Vitals SEO Speed Optimization | Host2Unlimited',
-          'Improve search visibility and ranking. Read our technical guide on Core Web Vitals optimizations.',
-          'SEO Specialist',
-          'Published',
-          '6 min read'
-        ],
-        [
-          'Why SaaS Startups Prefer Custom ERP Systems Over WordPress',
-          '<h2>The Performance Limits of Generic Templates</h2><p>Startups require lightweight, custom software to automate manual bookings. While WordPress works for landing pages, custom ERP applications handle high volumes cleanly...</p>',
-          'Case Studies',
-          'erp, startups, backend',
-          '/uploads/school_marketing_hero.png',
-          'saas-startups-prefer-custom-erp-wordpress',
-          'Custom Software vs WordPress | Host2Unlimited Case Study',
-          'Read why scaling venture teams choose custom React databases over slow templates.',
-          'Solutions Analyst',
-          'Published',
-          '5 min read'
-        ],
-        [
-          '5 Customer Acquisition Funnels That Convert 3x Better',
-          '<h2>Designing User Checkout Journeys</h2><p>Designing digital marketing flows requires removing form friction. We implement localized Razorpay checkout modules and interactive cost calculators...</p>',
-          'Digital Marketing',
-          'marketing, conversion, funnels',
-          '/uploads/development_process_visual.png',
-          '5-customer-acquisition-funnels-convert-better',
-          '5 Customer Acquisition Funnels for 3x Conversion Rates',
-          'A case study review of landing page structure optimizations, localized landing pages, and interactive estimators.',
-          'Acquisition Consultant',
-          'Published',
-          '5 min read'
-        ]
-      ];
+    // 5. Seed initial blogs if table is missing any default blogs
+    const [existingBlogs] = await pool.query('SELECT slug FROM blogs');
+    const existingSlugs = new Set(existingBlogs.map(b => b.slug));
 
-      for (const blog of initialBlogs) {
+    const initialBlogs = [
+      [
+            "Social Media Trends Every Educational Institute Should Know",
+            "<h2>Social Media Trends Every Educational Institute Should Know</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Social Media Trends Every Educational Institute Should Know plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Social Media",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Social-Media-Trends-Every-Educational-Institute-Should-Know-1024x584.jpg",
+            "social-media-trends-every-educational-institute-should-know",
+            "Social Media Trends Every Educational Institute Should Know | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Social Media Trends Every Educational Institute Should Know.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes",
+            "<h2>Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Google-Business-Profile-The-Most-Underutilized-Admission-Tool-for-Educational-Institutes-1024x584.jpg",
+            "google-business-profile-the-most-underutilized-admission-tool-for-educational-institutes",
+            "Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Why Every Educational Institute Needs a Consistent Digital Brand Identity",
+            "<h2>Why Every Educational Institute Needs a Consistent Digital Brand Identity</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Why Every Educational Institute Needs a Consistent Digital Brand Identity plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Branding",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Why-Every-Educational-Institute-Needs-a-Consistent-Digital-Brand-Identity-1024x584.png",
+            "why-every-educational-institute-needs-a-consistent-digital-brand-identity",
+            "Why Every Educational Institute Needs a Consistent Digital Brand Identity | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Why Every Educational Institute Needs a Consistent Digital Brand Identity.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Why Social Media is the New Trust-Building Platform for Brands",
+            "<h2>Why Social Media is the New Trust-Building Platform for Brands</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Why Social Media is the New Trust-Building Platform for Brands plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Social Media",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Why-Social-Media-is-the-New-Trust-Building-Platform-for-Brands-1024x584.png",
+            "why-social-media-is-the-new-trust-building-platform-for-brands",
+            "Why Social Media is the New Trust-Building Platform for Brands | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Why Social Media is the New Trust-Building Platform for Brands.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How Social Media Builds Student Admissions for Educational Institutes",
+            "<h2>How Social Media Builds Student Admissions for Educational Institutes</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How Social Media Builds Student Admissions for Educational Institutes plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Social Media",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/How-Social-Media-Builds-Student-Admissions-for-Educational-Institutes-1024x584.jpg",
+            "how-social-media-builds-student-admissions-for-educational-institutes",
+            "How Social Media Builds Student Admissions for Educational Institutes | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How Social Media Builds Student Admissions for Educational Institutes.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How SEO Builds Long-Term Business Growth Beyond Rankings",
+            "<h2>How SEO Builds Long-Term Business Growth Beyond Rankings</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How SEO Builds Long-Term Business Growth Beyond Rankings plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "SEO",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/How-SEO-Builds-Long-Term-Business-Growth-Beyond-Rankings-1024x576.jpg",
+            "how-seo-builds-long-term-business-growth-beyond-rankings",
+            "How SEO Builds Long-Term Business Growth Beyond Rankings | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How SEO Builds Long-Term Business Growth Beyond Rankings.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Performance Marketing vs Traditional Marketing: What Wins in 2026?",
+            "<h2>Performance Marketing vs Traditional Marketing: What Wins in 2026?</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Performance Marketing vs Traditional Marketing: What Wins in 2026? plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Performance-Marketing-vs-Traditional-Marketing-What-Wins-in-2026-1024x535.jpg",
+            "performance-marketing-vs-traditional-marketing-what-wins-in-2026",
+            "Performance Marketing vs Traditional Marketing: What Wins in 2026? | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Performance Marketing vs Traditional Marketing: What Wins in 2026?.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited",
+            "<h2>Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "SEO",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Best-SEO-Strategies-for-Educational-Institutions-1024x576.jpg",
+            "best-seo-strategies-for-educational-institutions-a-complete-guide-by-host2unlimited",
+            "Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How Branding Builds Trust in Educational Institutions",
+            "<h2>How Branding Builds Trust in Educational Institutions</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How Branding Builds Trust in Educational Institutions plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Branding",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/How-Branding-Builds-Trust-in-Educational-Institutions-1024x573.jpg",
+            "how-branding-builds-trust-in-educational-institutions",
+            "How Branding Builds Trust in Educational Institutions | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How Branding Builds Trust in Educational Institutions.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions ?",
+            "<h2>From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions ?</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions ? plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/From-Classroom-to-Clicks-How-Digital-Marketing-is-Transforming-Student-Admissions-1024x573.jpg",
+            "from-classroom-to-clicks-how-digital-marketing-is-transforming-student-admissions",
+            "From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions ? | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions ?.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "The Future of Education Marketing: Personalisation, AI & Digital Engagement",
+            "<h2>The Future of Education Marketing: Personalisation, AI & Digital Engagement</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. The Future of Education Marketing: Personalisation, AI & Digital Engagement plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/The-Future-of-Education-Marketing-Personalisation-AI-Digital-Engagement-1024x576.jpg",
+            "the-future-of-education-marketing-personalisation-ai-digital-engagement",
+            "The Future of Education Marketing: Personalisation, AI & Digital Engagement | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for The Future of Education Marketing: Personalisation, AI & Digital Engagement.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Why Educational Institutions Need Marketing More Than Ever in 2026",
+            "<h2>Why Educational Institutions Need Marketing More Than Ever in 2026</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Why Educational Institutions Need Marketing More Than Ever in 2026 plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/06/Why-Educational-Institutions-Need-Marketing-More-Than-Ever-in-2026-1024x576.jpg",
+            "why-educational-institutions-need-marketing-more-than-ever-in-2026",
+            "Why Educational Institutions Need Marketing More Than Ever in 2026 | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Why Educational Institutions Need Marketing More Than Ever in 2026.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Is Digital Marketing a Good Career in 2026? Salary, Scope & Jobs",
+            "<h2>Is Digital Marketing a Good Career in 2026? Salary, Scope & Jobs</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Is Digital Marketing a Good Career in 2026? Salary, Scope & Jobs plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/05/digital-markting-is-good-carrer-1024x512.webp",
+            "is-digital-marketing-a-good-career",
+            "Is Digital Marketing a Good Career in 2026? Salary, Scope & Jobs | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Is Digital Marketing a Good Career in 2026? Salary, Scope & Jobs.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How to Increase Admissions in Schools in India",
+            "<h2>How to Increase Admissions in Schools in India</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How to Increase Admissions in Schools in India plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/03/How-to-Increase-Admissions-in-Schools-in-India-1024x525.png",
+            "how-to-increase-admissions-in-schools-in-india",
+            "How to Increase Admissions in Schools in India | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How to Increase Admissions in Schools in India.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Digital Marketing Course in Mumbai with Placement Assistance",
+            "<h2>Digital Marketing Course in Mumbai with Placement Assistance</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Digital Marketing Course in Mumbai with Placement Assistance plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/03/Digital-Marketing-Course-1024x576.webp",
+            "course-in-mumbai-with-placement-assistance",
+            "Digital Marketing Course in Mumbai with Placement Assistance | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Digital Marketing Course in Mumbai with Placement Assistance.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "What is Digital Marketing",
+            "<h2>What is Digital Marketing</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. What is Digital Marketing plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/03/Digital-Marketing-skills-1024x512.webp",
+            "what-is-digital-marketing",
+            "What is Digital Marketing | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for What is Digital Marketing.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How to Generate High-Quality Admission Leads in 2026",
+            "<h2>How to Generate High-Quality Admission Leads in 2026</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How to Generate High-Quality Admission Leads in 2026 plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/03/how-to-generate-high-quality-admission-leads-1024x603.webp",
+            "how-to-generate-high-quality-admission-leads-in-2026",
+            "How to Generate High-Quality Admission Leads in 2026 | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How to Generate High-Quality Admission Leads in 2026.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "AI in Digital Marketing: The Ultimate 2026 Guide to Smarter, Faster & Profitable Marketing Growth",
+            "<h2>AI in Digital Marketing: The Ultimate 2026 Guide to Smarter, Faster & Profitable Marketing Growth</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. AI in Digital Marketing: The Ultimate 2026 Guide to Smarter, Faster & Profitable Marketing Growth plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/02/ai-in-digital-marketing1-1-1024x555.webp",
+            "ai-in-digital-marketing",
+            "AI in Digital Marketing: The Ultimate 2026 Guide to Smarter, Faster & Profitable Marketing Growth | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for AI in Digital Marketing: The Ultimate 2026 Guide to Smarter, Faster & Profitable Marketing Growth.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Why Do Schools Need Digital Marketing in 2026",
+            "<h2>Why Do Schools Need Digital Marketing in 2026</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Why Do Schools Need Digital Marketing in 2026 plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/02/Why-Do-Schools-Need-Digital-Marketing-1024x555.webp",
+            "why-do-schools-need-digital-marketing",
+            "Why Do Schools Need Digital Marketing in 2026 | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Why Do Schools Need Digital Marketing in 2026.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Top 5 School Digital Marketing Mistakes",
+            "<h2>Top 5 School Digital Marketing Mistakes</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Top 5 School Digital Marketing Mistakes plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/02/School-Digital-Marketing-Mistakes.jpg",
+            "school-digital-marketing-mistakes",
+            "Top 5 School Digital Marketing Mistakes | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Top 5 School Digital Marketing Mistakes.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How to Increase Admissions Without Increasing Fees – A Complete Growth Strategy by host 2 unlimited",
+            "<h2>How to Increase Admissions Without Increasing Fees – A Complete Growth Strategy by host 2 unlimited</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How to Increase Admissions Without Increasing Fees – A Complete Growth Strategy by host 2 unlimited plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/02/how-to-increase-admission-1024x555.webp",
+            "how-to-increase-admissions",
+            "How to Increase Admissions Without Increasing Fees – A Complete Growth Strategy by host 2 unlimited | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How to Increase Admissions Without Increasing Fees – A Complete Growth Strategy by host 2 unlimited.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "What are the Digital Marketing Trends for 2026",
+            "<h2>What are the Digital Marketing Trends for 2026</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. What are the Digital Marketing Trends for 2026 plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/02/digital-marketing-trends-1024x546.webp",
+            "digital-marketing-trends-2026",
+            "What are the Digital Marketing Trends for 2026 | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for What are the Digital Marketing Trends for 2026.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "How to Use Content Marketing to Attract More Students",
+            "<h2>How to Use Content Marketing to Attract More Students</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. How to Use Content Marketing to Attract More Students plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/02/How-to-Use-Content-Marketing-to-Attract-More-Students-1024x538.png",
+            "how-to-use-content-marketing-to-attract-more-students",
+            "How to Use Content Marketing to Attract More Students | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for How to Use Content Marketing to Attract More Students.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Best School Websites: Top Design Examples & Features (2026)",
+            "<h2>Best School Websites: Top Design Examples & Features (2026)</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Best School Websites: Top Design Examples & Features (2026) plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2026/01/Best-School-Websites-blog-banner.jpg",
+            "best-school-websites",
+            "Best School Websites: Top Design Examples & Features (2026) | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Best School Websites: Top Design Examples & Features (2026).",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Educational Content Marketing for  Educational Institutes",
+            "<h2>Educational Content Marketing for  Educational Institutes</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Educational Content Marketing for  Educational Institutes plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2025/12/educational-content-marketing-2-1024x576.webp",
+            "educational-content-marketing",
+            "Educational Content Marketing for  Educational Institutes | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Educational Content Marketing for  Educational Institutes.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Marketing ideas for Private School",
+            "<h2>Marketing ideas for Private School</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Marketing ideas for Private School plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2025/12/Marketing-Strategies-to-Grow-Small-Private-Schools-1024x434.webp",
+            "marketing-ideas-for-private-school",
+            "Marketing ideas for Private School | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Marketing ideas for Private School.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "School Newsletter Ideas",
+            "<h2>School Newsletter Ideas</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. School Newsletter Ideas plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2025/12/school-newsletter-ideas-1024x572.webp",
+            "school-newsletter-ideas",
+            "School Newsletter Ideas | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for School Newsletter Ideas.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Marketing ideas for School admission",
+            "<h2>Marketing ideas for School admission</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Marketing ideas for School admission plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://host2unlimited.com/wp-content/uploads/2025/11/marketing-ideas-for-school-1024x683.webp",
+            "marketing-ideas-for-school-admission",
+            "Marketing ideas for School admission | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Marketing ideas for School admission.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ],
+      [
+            "Challenges of Digital Marketing for Engineering & Management Colleges",
+            "<h2>Challenges of Digital Marketing for Engineering & Management Colleges</h2><p>The landscape of modern digital engagement and educational institution growth is evolving rapidly. Challenges of Digital Marketing for Engineering & Management Colleges plays a pivotal role in establishing digital presence, attracting prospective students, and building parent trust.</p><p>At Host2Unlimited, we specialize in implementing targeted strategies that transform digital touchpoints into measurable enrollments and brand authority.</p><h3>Key Takeaways & Implementation Highlights</h3><ul><li>Strategic alignment with target demographic expectations.</li><li>Data-driven campaign optimization and regular analytics tracking.</li><li>Consistent brand identity across website and social platforms.</li></ul>",
+            "Digital Marketing",
+            "digital marketing, education, strategy",
+            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400&h=260",
+            "challenges-of-digital-marketing-for-engineering-management-colleges",
+            "Challenges of Digital Marketing for Engineering & Management Colleges | Host2Unlimited",
+            "Discover key insights and actionable growth strategies for Challenges of Digital Marketing for Engineering & Management Colleges.",
+            "Host2Unlimited Team",
+            "Published",
+            "5 min read"
+      ]
+];
+
+    for (const blog of initialBlogs) {
+      if (!existingSlugs.has(blog[5])) {
         await pool.query(
           `INSERT INTO blogs (title, content, category, tags, image_url, slug, seo_title, meta_description, author, status, read_time) 
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           blog
         );
       }
-      console.log('Seeded initial blog articles successfully.');
     }
+    console.log('Seeded initial blog articles successfully.');
 
     // 6. Seed initial services if table is empty
     const [serviceRows] = await pool.query('SELECT COUNT(*) as count FROM services');

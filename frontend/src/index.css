@@ -158,13 +158,13 @@ img {
 }
 
 .section-padding {
-  padding: 100px 0;
+  padding: 45px 0;
 }
 
 /* Responsive Typography & Mobile Layout Optimizations */
 @media (max-width: 768px) {
   .section-padding {
-    padding: 50px 0;
+    padding: 30px 0;
   }
   h1 {
     font-size: clamp(24px, 6vw, 36px) !important;
@@ -229,8 +229,8 @@ img {
   position: relative;
   width: 100% !important;
   max-width: 100% !important;
-  height: 280px !important;
-  min-height: 280px !important;
+  height: 190px !important;
+  min-height: 190px !important;
   padding: 0 !important;
   margin: 0 !important;
   display: flex !important;
@@ -499,6 +499,120 @@ body.dark .card-glass:hover {
   stroke: #ffffff !important;
 }
 
+/* Standardized Badge Pill */
+.badge {
+  display: inline-block;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 6px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.2px;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+/* Case Study Cards Elegant Hover Styling */
+.case-study-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.case-study-card h3 {
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.case-study-card p {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.case-study-card-badge {
+  background-color: #eff6ff;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.case-study-btn-outline {
+  display: inline-block;
+  padding: 9px 26px;
+  border-radius: 25px;
+  border: 1.5px solid var(--primary);
+  background-color: transparent;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 13.5px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Elegant Card Hover Transformation */
+.case-study-card:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  border-color: rgba(37, 99, 235, 0.5) !important;
+  box-shadow: 0 22px 45px -10px rgba(37, 99, 235, 0.18) !important;
+  transform: translateY(-8px);
+}
+
+.case-study-card:hover h3 {
+  color: var(--primary) !important;
+}
+
+.case-study-card:hover .case-study-card-badge {
+  background-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+.case-study-card:hover .case-study-btn-outline {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+}
+
+.case-study-logo-circle {
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 28px auto 16px auto;
+  padding: 12px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.case-study-card:hover .case-study-logo-circle {
+  border-color: var(--primary) !important;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25) !important;
+  transform: scale(1.1);
+  background-color: #ffffff !important;
+}
+
 /* Gradients text */
 .text-gradient {
   background: var(--grad-primary);
@@ -610,8 +724,12 @@ textarea.form-control {
 .carousel-track {
   display: flex;
   width: max-content;
-  gap: 60px;
-  animation: scroll 30s linear infinite;
+  gap: 20px;
+  animation: scroll 120s linear infinite;
+}
+
+.carousel-track:hover {
+  animation-play-state: paused;
 }
 
 @keyframes scroll {
@@ -893,8 +1011,8 @@ table-wrapper {
   position: relative;
   width: 100%;
   padding: 0 !important;
-  height: 280px !important;
-  min-height: 280px !important;
+  height: 190px !important;
+  min-height: 190px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1000,4 +1118,50 @@ body:not(.dark) .dark-cta-banner h4 {
 .dark-cta-banner p,
 body:not(.dark) .dark-cta-banner p {
   color: rgba(241, 245, 249, 0.95) !important;
+}
+
+/* Unique Premium Card Background & Shimmer Hover Effect */
+.preschool-activity-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Radiant top spotlight glow */
+.preschool-activity-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  border-radius: 20px;
+  background: radial-gradient(800px circle at var(--mouse-x, 50%) 0%, rgba(59, 130, 246, 0.18) 0%, rgba(6, 182, 212, 0.08) 40%, transparent 80%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.preschool-activity-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(59, 130, 246, 0.65) !important;
+  box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.35), 0 0 30px rgba(59, 130, 246, 0.25) !important;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(30, 58, 138, 0.35) 50%, var(--bg-secondary) 100%) !important;
+}
+
+.preschool-activity-card:hover::after {
+  opacity: 1;
+}
+
+.preschool-activity-card .card-number-badge {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preschool-activity-card:hover .card-number-badge {
+  transform: scale(1.25);
+  color: #60a5fa !important;
+  text-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
 }

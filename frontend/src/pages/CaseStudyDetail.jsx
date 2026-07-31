@@ -1,189 +1,52 @@
-import express from 'express';
-import { getPool } from '../db.js';
-import { cacheInvalidate } from '../cache.js';
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  Building2, GraduationCap, ArrowLeft, ArrowRight, CheckCircle2, 
+  TrendingUp, Users, Target, Shield, Send, Check, Sparkles, Share2, Layout, Globe, Palette
+} from 'lucide-react';
+import SEOMeta from '../components/SEOMeta';
+import Breadcrumbs from '../components/Breadcrumbs';
+import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_clean.png';
+import { useLeads } from '../context/LeadContext';
 
-const router = express.Router();
+// Import logos
+import newHorizonPanvel from '../assets/h2u logos/new-horizon-public-school-panvel.png';
+import newHorizonRodasInt from '../assets/h2u logos/new-horizon-International-school-Rodas.png';
+import newHorizonKavesar from '../assets/h2u logos/new-horizon-scholars-school-kavesar-thane.png';
+import newHorizonAiroli13 from '../assets/h2u logos/new-horizon-scholars-school-airoli-sector-13.png';
+import newHorizonAiroli3 from '../assets/h2u logos/new-horizon-public-school-airoli-Sector-3.png';
+import newHorizonVasant from '../assets/h2u logos/new-horizon-scholars-school-Vasant-Lawns (1).png';
+import newHorizonAiroli19 from '../assets/h2u logos/new-horizon-public-school-airoli-Sector-19.png';
+import newHorizonRodasKolshet from '../assets/h2u logos/new-horizon-scholars-school-Rodas-Kolshet.png';
+import ulweLogo from '../assets/h2u logos/Ulwe-logo (1).png';
+import vsignLogo from '../assets/h2u logos/V-Sign-logo.png';
+import gsgsLogo from '../assets/h2u logos/GSGS-logo@4x (1).png';
+import armietLogo from '../assets/h2u logos/armiet_logo.jpeg';
+import drPillaiLogo from '../assets/h2u logos/dr-pillai-global-academy.png';
+import uudaanLogo from '../assets/h2u logos/uudaan-montessori-preschool.jpg';
+import dnyanGangaLogo from '../assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp';
+import pillaiLogo from '../assets/h2u logos/pillai-logo.png';
+import ardentLogo from '../assets/h2u logos/ardent_tutorials_thane.png';
+import somaiyaLogo from '../assets/h2u logos/somaiya_college.png';
+import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
+import newHorizonLogo from '../assets/h2u logos/New-Horizon-logo.png';
+import i3rLogo from '../assets/h2u logos/i3globle-logo.png';
+import avLogo from '../assets/h2u logos/av-solution-logo.png';
+import rnpLogo from '../assets/h2u logos/RNP_Logo-1.webp';
+import skytechLogo from '../assets/h2u logos/skytech-logo.png';
+import lotusLogo from '../assets/h2u logos/lotusleafentertainment-logo.png';
+import verticesLogo from '../assets/h2u logos/Vertices-Partners_logo (1).svg';
+import poddarBrioHero from '../assets/poddar_brio_hero.png';
+import schoolBuildingHero from '../assets/school_building_clean.png';
 
-// Fallback seed dictionary for universal pages
-const DEFAULT_PAGE_CONTENTS = {
-  solutions: [
-    {
-      icon_name: 'Building2',
-      title: 'Enterprise Digitalization',
-      subtitle: 'For Large Companies & Organizations',
-      desc: 'Scale legacy architectures into high-performance web systems. We construct customized integrations to automate operational pipelines and secure data stores.',
-      bulletTitle: 'Key Focus Areas:',
-      bullets: ['Legacy Systems Migration & Modernization', 'Custom ERP & CRM software engineering', 'Military-grade database encryption', 'Automated reporting dashboards', 'RESTful API developer environments']
-    },
-    {
-      icon_name: 'Rocket',
-      title: 'Startup Scale Accelerator',
-      subtitle: 'For Early-stage & Venture Backed Teams',
-      desc: 'Build, deploy, and validate your MVP platforms rapidly. We deploy lightweight, high-performance web applications using robust React and secure databases.',
-      bulletTitle: 'Key Focus Areas:',
-      bullets: ['MVP scoping and modular designs', 'High-conversion SaaS landing pages', 'Continuous integration (CI/CD) pipelines', 'Scalable hosting deployments', 'Product analytics & heatmaps tracking']
-    },
-    {
-      icon_name: 'ShoppingBag',
-      title: 'E-Commerce Infrastructure',
-      subtitle: 'For Retailers & Digital Brands',
-      desc: 'Boost conversion rates, eliminate payment friction, and sync product inventories across channels. We build secure online stores handling high peak volumes.',
-      bulletTitle: 'Key Focus Areas:',
-      bullets: ['Optimized checkout page funnels', 'Multi-channel inventory management', 'Localized payment API modules', 'Personalized buyer dashboards', 'Automated receipt and email tracking']
-    },
-    {
-      icon_name: 'GraduationCap',
-      title: 'Public Sector & Academics',
-      subtitle: 'For Schools, Colleges, and Organizations',
-      desc: 'Deploy secure portal portals supporting high concurrent users. We align systems with WCAG accessibility guidelines and secure student databases.',
-      bulletTitle: 'Key Focus Areas:',
-      bullets: ['WCAG Accessibility compliant layouts', 'Student management systems (SMS)', 'Secure login & roles databases', 'Interactive resource centers', 'Server load optimization for exam events']
-    }
-  ],
-  portfolio: [
-    {
-      id: 1,
-      title: 'Apex Corporate Hub',
-      client: 'Apex Global Enterprises',
-      category: 'Corporate',
-      tech: ['React', 'Next.js', 'Framer Motion', 'Vanilla CSS'],
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=500&h=320',
-      desc: 'A premium, high-speed corporate portal optimized for global clients with real-time analytics.'
-    },
-    {
-      id: 2,
-      title: 'RetailPro E-Marketplace',
-      client: 'RetailPro Logistics',
-      category: 'E-Commerce',
-      tech: ['PHP', 'Laravel', 'MySQL', 'Stripe API'],
-      image: 'https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=500&h=320',
-      desc: 'An enterprise ecommerce ecosystem supporting multiple vendors, stripe payments, and live tracking.'
-    },
-    {
-      id: 3,
-      title: 'MedVitals Cloud System',
-      client: 'HealthLine Diagnostics',
-      category: 'Software',
-      tech: ['Node.js', 'Express.js', 'MongoDB', 'Docker'],
-      image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=500&h=320',
-      desc: 'Custom software suite handling diagnostic records, patient booking automation, and secure PDF export.'
-    },
-    {
-      id: 4,
-      title: 'State Portal Directory',
-      client: 'Municipal Technology Board',
-      category: 'Government',
-      tech: ['TypeScript', 'React.js', 'PostgreSQL', 'AWS'],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=500&h=320',
-      desc: 'Highly accessible public directory compliance with WCAG level AA, serving millions of active citizens.'
-    }
-  ],
-  case_studies: [
-    { id: 1, name: 'PODDAR BRIO SCHOOL', title: 'PODDAR BRIO SCHOOL', category: 'Education', link: '/educational-institutes/international', description: 'PODDAR BRIO International School is a leading CBSE educational institution in Badlapur that provides schooling from kindergarten to higher secondary levels. The school emphasizes academic excellence blended with global teaching standards.' },
-    { id: 2, name: 'DR. PILLAI GLOBAL ACADEMY PANVEL', title: 'DR. PILLAI GLOBAL ACADEMY PANVEL', category: 'Education', link: '/educational-institutes/international', description: 'The Dr. Pillai Global Academy Panvel is a well-planned initiative from the Mahatma Education Society, a trust committed to provide meaningful education with tangible results.' },
-    { id: 3, name: 'ROYAL INTERNATIONAL CBSE SCHOOL', title: 'ROYAL INTERNATIONAL CBSE SCHOOL', category: 'Education', link: '/educational-institutes/international', description: 'At Royal International School, we believe in providing excellent learning with the best infrastructure and academic performance. Experience quality facilities and a superior study environment.' },
-    { id: 4, name: 'ARMIET ENGINEERING & MGMT COLLEGE', title: 'ARMIET ENGINEERING & MGMT COLLEGE', category: 'Higher Education', link: '/educational-institutes/engineering', description: 'ARMIET (Alamuri Ratnamala Institute of Engineering and Technology) is a reputed engineering and management institute in Asangaon offering diploma, degree, and postgraduate programs.' },
-    { id: 5, name: 'GAUTAM SINGHANIA GLOBAL SCHOOL DOMBIVALI', title: 'GAUTAM SINGHANIA GLOBAL SCHOOL DOMBIVALI', category: 'Education', link: '/educational-institutes/international', description: 'Innovate & Thrive – A New Era of Education, transforming learning. Gautam Singhania Global School is a dynamic and inclusive learning community with a global perspective.' },
-    { id: 6, name: 'PODDAR BRIO KIDS', title: 'PODDAR BRIO KIDS', category: 'Preschool', link: '/educational-institutes/preschools', description: 'Poddar Brio Kids is a leading preschool chain offering a nurturing environment focused on early childhood development.' },
-    { id: 7, name: 'DG INTERNATIONAL CBSE SCHOOL', title: 'DG INTERNATIONAL CBSE SCHOOL', category: 'Education', link: '/educational-institutes/international', description: 'DG International CBSE School is a leading educational institution in Thane that provides schooling from kindergarten to higher secondary levels.' },
-    { id: 8, name: 'SHIVAJIRAO S. JONDHLE COLLEGE OF ENGINEERING & TECHNOLOGY', title: 'SHIVAJIRAO S. JONDHLE COLLEGE OF ENGINEERING & TECHNOLOGY', category: 'Higher Education', link: '/educational-institutes/engineering', description: 'Shivajirao S. Jondhle College of Engineering & Technology is a leading institution offering diploma, degree, and postgraduate programs in engineering and technology.' },
-    { id: 9, name: 'PILLAI INSTITUTE PANVEL', title: 'PILLAI INSTITUTE PANVEL', category: 'Higher Education', link: '/educational-institutes/universities', description: 'At PIL, we facilitate immersive study abroad experiences, allowing you to fully embrace a new language and culture.' },
-    { id: 10, name: 'UUDAAN MONTESSORI', title: 'UUDAAN MONTESSORI', category: 'Preschool', link: '/educational-institutes/preschools', description: 'Uudaan Montessori Preschool and Daycare, is headquartered at Thane, maintaining a high-quality learning atmosphere for Young-Minds.' },
-    { id: 11, name: 'DR SHIVAJIRAO S JONDHLE INTERNATIONAL SCHOOL', title: 'DR SHIVAJIRAO S JONDHLE INTERNATIONAL SCHOOL', category: 'Education', link: '/educational-institutes/international', description: 'Dr. Shivajirao S. Jondhle International School is a reputed CBSE educational institution committed to delivering quality learning through modern teaching methodologies.' },
-    { id: 12, name: 'DPGA GORAI', title: 'DPGA GORAI', category: 'Education', link: '/educational-institutes/international', description: 'The DPGA Borivali is a well-planned initiative from the Mahatma Education Society, a trust committed to provide meaningful education with tangible results.' },
-    { id: 13, name: 'ARDENT TUTORIALS', title: 'ARDENT TUTORIALS', category: 'Coaching', link: '/educational-institutes/coaching', description: 'Premier Commerce Tutorials in Thane. Certified Online Coaching for 11th & 12th Commerce, CA & CS Foundation.' },
-    { id: 14, name: 'ROYAL JUNIOR & DEGREE COLLEGE', title: 'ROYAL JUNIOR & DEGREE COLLEGE', category: 'Higher Education', link: '/educational-institutes/colleges', description: 'Royal Junior and Degree College, Dombivli, is a renowned higher education institution offering undergraduate and postgraduate programs in arts, science, and commerce.' },
-    { id: 15, name: 'GAUTAM SINGHANIA GLOBAL SCHOOL THANE', title: 'GAUTAM SINGHANIA GLOBAL SCHOOL THANE', category: 'Education', link: '/educational-institutes/international', description: 'Innovate & Thrive – A New Era of Education, transforming learning. Gautam Singhania Global School is a dynamic and inclusive learning community.' },
-    { id: 16, name: 'SWAMI VIVEKANAND EDUCATION SOCIETY', title: 'SWAMI VIVEKANAND EDUCATION SOCIETY', category: 'Education', link: '/educational-institutes/primary-secondary', description: 'Swami Vivekanand Education Society is a reputed educational group offering comprehensive learning from school to higher education.' },
-    { id: 17, name: 'DGET TRUST BED COLLEGE', title: 'DGET TRUST BED COLLEGE', category: 'Higher Education', link: '/educational-institutes/colleges', description: 'DGET Trust BEd College is an educational hub delivering quality education from KG to PG in Thane.' },
-    { id: 18, name: 'PODDAR BRIO COLLEGE OF LAW', title: 'PODDAR BRIO COLLEGE OF LAW', category: 'Higher Education', link: '/educational-institutes/universities', description: 'The college website features detailed information about 3-year LL.B and 5-year B.A. LL.B programs, admission process, and infrastructure.' },
-    { id: 19, name: 'DNYAN GANGA COLLEGE OF PHARMACY', title: 'DNYAN GANGA COLLEGE OF PHARMACY', category: 'Higher Education', link: '/educational-institutes/universities', description: 'The website provides complete academic details including D.Pharm and B.Pharm programs, admission guidelines, faculty and committees info, and syllabus downloads.' },
-    { id: 20, name: 'NAVODAYA ENGLISH HIGH SCHOOL & JUNIOR COLLEGE', title: 'NAVODAYA ENGLISH HIGH SCHOOL & JUNIOR COLLEGE', category: 'Education', link: '/educational-institutes/primary-secondary', description: 'Well-designed education system is a blessing of Indian culture. Navodaya Kannada Seva Sangha move on with total commitment.' },
-    { id: 21, name: 'HOLY CROSS ENGLISH MEDIUM SCHOOL', title: 'HOLY CROSS ENGLISH MEDIUM SCHOOL', category: 'Education', link: '/educational-institutes/primary-secondary', description: 'Holy Cross English Medium School, Dombivili, Thane: An English-medium co-educational school offering classes from pre-primary through higher levels.' },
-    { id: 22, name: 'THE LEARNING CURVE INDIA', title: 'THE LEARNING CURVE INDIA', category: 'Preschool', link: '/educational-institutes/preschools', description: 'The Learning Curve India specializes in early childhood education with a structured preschool and daycare program.' },
-    { id: 23, name: 'I3R GLOBAL', title: 'I3R GLOBAL', category: 'Business', link: '/contact?service=business-solutions', description: 'i3R Global core expertise lies in identifying opportunities, emerging market trends, and leveraging cutting-edge technologies.' },
-    { id: 24, name: 'AV SOLUTIONS INDIA', title: 'AV SOLUTIONS INDIA', category: 'Technology', link: '/contact?service=av-solutions', description: 'AV Solutions is a leading System Integrator for customized and personalized Audio Video, Home Automation and Control Solutions.' },
-    { id: 25, name: 'RNP SYDNEY', title: 'RNP SYDNEY', category: 'Real Estate', link: '/contact?service=real-estate-solutions', description: 'RNP Sydney is a real estate and property development company in Australia offering professional services in property buying and selling.' },
-    { id: 26, name: 'SMILES ROYALE', title: 'SMILES ROYALE', category: 'Healthcare', link: '/contact?service=healthcare-branding', description: 'We at Smiles Royale are committed to provide our patients with the most innovative and pleasant experience possible.' },
-    { id: 27, name: "V'SIGN", title: "V'SIGN", category: 'E-Commerce', link: '/contact?service=ecommerce-solutions', description: 'The official website of VSign Pen serves as an e-commerce platform showcasing premium fountain pens, ball pens, and roller pens.' },
-    { id: 28, name: 'SKYTECH INDIA', title: 'SKYTECH INDIA', category: 'Technology', link: '/contact?service=tech-branding', description: 'Established in 1993, Skytech Systems (I) Pvt Ltd stands as a pioneering force in the field of analytical instrument distribution in India.' },
-    { id: 29, name: 'LOTUS LEAF ENTERTAINMENT', title: 'LOTUS LEAF ENTERTAINMENT', category: 'Entertainment', link: '/contact?service=event-branding', description: 'Lotus Leaf Entertainment is a one stop solution for all entertainment events and high-end event branding.' },
-    { id: 30, name: 'GOEL AND SONS', title: 'GOEL AND SONS', category: 'Transport', link: '/contact?service=logistics-branding', description: 'Bus services started in April 2006 bringing 18 brilliant years of transportation experience for school kids.' },
-    { id: 31, name: 'VERTICES PARTNERS', title: 'VERTICES PARTNERS', category: 'Legal', link: '/contact?service=legal-branding', description: 'Vertices Partners is a full-service law firm providing legal solutions in Corporate & Commercial Law, M&A, Private Equity, and Dispute Resolution.' }
-  ],
-  educational_institutes: [
-    {
-      id: 'preschools',
-      title: 'Preschools & Daycare Centers',
-      desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/Wish-post-for-educational-institute-scaled.jpg',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
-      icon_name: 'Baby'
-    },
-    {
-      id: 'primary-secondary',
-      title: 'Primary & Secondary Schools',
-      desc: 'Reputation built with impactful stories and updates — engage your audience with content.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/School-Admission-Open-Creative.1-819x1024.png',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/New-Horizon-logo.png',
-      icon_name: 'BookOpen'
-    },
-    {
-      id: 'international',
-      title: 'International Schools (CBSE / ICSE / IB)',
-      desc: 'Boost student engagement by highlighting academic excellence and achievements.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/Educational-institute-website-layout-preview-scaled.jpg',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501-1.webp',
-      icon_name: 'Globe'
-    },
-    {
-      id: 'coaching',
-      title: 'Private Coaching Institutions',
-      desc: 'Promote innovative and personalized coaching methods, proven results, and approach.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/Social-media-presence-of-education-brand.jpg',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/ardent_tutorials_thane.png',
-      icon_name: 'GraduationCap'
-    },
-    {
-      id: 'colleges',
-      title: 'Junior and Degree Colleges',
-      desc: 'Empowering students at Junior and Degree Colleges to achieve academic excellence.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/img-3.webp',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/somaiya_college.png',
-      icon_name: 'School'
-    },
-    {
-      id: 'engineering',
-      title: 'Institutes of Engineering & Technology',
-      desc: 'Future engineers with innovative learning and hands-on experience.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/armite-photo-01.jpeg',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/armiet_logo.jpeg',
-      icon_name: 'Cpu'
-    },
-    {
-      id: 'management',
-      title: 'Institutes of Management Studies',
-      desc: 'Future leaders with practical knowledge, strategic thinking, and a global perspective.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/Social-media-presence-of-education-brand-3.jpg',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/dr-pillai-global-academy.png',
-      icon_name: 'Briefcase'
-    },
-    {
-      id: 'universities',
-      title: 'Public / Private / Deemed Universities',
-      desc: 'Private educational institutions striving continuously to attract the right students.',
-      image: 'https://host2unlimited.com/wp-content/uploads/2025/10/Festival-wish-post-for-school-4-scaled.jpg',
-      logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/GSGS-logo@4x-1.png',
-      icon_name: 'Award'
-    }
-  ],
-  case_study_details: [
+const caseStudiesDataList = [
   {
     id: '1',
     name: 'NEW HORIZON PUBLIC SCHOOL, PANVEL',
     category: 'Education',
     location: 'Panvel, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/newHorizonPanvel.png',
+    logo: newHorizonPanvel,
     color: '#0284c7',
     tagline: 'Leading CBSE School Driving Admissions & Digital Authority',
     metrics: [
@@ -205,7 +68,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON INTERNATIONAL SCHOOL, RODAS',
     category: 'Education',
     location: 'Rodas Enclave, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/newHorizonRodasInt.png',
+    logo: newHorizonRodasInt,
     color: '#7c3aed',
     tagline: 'World-Class International School Positioning & Digital Branding',
     metrics: [
@@ -227,7 +90,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'RAMSHETH THAKUR PUBLIC SCHOOL, ULWE',
     category: 'Education',
     location: 'Ulwe, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/ulweLogo.png',
+    logo: ulweLogo,
     color: '#059669',
     tagline: 'Dominating Local Search & Admission Lead Generation',
     metrics: [
@@ -249,7 +112,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON SCHOLARS SCHOOL, KAVESAR, THANE',
     category: 'Education',
     location: 'Kavesar, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/newHorizonKavesar.png',
+    logo: newHorizonKavesar,
     color: '#2563eb',
     tagline: 'STEM Learning & High-Impact Digital Parent Funnels',
     metrics: [
@@ -272,7 +135,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'PODDAR BRIO SCHOOL',
     category: 'Education',
     location: 'Badlapur, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#2563eb',
     tagline: 'Developing a Truly Holistic Learning Brand',
     subHeadline: 'Highly engaging digital campaigns crafted to maintain a consistent inquiry-to-application conversion rate of 25-30% with uncompromised emphasis on lead nurturing, clear communication, and strong brand trust.',
@@ -350,7 +213,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON SCHOLARS SCHOOL, AIROLI (SECTOR 13)',
     category: 'Education',
     location: 'Airoli, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/newHorizonAiroli13.png',
+    logo: newHorizonAiroli13,
     color: '#d97706',
     tagline: 'Fostering Excellence & Interactive Parent Engagement',
     metrics: [
@@ -373,7 +236,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'DR. PILLAI GLOBAL ACADEMY PANVEL',
     category: 'International IB & Cambridge School',
     location: 'Panvel, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/dr-pillai-global-academy.png',
+    logo: drPillaiLogo,
     color: '#7c3aed',
     tagline: 'Omnichannel Digital Brand Building & Admission Lead Generation',
     subHeadline: 'Through a data-driven, omnichannel strategy, we amplified brand visibility and lead generation via precision-targeted Meta and Google Ads, SEO optimization, interactive web design, and authentic visual storytelling.',
@@ -451,7 +314,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON PUBLIC SCHOOL, AIROLI (SECTOR 3)',
     category: 'Education',
     location: 'Airoli, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/newHorizonAiroli3.png',
+    logo: newHorizonAiroli3,
     color: '#0891b2',
     tagline: 'Academic Distinction & Top Google Search Rankings',
     metrics: [
@@ -474,7 +337,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'ROYAL INTERNATIONAL CBSE SCHOOL',
     category: 'Education',
     location: 'Dombivli, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/New-Horizon-logo.png',
+    logo: newHorizonLogo,
     color: '#dc2626',
     tagline: 'Driving Parent Trust & Local Brand Dominance',
     subHeadline: 'Comprehensive digital strategy blending academic storytelling, infrastructure showcases, and high-converting performance campaigns for maximum admission inquiries.',
@@ -531,7 +394,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'ARMIET ENGINEERING & MGMT COLLEGE',
     category: 'Higher Education',
     location: 'Asangaon, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/armiet_logo.jpeg',
+    logo: armietLogo,
     color: '#059669',
     tagline: 'Multi-Audience SEO & Targeted Engineering Admission Funnels',
     subHeadline: 'Data-driven campus marketing strategy combining placement records, student testimonials, and statewide ad campaigns.',
@@ -574,7 +437,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON SCHOLARS SCHOOL, VASANT LAWNS',
     category: 'Education',
     location: 'Vasant Lawns, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/new-horizon-scholars-school-Vasant-Lawns.png',
+    logo: newHorizonVasant,
     color: '#4f46e5',
     tagline: 'Enriched Educational Journeys & Digital Parent Engagement',
     metrics: [
@@ -596,7 +459,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON PUBLIC SCHOOL, AIROLI (SECTOR 19)',
     category: 'Education',
     location: 'Airoli, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/new-horizon-public-school-airoli-Sector-19.png',
+    logo: newHorizonAiroli19,
     color: '#0284c7',
     tagline: 'Fostering Critical Thinking & Digital Brand Strength',
     metrics: [
@@ -619,7 +482,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'GAUTAM SINGHANIA GLOBAL SCHOOL DOMBIVALI',
     category: 'Education',
     location: 'Dombivli West, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/GSGS-logo@4x-1.png',
+    logo: gsgsLogo,
     color: '#d97706',
     tagline: 'Shaping Future-Ready Education Branding',
     subHeadline: 'Innovate & Thrive — Launching a dynamic and inclusive learning community with global educational perspectives in Dombivli.',
@@ -666,7 +529,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'PODDAR BRIO KIDS',
     category: 'Preschool',
     location: 'Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#ec4899',
     tagline: 'Hyperlocal Preschool Enrolment & Parent Engagement',
     subHeadline: 'Engaging young urban parents through child-friendly visuals, transparent activity updates, and streamlined admission inquiry channels.',
@@ -710,7 +573,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'DG INTERNATIONAL CBSE SCHOOL',
     category: 'Education',
     location: 'Thane West, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501.webp',
+    logo: dnyanGangaLogo,
     color: '#0891b2',
     tagline: '360° CBSE School Branding & Full Admission Campaign',
     subHeadline: 'Blending academic excellence with global teaching standards, cultural values, and interactive parent-teacher digital touchpoints.',
@@ -757,7 +620,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'SHIVAJIRAO S. JONDHLE COLLEGE OF ENGINEERING & TECHNOLOGY',
     category: 'Higher Education',
     location: 'Asangaon, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/armiet_logo.jpeg',
+    logo: armietLogo,
     color: '#7c3aed',
     tagline: 'Smart School MIS Integration & Technical Student Growth',
     subHeadline: 'Empowering technical education through automated online admission portals, placement record highlights, and Smart MIS integration.',
@@ -800,7 +663,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NEW HORIZON SCHOLARS SCHOOL RODAS, KOLSHET',
     category: 'Education',
     location: 'Kolshet, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/new-horizon-scholars-school-Rodas-Kolshet.png',
+    logo: newHorizonRodasKolshet,
     color: '#2563eb',
     tagline: 'High-Standard Schooling & Digital Community Reach',
     metrics: [
@@ -822,7 +685,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'PILLAI INSTITUTE PANVEL',
     category: 'Higher Education',
     location: 'Panvel, Navi Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/dr-pillai-global-academy.png',
+    logo: pillaiLogo,
     color: '#6d28d9',
     tagline: 'Immersive Study Abroad & Language Learning Digital Campaigns',
     metrics: [
@@ -845,7 +708,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'UUDAAN MONTESSORI',
     category: 'Preschool',
     location: 'Thane, Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/uudaan-montessori-preschool.jpg',
+    logo: uudaanLogo,
     color: '#f59e0b',
     tagline: 'Building Early Childhood Digital Authority & Parent Trust',
     subHeadline: 'Nurturing young minds aged 2 to 6 through authentic parent testimonials, Montessori philosophy highlights, and Google Maps local search optimization.',
@@ -883,7 +746,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'DR SHIVAJIRAO S JONDHLE INTERNATIONAL SCHOOL',
     category: 'Education',
     location: 'Thane, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#10b981',
     tagline: 'CBSE Quality Learning & Smart MIS Digital Integration',
     subHeadline: 'Delivering modern CBSE education integrated with Smart School MIS for seamless online student management and parent communication.',
@@ -939,7 +802,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'DPGA GORAI',
     category: 'Education',
     location: 'Gorai / Borivali, Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/dr-pillai-global-academy.png',
+    logo: drPillaiLogo,
     color: '#7c3aed',
     tagline: 'Premium IB & International School Branding',
     metrics: [
@@ -962,7 +825,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'ARDENT TUTORIALS',
     category: 'Coaching',
     location: 'Thane, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/ardent_tutorials_thane.png',
+    logo: ardentLogo,
     color: '#2563eb',
     tagline: 'Premier Commerce & CA/CS Foundation Coaching Marketing',
     subHeadline: 'Showcasing concept-based learning, student success stories, and the Ardent family ethos to build brand credibility and attract motivated commerce students.',
@@ -1019,7 +882,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'ROYAL JUNIOR & DEGREE COLLEGE',
     category: 'Higher Education',
     location: 'Dombivli, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2026/04/New-Horizon-logo.png',
+    logo: newHorizonLogo,
     color: '#dc2626',
     tagline: 'Renowned Higher Education & Degree Program Admissions',
     subHeadline: 'Combining data insights, student-centric content, and sharp targeting for maximum inquiries across B.Com, B.Sc, and B.A. streams.',
@@ -1075,7 +938,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'GAUTAM SINGHANIA GLOBAL SCHOOL THANE',
     category: 'Education',
     location: 'Thane, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/GSGS-logo@4x-1.png',
+    logo: gsgsLogo,
     color: '#d97706',
     tagline: 'Future-Ready Education & Dynamic Campus Growth',
     metrics: [
@@ -1097,7 +960,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'SWAMI VIVEKANAND EDUCATION SOCIETY',
     category: 'Education',
     location: 'Mumbai, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#f97316',
     tagline: 'Multi-Institutional Group Branding & Website Portal',
     metrics: [
@@ -1119,7 +982,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'DGET TRUST BED COLLEGE',
     category: 'Higher Education',
     location: 'Thane, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501.webp',
+    logo: dnyanGangaLogo,
     color: '#0284c7',
     tagline: 'Quality B.Ed Teacher Education & Professional Growth',
     metrics: [
@@ -1141,7 +1004,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'PODDAR BRIO COLLEGE OF LAW',
     category: 'Higher Education',
     location: 'Badlapur, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#1e3a8a',
     tagline: 'Legal Education Portal & LL.B Admission Campaigns',
     metrics: [
@@ -1163,7 +1026,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'DNYAN GANGA COLLEGE OF PHARMACY',
     category: 'Higher Education',
     location: 'Thane, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501.webp',
+    logo: dnyanGangaLogo,
     color: '#059669',
     tagline: 'Pharmacy Education, AICTE/PCI Compliance & Student Leads',
     metrics: [
@@ -1185,7 +1048,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'NAVODAYA ENGLISH HIGH SCHOOL & JUNIOR COLLEGE',
     category: 'Education',
     location: 'Thane, Maharashtra',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#dc2626',
     tagline: 'Sculpting Better Citizens & Digital Community Engagement',
     metrics: [
@@ -1207,7 +1070,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'HOLY CROSS ENGLISH MEDIUM SCHOOL',
     category: 'Education',
     location: 'Dombivli, Thane',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#4f46e5',
     tagline: 'Holistic Development & Activity-Based Learning Marketing',
     metrics: [
@@ -1229,7 +1092,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'THE LEARNING CURVE INDIA',
     category: 'Preschool',
     location: 'Mumbai & Pan-India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#ec4899',
     tagline: 'Play-Centric Early Childhood Education & Daycare Marketing',
     metrics: [
@@ -1251,7 +1114,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'I3R GLOBAL',
     category: 'Business',
     location: 'Mumbai, India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/i3globle-logo.png',
+    logo: i3rLogo,
     color: '#0891b2',
     tagline: 'Global Event Management, B2B Networking & Hybrid Marketing',
     metrics: [
@@ -1273,7 +1136,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'AV SOLUTIONS INDIA',
     category: 'Technology',
     location: 'Mumbai, India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/av-solution-logo.png',
+    logo: avLogo,
     color: '#1e40af',
     tagline: 'Premier AV Systems Integration & School Auditorium Solutions',
     metrics: [
@@ -1295,7 +1158,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'RNP SYDNEY',
     category: 'Real Estate',
     location: 'Sydney, Australia',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/RNP_Logo-1.webp',
+    logo: rnpLogo,
     color: '#0f766e',
     tagline: 'Australia Property Development & Sydney Real Estate Marketing',
     metrics: [
@@ -1317,7 +1180,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'SMILES ROYALE',
     category: 'Healthcare',
     location: 'Mumbai, India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/dr-pillai-global-academy.png',
+    logo: drPillaiLogo,
     color: '#059669',
     tagline: 'Innovative Dental Care & Patient Acquisition Funnels',
     metrics: [
@@ -1339,7 +1202,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: "V'SIGN",
     category: 'E-Commerce',
     location: 'India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/V-Sign-logo.png',
+    logo: vsignLogo,
     color: '#7c3aed',
     tagline: 'Premium Pen E-Commerce Platform & Online Sales Growth',
     metrics: [
@@ -1361,7 +1224,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'SKYTECH INDIA',
     category: 'Technology',
     location: 'Mumbai, India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/skytech-logo.png',
+    logo: skytechLogo,
     color: '#0369a1',
     tagline: 'Pioneering Analytical Instrument Distribution & B2B Growth',
     metrics: [
@@ -1383,7 +1246,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'LOTUS LEAF ENTERTAINMENT',
     category: 'Entertainment',
     location: 'Mumbai, India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/lotusleafentertainment-logo.png',
+    logo: lotusLogo,
     color: '#db2777',
     tagline: 'Premier Entertainment Events & Production Marketing',
     metrics: [
@@ -1405,7 +1268,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'GOEL AND SONS',
     category: 'Transport',
     location: 'Mulund West, Mumbai',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/euro_kids.jpeg',
+    logo: euroKidsLogo,
     color: '#15803d',
     tagline: '18+ Years School Bus Transport & Safety Operations',
     metrics: [
@@ -1427,7 +1290,7 @@ const DEFAULT_PAGE_CONTENTS = {
     name: 'VERTICES PARTNERS',
     category: 'Legal',
     location: 'Mumbai, India',
-    logo: 'https://host2unlimited.com/wp-content/uploads/2025/09/Vertices-Partners_logo.svg',
+    logo: verticesLogo,
     color: '#1e3a8a',
     tagline: 'Full-Service Corporate Law Firm Digital Positioning',
     metrics: [
@@ -1444,204 +1307,658 @@ const DEFAULT_PAGE_CONTENTS = {
       'Reinforced firm credibility among venture capital and corporate clients.'
     ]
   }
-],
-  pricing: [
-    {
-      name: 'Starter Website Package',
-      price: '₹15,000 – ₹25,000',
-      desc: 'Perfect for small businesses and startups seeking a professional landing page or online brochure.',
-      features: 'Up to 5 Pages development, Fully Mobile Responsive, Secure Contact Form, Basic SEO & Metadata config, SSL Certificate Setup, 1 Month Support',
-      popular: false
-    },
-    {
-      name: 'Business Website Package',
-      price: '₹35,000 – ₹60,000',
-      desc: 'Designed for scaling companies needing custom layout mockups, blogs, and marketing connections.',
-      features: 'Up to 15 Pages development, Custom UI/UX & Animations, Blog Engine Integration, Lead Management Dashboard, Advanced Technical SEO, Google Analytics setup, 3 Months Dedicated Support',
-      popular: true
-    },
-    {
-      name: 'Enterprise / Custom Software',
-      price: 'Custom Quote',
-      desc: 'Tailored for high-scale organizations needing custom ERP portals, SaaS platforms, or mobile apps.',
-      features: 'Unlimited Pages / Custom Modules, Dedicated Cloud Architecture, Multi-role RBAC security, API & Webhooks integration, SLA 99.9% Uptime Guarantee, Dedicated Project Manager, 24/7 Priority Support',
-      popular: false
-    }
-  ],
-  careers: [
-    {
-      title: 'Senior Full Stack Engineer',
-      department: 'Engineering',
-      type: 'Full-time',
-      location: 'Thane / Remote',
-      desc: 'Build scalable web applications, API microservices, and high-performance user interfaces using React, Node.js, and cloud databases.'
-    },
-    {
-      title: 'Digital Marketing & SEO Manager',
-      department: 'Marketing',
-      type: 'Full-time',
-      location: 'Thane, Mumbai',
-      desc: 'Lead strategic organic search optimization campaigns, lead generation funnels, and performance marketing for educational & enterprise clients.'
-    },
-    {
-      title: 'UI/UX Visual Designer',
-      department: 'Design',
-      type: 'Full-time',
-      location: 'Remote',
-      desc: 'Craft modern responsive user interfaces, brand design systems, dynamic web animations, and interactive prototypes.'
-    }
-  ],
-  about: {
-    values: [
-      { icon_name: 'ShieldCheck', title: 'Absolute Data Integrity', desc: 'We prioritize high-encryption security standards across every database query and customer portal.' },
-      { icon_name: 'Zap', title: 'Performance-First Engineering', desc: 'Every line of code is optimized for microsecond load speeds and lightweight execution.' },
-      { icon_name: 'HeartHandshake', title: 'Client-Centric Transparency', desc: 'Direct technical communication and transparent project roadmaps from initial scoping to live deployment.' }
-    ],
-    stats: [
-      { number: '16+', label: 'Years Experience' },
-      { number: '35+', label: 'Enterprise Clients' },
-      { number: '300+', label: 'Campaigns Delivered' },
-      { number: '99.9%', label: 'Uptime SLA' }
-    ]
-  },
-  testimonials: [
-    {
-      id: 1,
-      name: 'Rajesh Sharma',
-      designation: 'Director',
-      company: 'Poddar Brio International School',
-      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150',
-      rating: 5,
-      review: 'Host2Unlimited transformed our digital presence and online admissions system completely. Their technical team is extremely responsive and proactive.'
-    },
-    {
-      id: 2,
-      name: 'Dr. K. M. Vasudevan',
-      designation: 'Trustee',
-      company: 'Dr. Pillai Global Academy',
-      photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150&h=150',
-      rating: 5,
-      review: 'Outstanding execution on our web portal development and admission lead pipelines. The CMS gives us total control over our website updates.'
-    }
-  ],
-  banner: {
-    about: { title: 'About Host2Unlimited', subtitle: 'Our Background', desc: 'We are a dedicated team of software developers, database managers, systems architects, and digital marketing consultants who help brands scale their systems.' },
-    services: { title: 'Our Services & Solutions', subtitle: 'Capabilities', desc: 'We offer robust custom website design, cloud database configuration, Google organic search SEO sprints, and scalable VPS architectures.' },
-    careers: { title: 'Careers at Host2Unlimited', subtitle: 'Join Our Team', desc: 'Explore opportunities to build scalable portals, launch digital marketing campaigns, and craft visual graphics with our collaborative engineering desk.' },
-    portfolio: { title: 'Selected Projects & Portfolios', subtitle: 'Our Work', desc: 'Explore our track record of custom e-commerce engines, public sector portals, compliance directories, and interactive software suites.' },
-    case_studies: { title: 'Success Metrics & Case Studies', subtitle: 'Client Outcomes', desc: 'Real-world blueprints detailing how our systems engineers scale database transactions, improve page loads, and cut cloud hosting overheads.' }
-  },
-  website_settings: {
-    company_name: 'Host2Unlimited Technologies',
-    whatsapp_number: '+91 81046 12974',
-    contact_email: 'info@host2unlimited.com',
-    contact_phone: '+91 81046 12974',
-    office_address: 'Thane West, Mumbai Metropolitan Region, Maharashtra 400601',
-    footer_text: '© 2026 Host2Unlimited Technologies. All Rights Reserved.'
-  }
-};
+];
 
-DEFAULT_PAGE_CONTENTS.educational_institutes = DEFAULT_PAGE_CONTENTS.case_study_details;
+const CaseStudyDetail = (props) => {
+  const { id: paramId } = useParams();
+  const location = useLocation();
+  const { addLead } = useLeads();
+  const [studiesList, setStudiesList] = useState(caseStudiesDataList);
 
-// Helper for cross-database safe upsert (MySQL & PostgreSQL compatible)
-const savePageToDB = async (db, id, stringified) => {
-  const [existing] = await db.query('SELECT id FROM cms_pages WHERE id = ?', [id]);
-  if (existing && existing.length > 0) {
-    return await db.query('UPDATE cms_pages SET content_data = ? WHERE id = ?', [stringified, id]);
-  } else {
-    return await db.query('INSERT INTO cms_pages (id, content_data) VALUES (?, ?)', [id, stringified]);
-  }
-};
-
-// GET page content
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const db = getPool();
-    const [rows] = await db.query('SELECT * FROM cms_pages WHERE id = ?', [id]);
-    
-    if (rows.length === 0) {
-      if (DEFAULT_PAGE_CONTENTS[id]) {
-        const defaultData = DEFAULT_PAGE_CONTENTS[id];
-        const stringified = JSON.stringify(defaultData);
-        
-        // Auto-seed into DB if missing
-        try {
-          await savePageToDB(db, id, stringified);
-        } catch (e) {
-          console.warn(`Could not auto-seed ${id}:`, e.message);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBackendCaseStudies = async () => {
+      try {
+        const CURRENT_API_BASE = process.env.NODE_ENV === 'production'
+          ? (window.location.origin.includes('localhost') ? 'http://localhost:5000' : 'https://host2unlimitedcms-backend.onrender.com')
+          : 'http://localhost:5000';
+        const res = await fetch(`${CURRENT_API_BASE}/api/pages/case_study_details`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0 && isMounted) {
+            setStudiesList(data);
+          }
         }
-        return res.json(defaultData);
+      } catch (err) {
+        console.warn('Backend fetch for case_study_details fallback to static:', err.message);
       }
-      return res.status(404).json({ error: `Page content block for '${id}' not found.` });
-    }
-    
-    // Parse the JSON data before sending
-    const pageData = JSON.parse(rows[0].content_data);
-    res.json(pageData);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    };
+    fetchBackendCaseStudies();
+    return () => { isMounted = false; };
+  }, []);
 
-// POST update page content
-router.post('/:id', async (req, res) => {
-  const { id } = req.params;
-  const contentData = req.body;
+  // Normalize pathname to extract key segment
+  const cleanPath = (location.pathname || '').replace(/^\/+|\/+$/g, '');
+  const pathSegment = cleanPath.split('/').pop() || '';
 
-  if (!contentData) {
-    return res.status(400).json({ error: 'Page content payload is required.' });
-  }
+  const targetKey = String(props.defaultId || paramId || pathSegment).toLowerCase().trim();
 
-  try {
-    const db = getPool();
-    const stringified = JSON.stringify(contentData);
+  // Bulletproof study lookup matching id, slug, or normalized name
+  const study = studiesList.find(s => {
+    if (!s) return false;
+    const sId = String(s.id).toLowerCase().trim();
+    const sSlug = (s.slug || '').toLowerCase().trim();
+    const sNameKey = (s.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').trim();
 
-    await savePageToDB(db, id, stringified);
+    return (
+      sId === targetKey ||
+      (sSlug && sSlug === targetKey) ||
+      (sSlug && targetKey.endsWith(sSlug)) ||
+      (sNameKey && targetKey.includes(sNameKey))
+    );
+  }) || studiesList.find(s => String(s.id) === '1') || studiesList[0];
 
-    cacheInvalidate('/api/pages');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    instituteName: '',
+    message: ''
+  });
+  const [submitted, setSubmitted] = useState(false);
 
-    if (global.broadcastSSE) {
-      global.broadcastSSE({ type: 'page_update', page: id });
-    }
+  const breadcrumbs = [
+    { name: 'Home', label: 'Home', path: '/' },
+    { name: 'Case Studies', label: 'Case Studies', path: '/case-studies' },
+    { name: study?.name || 'Detail', label: study?.name || 'Detail', path: location.pathname }
+  ];
 
-    res.json({
-      message: `Universal page content for '${id}' saved successfully.`,
-      updated: true
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addLead({
+      type: 'Case Study Strategy Request',
+      ...formData,
+      caseStudy: study.name,
+      date: new Date().toISOString()
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    setSubmitted(true);
+  };
 
-// Alias POST to PUT also for convenience
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const contentData = req.body;
+  return (
+    <div style={{ paddingTop: '0px', minHeight: '100vh', backgroundColor: 'var(--bg-primary)' }}>
+      <SEOMeta
+        title={`${study?.name || 'Case Study'} | Digital Marketing Case Study | Host2Unlimited`}
+        description={study?.description || study?.subHeadline || 'Explore how Host2Unlimited scales admissions and digital brand equity.'}
+        canonical={`https://host2unlimited.com${location.pathname}`}
+        breadcrumbPaths={breadcrumbs}
+      />
 
-  if (!contentData) {
-    return res.status(400).json({ error: 'Page content payload is required.' });
-  }
+      {/* Hero Banner with H1 Title */}
+      <section
+        className="page-hero-banner"
+        style={{ 
+          position: 'relative', 
+          minHeight: '220px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          overflow: 'hidden', 
+          backgroundColor: '#0b0f19',
+          padding: '36px 0'
+        }}
+      >
+        <img
+          src={caseStudiesHeroBg}
+          alt="Case Study Hero"
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover', 
+            zIndex: 1, 
+            pointerEvents: 'none' 
+          }}
+        />
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          <span style={{ 
+            backgroundColor: 'rgba(59, 130, 246, 0.2)', 
+            color: '#60a5fa', 
+            fontSize: '12px', 
+            fontWeight: 800, 
+            padding: '4px 16px', 
+            borderRadius: '20px', 
+            textTransform: 'uppercase',
+            letterSpacing: '0.8px',
+            display: 'inline-block',
+            marginBottom: '12px',
+            border: '1px solid rgba(96, 165, 250, 0.3)'
+          }}>
+            Case Study • {study?.category || 'Education'}
+          </span>
+          <h1 style={{ fontSize: 'clamp(24px, 4vw, 38px)', fontWeight: 900, color: '#ffffff', marginBottom: '14px', letterSpacing: '-0.5px', lineHeight: 1.2 }}>
+            {study?.name || 'Case Study Detail'}
+          </h1>
+          <Breadcrumbs paths={breadcrumbs} />
+        </div>
+      </section>
 
-  try {
-    const db = getPool();
-    const stringified = JSON.stringify(contentData);
+      <div className="container" style={{ marginTop: '40px', paddingBottom: '80px' }}>
+        
+        {/* Navigation back link */}
+        <Link 
+          to="/case-studies" 
+          style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            color: '#0284c7', 
+            fontWeight: 700, 
+            fontSize: '14.5px', 
+            marginBottom: '28px',
+            textDecoration: 'none'
+          }}
+        >
+          <ArrowLeft size={16} /> Back to All Case Studies
+        </Link>
 
-    await savePageToDB(db, id, stringified);
+        {/* Case Study Header Box */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{ 
+            backgroundColor: 'var(--bg-secondary)', 
+            border: '1px solid var(--border-color)', 
+            borderRadius: '24px', 
+            overflow: 'hidden',
+            marginBottom: '40px',
+            boxShadow: '0 15px 40px rgba(0,0,0,0.18)'
+          }}
+        >
+          {/* Universal Photographic Hero Visual Banner */}
+          {(() => {
+            let heroImg = poddarBrioHero;
+            let badgeText = '★ Featured Educational Success Story';
+            let badgeBg = '#2563eb';
 
-    cacheInvalidate('/api/pages');
+            if (study?.slug === 'poddar-brio-school' || study?.id === '5') {
+              heroImg = poddarBrioHero;
+              badgeText = '★ Featured CBSE School Success Story';
+              badgeBg = '#2563eb';
+            } else if (study?.slug === 'dr-pillai-global-academy-panvel' || study?.id === '7') {
+              heroImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/Festival-wish-post-for-school-2-scaled.jpg';
+              badgeText = '★ Featured International IB & Cambridge School Success Story';
+              badgeBg = '#7c3aed';
+            } else if (study?.category === 'Preschool') {
+              heroImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/Social-media-presence-of-education-brand.jpg';
+              badgeText = '★ Featured Early Childhood & Preschool Success Story';
+              badgeBg = '#ec4899';
+            } else if (study?.category === 'Higher Education' || study?.category === 'Engineering') {
+              heroImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/armite-photo-01.jpeg';
+              badgeText = '★ Featured Higher Education & Engineering Success Story';
+              badgeBg = '#059669';
+            } else if (study?.category === 'Coaching') {
+              heroImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/Social-media-education-brand-1.jpg';
+              badgeText = '★ Featured Coaching & Commerce Success Story';
+              badgeBg = '#2563eb';
+            } else {
+              heroImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/Wish-post-for-educational-institute-scaled.jpg';
+              badgeText = '★ Featured CBSE & K-12 Digital Branding Story';
+              badgeBg = '#0284c7';
+            }
 
-    if (global.broadcastSSE) {
-      global.broadcastSSE({ type: 'page_update', page: id });
-    }
+            return (
+              <div style={{ position: 'relative', width: '100%', height: '260px', overflow: 'hidden' }}>
+                <img 
+                  src={heroImg} 
+                  alt={study?.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} 
+                  onError={(e) => { e.target.src = schoolBuildingHero; }}
+                />
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(11, 15, 25, 0.95) 0%, rgba(11, 15, 25, 0.35) 60%, transparent 100%)',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  padding: '28px 36px'
+                }}>
+                  <div>
+                    <span className="badge" style={{ fontSize: '12px', fontWeight: 800, backgroundColor: badgeBg, color: '#fff', padding: '6px 18px', borderRadius: '20px', letterSpacing: '0.5px' }}>
+                      {badgeText}
+                    </span>
+                    <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 32px)', fontWeight: 900, color: '#ffffff', margin: '8px 0 0 0', textAlign: 'left' }}>
+                      {study?.name} — {study?.tagline}
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
-    res.json({
-      message: `Universal page content for '${id}' updated successfully.`,
-      updated: true
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+          <div style={{ padding: '36px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            
+            {/* Callout Header Box (Preschool Style) */}
+            <div style={{ backgroundColor: 'rgba(59, 130, 246, 0.08)', borderLeft: '4px solid #3b82f6', borderRadius: '14px', padding: '20px 24px', textAlign: 'left' }}>
+              <span style={{ color: '#3b82f6', fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block', marginBottom: '4px' }}>
+                {study?.category} • {study?.location}
+              </span>
+              <h1 style={{ fontSize: 'clamp(24px, 3.5vw, 34px)', fontWeight: 900, color: 'var(--text-primary)', margin: '0 0 6px 0', lineHeight: 1.25, textAlign: 'left' }}>
+                {study?.tagline}
+              </h1>
+              {study?.subHeadline && (
+                <p style={{ fontSize: '15px', lineHeight: 1.65, color: 'var(--text-secondary)', margin: 0, fontWeight: 500, textAlign: 'left' }}>
+                  {study.subHeadline}
+                </p>
+              )}
+            </div>
 
-export default router;
+            {/* Key Metric Badges Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', paddingTop: '10px' }}>
+              {(study?.metrics || []).map((m, idx) => {
+                const badgeColors = [
+                  { bg: 'rgba(56, 189, 248, 0.08)', border: 'rgba(56, 189, 248, 0.25)', text: '#38bdf8' },
+                  { bg: 'rgba(52, 211, 153, 0.08)', border: 'rgba(52, 211, 153, 0.25)', text: '#34d399' },
+                  { bg: 'rgba(192, 132, 252, 0.08)', border: 'rgba(192, 132, 252, 0.25)', text: '#c084fc' },
+                  { bg: 'rgba(250, 204, 21, 0.08)', border: 'rgba(250, 204, 21, 0.25)', text: '#facc15' }
+                ];
+                const theme = badgeColors[idx % badgeColors.length];
+
+                return (
+                  <motion.div 
+                    key={idx} 
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    style={{ 
+                      backgroundColor: theme.bg, 
+                      borderRadius: '20px', 
+                      padding: '22px 24px', 
+                      textAlign: 'center', 
+                      border: `1px solid ${theme.border}`,
+                      boxShadow: '0 8px 20px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <span style={{ fontSize: '38px', fontWeight: 900, color: theme.text, display: 'block', letterSpacing: '-1px' }}>{m.value}</span>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{m.label}</span>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Full-Width Case Details Content */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
+          
+          {/* Institute Overview & Goal */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '26px' }}>
+            <motion.div whileHover={{ y: -4 }} className="card-glass" style={{ padding: '32px', textAlign: 'left', borderRadius: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '14px', backgroundColor: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Building2 size={22} color="#38bdf8" />
+                </div>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'left' }}>
+                  Institute Overview
+                </h3>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.75, margin: 0, textAlign: 'left' }}>
+                {study.description}
+              </p>
+            </motion.div>
+
+            <motion.div whileHover={{ y: -4 }} className="card-glass" style={{ padding: '32px', textAlign: 'left', borderRadius: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '14px', backgroundColor: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Target size={22} color="#38bdf8" />
+                </div>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, color: '#38bdf8', margin: 0, textAlign: 'left' }}>
+                  Strategic Goal & Objective
+                </h3>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.75, margin: 0, textAlign: 'left' }}>
+                {study.goal || `Accelerate student admissions, maximize local search dominance, and build strong brand trust among parents across ${study.location}.`}
+              </p>
+            </motion.div>
+          </div>
+
+          {/* The Challenge & Solution */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '26px' }}>
+            <motion.div whileHover={{ y: -4 }} className="card-glass" style={{ padding: '32px', textAlign: 'left', borderRadius: '24px', borderLeft: '4px solid #ef4444' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '14px', backgroundColor: 'rgba(239, 68, 68, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Target size={22} color="#ef4444" />
+                </div>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, color: '#f87171', margin: 0, textAlign: 'left' }}>
+                  The Challenge
+                </h3>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.75, margin: 0, textAlign: 'left' }}>
+                {study.challenge}
+              </p>
+            </motion.div>
+
+            <motion.div whileHover={{ y: -4 }} className="card-glass" style={{ padding: '32px', textAlign: 'left', borderRadius: '24px', borderLeft: '4px solid #10b981' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                <div style={{ width: '44px', height: '44px', borderRadius: '14px', backgroundColor: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Shield size={22} color="#10b981" />
+                </div>
+                <h3 style={{ fontSize: '21px', fontWeight: 800, color: '#34d399', margin: 0, textAlign: 'left' }}>
+                  Strategy & Execution by Host2Unlimited
+                </h3>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.75, margin: 0, textAlign: 'left' }}>
+                {study.solution}
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Universal Middle Visual Spotlight Showcase Banner */}
+          {(() => {
+            let spotlightImg = schoolBuildingHero;
+            let spotlightBadge = 'Admission Growth Engine';
+            let spotlightTitle = `Consistent Inquiry Growth for ${study.name}`;
+            let spotlightDesc = `By pairing localized SEO and targeted Meta ads with continuous lead nurturing and authentic campus storytelling, HOST2UNLIMITED established ${study.name} as a top choice in ${study.location}.`;
+
+            if (study?.slug === 'dr-pillai-global-academy-panvel' || study?.id === '7') {
+              spotlightImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/armite-photo-01.jpeg';
+              spotlightBadge = '360° International Education Campaign';
+              spotlightTitle = '31% Increase in Qualified IB & Cambridge Admission Inquiries';
+              spotlightDesc = 'By combining high-converting Meta and Google Ad placements with intuitive web UX, localized SEO, and campus event reels, HOST2UNLIMITED amplified DPGA Panvel’s brand reputation across Navi Mumbai.';
+            } else if (study?.slug === 'poddar-brio-school' || study?.id === '5') {
+              spotlightImg = schoolBuildingHero;
+              spotlightBadge = 'Admission Growth Engine';
+              spotlightTitle = 'Consistent 25-30% Inquiry-to-Application Conversion Rate';
+              spotlightDesc = 'By pairing localized SEO and targeted Meta ads with continuous lead nurturing and authentic campus Reels storytelling, HOST2UNLIMITED established Poddar BRIO School as a premier educational choice in Badlapur.';
+            } else if (study?.category === 'Higher Education' || study?.category === 'Engineering') {
+              spotlightImg = 'https://host2unlimited.com/wp-content/uploads/2025/10/armite-photo-01.jpeg';
+              spotlightBadge = 'Campus Enrolment Engine';
+              spotlightTitle = 'Multi-Stream Technical & Degree Application Growth';
+              spotlightDesc = `HOST2UNLIMITED executed targeted digital ad funnels and student testimonial reels, driving verified degree & diploma applications for ${study.name}.`;
+            }
+
+            return (
+              <motion.div 
+                whileHover={{ scale: 1.01 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+                  gap: '32px', 
+                  alignItems: 'center', 
+                  backgroundColor: 'var(--bg-secondary)', 
+                  border: '1px solid rgba(56, 189, 248, 0.3)', 
+                  borderRadius: '28px', 
+                  padding: '32px', 
+                  margin: '10px 0',
+                  textAlign: 'left',
+                  boxShadow: '0 16px 40px rgba(0, 0, 0, 0.2)'
+                }}
+              >
+                <div style={{ borderRadius: '20px', overflow: 'hidden', height: '240px', boxShadow: '0 10px 25px rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <img 
+                    src={spotlightImg} 
+                    alt={`${study.name} Showcase`} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    onError={(e) => { e.target.src = schoolBuildingHero; }}
+                  />
+                </div>
+                <div style={{ textAlign: 'left' }}>
+                  <span className="badge" style={{ marginBottom: '14px', fontSize: '12px', fontWeight: 800, backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                    {spotlightBadge}
+                  </span>
+                  <h4 style={{ fontSize: '24px', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '14px', textAlign: 'left', letterSpacing: '-0.3px' }}>
+                    {spotlightTitle}
+                  </h4>
+                  <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.7, margin: 0, textAlign: 'left' }}>
+                    {spotlightDesc}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })()}
+
+          {/* Strategic Execution Pillars with Exact Website Images (Preschool Style) */}
+          {(() => {
+            const activePillars = (study?.pillars && study.pillars.length > 0) ? study.pillars : [
+              {
+                title: 'Hyper-Targeted Digital Audience Reach',
+                desc: `We deployed precision-targeted Meta, Google, and display advertising campaigns focused on reaching parents and prospective students in ${study.location}. By segmenting demographics by age, interest, and academic goals, we ensured maximum ROI and qualified lead generation.`,
+                images: ['https://host2unlimited.com/wp-content/uploads/2025/10/Wish-post-for-educational-institute-scaled.jpg'],
+                layout: 'single-banner'
+              },
+              {
+                title: 'High-Converting Web Architecture & Mobile UX',
+                desc: 'We optimized the institutional web portal with fast loading speeds, mobile responsiveness, and intuitive navigation. Direct WhatsApp and admission inquiry touchpoints were embedded to turn casual visitors into registered applicants.',
+                images: ['https://host2unlimited.com/wp-content/uploads/2025/10/Educational-institute-website-layout-preview-scaled.jpg'],
+                layout: 'single-banner'
+              },
+              {
+                title: 'Authentic Social Media Visual Storytelling',
+                desc: 'Our creative team delivered custom video reels, campus event coverage, and student success highlights. This consistent visual messaging strengthened community trust and boosted social engagement across platforms.',
+                images: [
+                  'https://host2unlimited.com/wp-content/uploads/2025/10/Social-media-presence-of-education-brand.jpg',
+                  'https://host2unlimited.com/wp-content/uploads/2025/10/Social-media-education-brand-1.jpg'
+                ],
+                layout: 'grid-2'
+              },
+              {
+                title: 'Localized SEO & Google Search Dominance',
+                desc: `Through dedicated local keyword optimization, Google Business Profile management, and high-authority backlinks, we secured top search engine rankings for ${study.name} in ${study.location}.`,
+                images: [
+                  'https://host2unlimited.com/wp-content/uploads/2025/10/img-3.webp',
+                  'https://host2unlimited.com/wp-content/uploads/2025/10/img-4.webp'
+                ],
+                layout: 'grid-2'
+              }
+            ];
+
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
+                <div style={{ textAlign: 'left' }}>
+                  <span style={{ color: '#3b82f6', fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '6px' }}>
+                    Strategic Growth Roadmap
+                  </span>
+                  <h3 style={{ fontSize: '28px', fontWeight: 900, color: 'var(--text-primary)', margin: 0, textAlign: 'left', letterSpacing: '-0.5px' }}>
+                    {activePillars.length} Core Execution Pillars & Campaign Creatives
+                  </h3>
+                </div>
+
+                {activePillars.map((pillar, pIdx) => {
+                  const pillarIcons = [
+                    <Sparkles key={0} size={22} color="#38bdf8" />,
+                    <Share2 key={1} size={22} color="#ec4899" />,
+                    <Layout key={2} size={22} color="#06b6d4" />,
+                    <Globe key={3} size={22} color="#10b981" />,
+                    <Palette key={4} size={22} color="#f59e0b" />,
+                    <Target key={5} size={22} color="#8b5cf6" />
+                  ];
+                  const icon = pillarIcons[pIdx % pillarIcons.length];
+
+                  return (
+                    <motion.div 
+                      key={pIdx}
+                      whileHover={{ y: -6, scale: 1.01 }}
+                      transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                      className="card-glass preschool-activity-card"
+                      style={{ 
+                        padding: '36px', 
+                        textAlign: 'left',
+                        borderRadius: '28px',
+                        border: '1px solid var(--border-color)',
+                        backgroundColor: 'var(--bg-secondary)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '22px',
+                        boxShadow: '0 14px 40px rgba(0,0,0,0.15)',
+                        position: 'relative'
+                      }}
+                    >
+                      {/* Glowing Index Badge (Preschool Style) */}
+                      <span 
+                        style={{ 
+                          position: 'absolute', 
+                          top: '28px', 
+                          right: '28px', 
+                          fontSize: '13px', 
+                          fontWeight: 900, 
+                          color: '#3b82f6', 
+                          backgroundColor: 'rgba(59, 130, 246, 0.15)', 
+                          padding: '6px 16px', 
+                          borderRadius: '20px', 
+                          border: '1px solid rgba(59, 130, 246, 0.3)' 
+                        }}
+                      >
+                        Pillar 0{pIdx + 1}
+                      </span>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '16px', backgroundColor: 'rgba(59, 130, 246, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {icon}
+                        </div>
+                        <div style={{ paddingRight: '90px' }}>
+                          <h4 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, textAlign: 'left' }}>
+                            {pillar.title}
+                          </h4>
+                        </div>
+                      </div>
+
+                      <p style={{ fontSize: '15.5px', color: 'var(--text-secondary)', lineHeight: 1.75, margin: 0, textAlign: 'left' }}>
+                        {pillar.desc}
+                      </p>
+
+                      {/* Render Exact Website Images */}
+                      {pillar.images && pillar.images.length > 0 && (
+                        <div style={{ marginTop: '12px' }}>
+                          {pillar.layout === 'single-banner' && (
+                            <motion.div 
+                              whileHover={{ scale: 1.015 }}
+                              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                              style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: '0 12px 35px rgba(0,0,0,0.2)' }}
+                            >
+                              <img 
+                                src={pillar.images[0]} 
+                                alt={pillar.title}
+                                style={{ width: '100%', height: 'auto', maxHeight: '460px', objectFit: 'cover', display: 'block' }}
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                            </motion.div>
+                          )}
+
+                          {pillar.layout === 'grid-2' && (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+                              {pillar.images.map((imgUrl, imgIdx) => (
+                                <motion.div 
+                                  key={imgIdx} 
+                                  whileHover={{ scale: 1.02 }}
+                                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                                  style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: '0 10px 30px rgba(0,0,0,0.18)' }}
+                                >
+                                  <img 
+                                    src={imgUrl} 
+                                    alt={`${pillar.title} visual ${imgIdx + 1}`}
+                                    style={{ width: '100%', height: '100%', maxHeight: '360px', objectFit: 'cover', display: 'block' }}
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                  />
+                                </motion.div>
+                              ))}
+                            </div>
+                          )}
+
+                          {pillar.layout === 'grid-3' && (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
+                              {pillar.images.map((imgUrl, imgIdx) => (
+                                <motion.div 
+                                  key={imgIdx} 
+                                  whileHover={{ scale: 1.025 }}
+                                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                                  style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: '0 10px 30px rgba(0,0,0,0.18)' }}
+                                >
+                                  <img 
+                                    src={imgUrl} 
+                                    alt={`Admission Creative ${imgIdx + 1}`}
+                                    style={{ width: '100%', height: 'auto', objectFit: 'cover', display: 'block' }}
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                  />
+                                </motion.div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          {/* Key Delivered Results */}
+          <motion.div whileHover={{ y: -4 }} className="card-glass" style={{ padding: '36px', textAlign: 'left', borderRadius: '28px', borderLeft: '4px solid #10b981' }}>
+            <h3 style={{ fontSize: '24px', fontWeight: 900, marginBottom: '22px', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '14px', textAlign: 'left' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '14px', backgroundColor: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TrendingUp size={24} color="#34d399" />
+              </div>
+              Delivered Growth & Results
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '18px' }}>
+              {study.results.map((res, rIdx) => (
+                <div key={rIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', backgroundColor: 'rgba(52, 211, 153, 0.08)', padding: '18px 20px', borderRadius: '18px', border: '1px solid rgba(52, 211, 153, 0.25)' }}>
+                  <div style={{ backgroundColor: '#10b98125', borderRadius: '50%', padding: '6px', marginTop: '2px', flexShrink: 0 }}>
+                    <CheckCircle2 size={20} color="#34d399" />
+                  </div>
+                  <span style={{ fontSize: '15px', color: 'var(--text-primary)', lineHeight: 1.6, fontWeight: 600, textAlign: 'left' }}>
+                    {res}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Full-Width Bottom Contact CTA Section */}
+          <motion.div 
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            style={{ 
+              backgroundColor: 'var(--bg-secondary)', 
+              border: '1px solid rgba(59, 130, 246, 0.35)', 
+              borderRadius: '28px', 
+              padding: '48px 40px',
+              textAlign: 'center',
+              marginTop: '24px',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <span className="badge" style={{ marginBottom: '14px', fontSize: '12px', fontWeight: 800, backgroundColor: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)', padding: '6px 18px', borderRadius: '20px' }}>
+              Accelerate Your Admission Funnel
+            </span>
+            <h3 style={{ fontSize: 'clamp(24px, 3.5vw, 34px)', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '14px', letterSpacing: '-0.5px' }}>
+              Want Similar Admission Results for Your Institute?
+            </h3>
+            <p style={{ fontSize: '16px', color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: '680px', marginBottom: '32px' }}>
+              Partner with HOST2UNLIMITED for a customized 360° digital marketing roadmap, lead nurturing CRM, and targeted admission campaigns.
+            </p>
+            <Link 
+              to="/contact" 
+              className="btn btn-primary" 
+              style={{ padding: '18px 40px', fontSize: '16.5px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '12px', borderRadius: '30px', boxShadow: '0 10px 30px rgba(59, 130, 246, 0.4)' }}
+            >
+              Get Your Custom Admission Strategy <Send size={20} />
+            </Link>
+          </motion.div>
+
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default CaseStudyDetail;

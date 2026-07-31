@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Shield, Zap, Globe, Server, Award, ChevronDown, ChevronUp, AlertCircle, Cloud, Network } from 'lucide-react';
 import SEOMeta from '../../components/SEOMeta';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import servicesHeroBg from '../../assets/hero_bg/services_hero_art.svg';
+import servicesHeroBg from '../../assets/hero_bg/services_hero_clean.png';
 
 const CloudHosting = () => {
   const [openFaq, setOpenFaq] = useState(null);

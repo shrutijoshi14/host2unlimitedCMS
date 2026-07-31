@@ -4,132 +4,13 @@ import { Search, Calendar, Clock, ArrowRight, ChevronLeft, ChevronRight, User } 
 import { Link } from 'react-router-dom';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import blogHeroBg from '../assets/hero_bg/blog_hero_art.svg';
+import blogHeroBg from '../assets/hero_bg/blog_hero_clean.png';
 
-const ACTIVE_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const ACTIVE_API_BASE = process.env.NODE_ENV === 'production'
+  ? (window.location.origin.includes('localhost') ? 'http://localhost:5000' : 'https://host2unlimitedcms-backend.onrender.com')
+  : 'http://localhost:5000';
 
-const staticArticles = [
-  {
-    id: 'static-1',
-    title: 'Social Media Trends Every Educational Institute Should Know',
-    category: 'Social Media',
-    date: 'July 12, 2026',
-    readTime: '5 min read',
-    desc: 'Unpacking emerging video reels strategies, story campaigns, and community engagement algorithms for schools and colleges.',
-    image: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'social-media-trends-every-educational-institute-should-know',
-    created_at: new Date('2026-07-12').toISOString(),
-    author: 'Marketing Lead'
-  },
-  {
-    id: 'static-2',
-    title: 'Google Business Profile: The Most Underutilized Admission Tool for Educational Institutes',
-    category: 'SEO',
-    date: 'July 05, 2026',
-    readTime: '7 min read',
-    desc: 'How local search map optimizations, reviews monitoring, and timely updates drive parent inquiries directly to your admissions desk.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'google-business-profile-most-underutilized-admission-tool',
-    created_at: new Date('2026-07-05').toISOString(),
-    author: 'SEO Expert'
-  },
-  {
-    id: 'static-3',
-    title: 'Why Every Educational Institute Needs a Consistent Digital Brand Identity',
-    category: 'Branding',
-    date: 'June 25, 2026',
-    readTime: '6 min read',
-    desc: 'Establishing a unified voice, visual guidelines, and digital footprints to secure trust and command a premium reputation online.',
-    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'why-every-educational-institute-needs-consistent-digital-brand-identity',
-    created_at: new Date('2026-06-25').toISOString(),
-    author: 'Branding Lead'
-  },
-  {
-    id: 'static-4',
-    title: 'Why Social Media is the New Trust-Building Platform for Brands',
-    category: 'Social Media',
-    date: 'June 18, 2026',
-    readTime: '5 min read',
-    desc: 'Traditional advertising is losing ground. Explore how authentic peer engagements, live interactions, and values sharing build brand credibility.',
-    image: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'why-social-media-is-new-trust-building-platform',
-    created_at: new Date('2026-06-18').toISOString(),
-    author: 'Social Media Expert'
-  },
-  {
-    id: 'static-5',
-    title: 'How Social Media Builds Student Admissions for Educational Institutes',
-    category: 'Digital Marketing',
-    date: 'June 10, 2026',
-    readTime: '8 min read',
-    desc: 'A systematic review of running target demographic lead generation ads on Facebook, Instagram, and LinkedIn to fill classes.',
-    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'how-social-media-builds-student-admissions',
-    created_at: new Date('2026-06-10').toISOString(),
-    author: 'Admissions Partner'
-  },
-  {
-    id: 'static-6',
-    title: 'How SEO Builds Long-Term Business Growth Beyond Rankings',
-    category: 'SEO',
-    date: 'June 02, 2026',
-    readTime: '6 min read',
-    desc: 'Search engine optimization yields compounding dividends. Discover the value of technical audits, content authority, and user intent alignment.',
-    image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'how-seo-builds-long-term-business-growth',
-    created_at: new Date('2026-06-02').toISOString(),
-    author: 'SEO Expert'
-  },
-  {
-    id: 'static-7',
-    title: 'Performance Marketing vs Traditional Marketing: What Wins in 2026?',
-    category: 'Digital Marketing',
-    date: 'May 28, 2026',
-    readTime: '7 min read',
-    desc: 'Comparing measurable parameters, budget tracking, and return on investment (ROI) in digital PPC ads versus print brochures.',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'performance-marketing-vs-traditional-marketing',
-    created_at: new Date('2026-05-28').toISOString(),
-    author: 'Analytics Lead'
-  },
-  {
-    id: 'static-8',
-    title: 'Best SEO Strategies for Educational Institutions: A Complete Guide by Host2Unlimited',
-    category: 'SEO',
-    date: 'May 15, 2026',
-    readTime: '9 min read',
-    desc: 'A comprehensive playbook covering keywords for higher education, site speed optimization, schema markup, and backlink networks.',
-    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'best-seo-strategies-for-educational-institutions',
-    created_at: new Date('2026-05-15').toISOString(),
-    author: 'SEO Lead'
-  },
-  {
-    id: 'static-9',
-    title: 'How Branding Builds Trust in Educational Institutions',
-    category: 'Branding',
-    date: 'April 30, 2026',
-    readTime: '5 min read',
-    desc: 'A strong brand connects emotionally. Understand how legacy highlights, parent testimonials, and core mission statements drive parent decisions.',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'how-branding-builds-trust-in-educational-institutions',
-    created_at: new Date('2026-04-30').toISOString(),
-    author: 'Branding Expert'
-  },
-  {
-    id: 'static-10',
-    title: 'From Classroom to Clicks: How Digital Marketing is Transforming Student Admissions',
-    category: 'Digital Marketing',
-    date: 'April 18, 2026',
-    readTime: '8 min read',
-    desc: 'The digital shift in the education vertical. How virtual tours, student reels, and CRM lead nurturing pipelines are replacing direct walk-ins.',
-    image: 'https://images.unsplash.com/photo-1516321497487-e288fb194ef3?auto=format&fit=crop&q=80&w=400&h=260',
-    slug: 'from-classroom-to-clicks-how-digital-marketing-transforming-admissions',
-    created_at: new Date('2026-04-18').toISOString(),
-    author: 'Growth Partner'
-  }
-];
+import { staticArticles } from '../data/staticBlogs';
 
 const categories = ['All', 'Digital Marketing', 'SEO', 'Branding', 'Social Media'];
 
@@ -145,12 +26,28 @@ const Blog = () => {
   // Pagination
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit] = useState(6);
+  const [limit, setLimit] = useState(6);
 
   useEffect(() => {
     const checkCMSAndLoadData = async () => {
       try {
         setLoading(true);
+        
+        // 0. Fetch configured items_per_page limit from CMS
+        let currentLimit = limit;
+        try {
+          const configRes = await fetch(`${ACTIVE_API_BASE}/api/blogs/config`);
+          if (configRes.ok) {
+            const configData = await configRes.json();
+            if (configData.items_per_page) {
+              currentLimit = Number(configData.items_per_page);
+              setLimit(currentLimit);
+            }
+          }
+        } catch (err) {
+          console.warn('Could not fetch blog config:', err);
+        }
+
         // 1. Fetch modules state to verify if Blog CMS is enabled
         const modulesResponse = await fetch(`${ACTIVE_API_BASE}/api/modules`);
         
@@ -167,7 +64,7 @@ const Blog = () => {
 
         if (cmsEnabled) {
           // 2. If CMS is enabled, query published articles dynamically
-          const blogsUrl = `${ACTIVE_API_BASE}/api/blogs?status=Published&page=${page}&limit=${limit}&category=${filter}&search=${search}`;
+          const blogsUrl = `${ACTIVE_API_BASE}/api/blogs?status=Published&page=${page}&limit=${currentLimit}&category=${filter}&search=${search}`;
           const blogsResponse = await fetch(blogsUrl);
           
           if (blogsResponse.ok) {
@@ -179,18 +76,18 @@ const Blog = () => {
           }
         } else {
           // 3. CMS is disabled: fall back to static articles locally filtered
-          loadStaticArticles();
+          loadStaticArticles(currentLimit);
         }
       } catch (error) {
         console.warn('CMS connection failed, loading static mock fallback.', error);
         setIsCMSActive(false);
-        loadStaticArticles();
+        loadStaticArticles(limit);
       } finally {
         setLoading(false);
       }
     };
 
-    const loadStaticArticles = () => {
+    const loadStaticArticles = (effectiveLimit = limit) => {
       // Apply search and category filter locally for static fallback
       const filtered = staticArticles.filter(art => {
         const matchesCat = filter === 'All' || art.category === filter;
@@ -200,10 +97,10 @@ const Blog = () => {
       });
 
       // Simple static pagination
-      const offset = (page - 1) * limit;
-      const paginated = filtered.slice(offset, offset + limit);
+      const offset = (page - 1) * effectiveLimit;
+      const paginated = filtered.slice(offset, offset + effectiveLimit);
       setArticles(paginated);
-      setTotalPages(Math.ceil(filtered.length / limit));
+      setTotalPages(Math.ceil(filtered.length / effectiveLimit));
     };
 
     checkCMSAndLoadData();
@@ -235,7 +132,7 @@ const Blog = () => {
   const breadcrumbs = [{ name: 'Blog', path: '/blog' }];
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
         title="Blog"
         description="Read technical articles on Host2Unlimited's blog. Caching tips, Google search guidelines, server configuration walkthroughs, and SEO advice."
@@ -247,7 +144,7 @@ const Blog = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ position: 'relative', height: '190px', minHeight: '190px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
         <img 
           src={blogHeroBg} 
@@ -406,10 +303,25 @@ const Blog = () => {
 
                           <Link 
                             to={`/blog/${art.slug}`} 
-                            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--primary)', textDecoration: 'none' }}
-                            className="read-article-link"
+                            style={{ 
+                              display: 'inline-flex', 
+                              alignItems: 'center', 
+                              justifyContent: 'center', 
+                              padding: '10px 22px', 
+                              backgroundColor: 'var(--primary)', 
+                              color: '#ffffff', 
+                              fontSize: '13.5px', 
+                              fontWeight: 700, 
+                              borderRadius: '8px', 
+                              textDecoration: 'none',
+                              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.25)',
+                              transition: 'all 0.2s ease',
+                              textAlign: 'center',
+                              width: '100%'
+                            }}
+                            className="btn-read-more-styled"
                           >
-                            Read Full Article <ArrowRight size={13} />
+                            Read More
                           </Link>
                         </div>
                       </div>
@@ -427,7 +339,7 @@ const Blog = () => {
 
             {/* Pagination controls for public view */}
             {totalPages > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '50px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '50px', flexWrap: 'wrap' }}>
                 <button 
                   disabled={page === 1}
                   onClick={() => setPage(p => Math.max(1, p - 1))}
@@ -436,9 +348,27 @@ const Blog = () => {
                 >
                   <ChevronLeft size={16} /> Prev
                 </button>
-                <span style={{ fontSize: '14.5px', color: 'var(--text-secondary)' }}>
-                  Page <strong>{page}</strong> of <strong>{totalPages}</strong>
-                </span>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className="btn"
+                    style={{
+                      padding: '8px 14px',
+                      fontSize: '14px',
+                      fontWeight: page === pageNum ? '800' : '600',
+                      backgroundColor: page === pageNum ? 'var(--primary)' : 'var(--bg-secondary)',
+                      color: page === pageNum ? 'white' : 'var(--text-primary)',
+                      border: `1px solid ${page === pageNum ? 'var(--primary)' : 'var(--border-color)'}`,
+                      borderRadius: '8px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+
                 <button 
                   disabled={page === totalPages}
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}

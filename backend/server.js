@@ -13,6 +13,7 @@ import authRoutes from './routes/authRoutes.js';
 import pageRoutes from './routes/pageRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import { cacheMiddleware, cacheInvalidate, cacheStats } from './cache.js';
+import multer from 'multer';
 
 dotenv.config();
 
@@ -138,6 +139,40 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 app.use('/uploads', express.static(uploadsDir));
+
+// Multer Image Upload Configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname) || '.jpg';
+    cb(null, 'creative-' + uniqueSuffix + ext);
+  }
+});
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
+
+app.post('/api/upload', upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file uploaded.' });
+    }
+    const host = req.get('host');
+    const protocol = req.protocol;
+    const fileUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+    res.json({ 
+      message: 'Image uploaded successfully.',
+      url: fileUrl,
+      filename: req.file.filename
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // API Routing Setup
 app.use('/api/modules', moduleRoutes); // Dynamic real-time module configs (no cache delay)
@@ -269,7 +304,7 @@ function startBlogScheduler() {
 
 // Initialize DB and start server
 async function startServer() {
-  app.listen(PORT, async () => {
+  const server = app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
     try {
       await initializeDatabase();
@@ -277,6 +312,16 @@ async function startServer() {
       startBlogScheduler();
     } catch (err) {
       console.error('Database initialization failed:', err);
+    }
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n[Server Error] Port ${PORT} is already in use by another process.`);
+      console.error(`Please stop the process running on port ${PORT} or run: npx kill-port ${PORT}\n`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', err);
     }
   });
 }

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import contactHeroBg from '../assets/hero_bg/contact_hero_art.svg';
+import contactHeroBg from '../assets/hero_bg/contact_hero_clean.png';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 import pointingWomanImg from '../assets/h2u/host2new-contact-page-01 (1).png';
 import { useLeads } from '../context/LeadContext';
 import { Phone, Mail, MapPin, CheckCircle, ChevronDown, ChevronUp, AlertCircle, Globe } from 'lucide-react';
@@ -241,7 +241,7 @@ const Contact = () => {
   const breadcrumbs = [{ name: 'Contact', path: '/contact' }];
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
         title="Contact Us"
         description="Get in touch with Host2Unlimited. Contact our digital marketing coordinators and support teams for admissions marketing and school branding."
@@ -253,25 +253,25 @@ const Contact = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ 
+          position: 'relative', 
+          height: '210px', 
+          minHeight: '210px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          overflow: 'hidden', 
+          backgroundColor: '#0b0f19'
+        }}
       >
         <img 
           src={contactHeroBg} 
           alt="Contact Hero Background" 
-          style={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover', 
-            objectPosition: 'center center',
-            zIndex: 1, 
-            pointerEvents: 'none' 
-          }} 
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1, pointerEvents: 'none' }}
         />
-        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          <div style={{ maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>

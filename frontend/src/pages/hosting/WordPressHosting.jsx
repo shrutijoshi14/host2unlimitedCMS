@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Shield, Zap, Globe, Server, Award, ChevronDown, ChevronUp, AlertCircle, RefreshCw, Layers } from 'lucide-react';
 import SEOMeta from '../../components/SEOMeta';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import blogHeroBg from '../../assets/hero_bg/blog_hero_art.svg';
+import blogHeroBg from '../../assets/hero_bg/blog_hero_clean.png';
 
 const WordPressHosting = () => {
   const [openFaq, setOpenFaq] = useState(null);

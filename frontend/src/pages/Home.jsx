@@ -23,48 +23,64 @@ const institutionsData = [
     title: 'Preschools & Daycare Centers',
     desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.',
     iconName: 'Smile',
+    image: preschoolHero,
+    logo: logo16, // EuroKids
     link: 'https://host2unlimited.com/digital-marketing-partner-for-preschools/'
   },
   {
     title: 'Primary & Secondary Schools',
     desc: 'Reputation with impactful stories and updates. Engage your audience with content.',
     iconName: 'BookOpen',
+    image: schoolBuildingHero,
+    logo: logo05, // New Horizon
     link: 'https://host2unlimited.com/digital-marketing-partner-for-primary-secondary-schools/'
   },
   {
     title: 'International Schools CBSE: ICSE: IB Board',
     desc: 'Boost student engagement by consistently highlighting academic excellence.',
     iconName: 'Globe',
+    image: campusHero,
+    logo: logo03, // Dnyan Ganga
     link: 'https://host2unlimited.com/digital-marketing-partner-for-international-schools-cbse-icse-ib/'
   },
   {
     title: 'Private Coaching Institutions',
     desc: 'Promote innovative coaching methods, proven results, and unique approach.',
     iconName: 'Users',
+    image: schoolBuildingHero,
+    logo: logo11, // Ardent Tutorials
     link: 'https://host2unlimited.com/digital-marketing-partner-for-private-coaching-institutions/'
   },
   {
     title: 'Junior and Degree Colleges',
     desc: 'Empowering students at Junior and Degree Colleges to achieve academic of excellence.',
     iconName: 'GraduationCap',
+    image: campusHero,
+    logo: logo37, // Somaiya College
     link: 'https://host2unlimited.com/digital-marketing-partner-for-junior-and-degree-colleges/'
   },
   {
     title: 'Institutes of Engineering & Technology',
     desc: 'Future engineers with innovative learning, hands-on experience.',
     iconName: 'Cpu',
+    image: universityHero,
+    logo: logo12, // ARMIET
     link: 'https://host2unlimited.com/digital-marketing-partner-for-institutes-of-engineering-management-studies/'
   },
   {
     title: 'Institutes of Management Studies',
     desc: 'Empowering future leaders with practical knowledge, strategic thinking.',
     iconName: 'Briefcase',
+    image: managementCollegeHero,
+    logo: logo34, // Pillai Group
     link: 'https://host2unlimited.com/digital-marketing-partner-for-institutes-of-engineering-management-studies/'
   },
   {
     title: 'Public / Private / Deemed Universities',
     desc: 'Empowering private educational institutions to attract the right students.',
     iconName: 'Award',
+    image: universityHero,
+    logo: logo04, // GSGS
     link: 'https://host2unlimited.com/digital-marketing-partner-for-public-private-deemed-universities/'
   }
 ];
@@ -133,7 +149,7 @@ const getIconComponent = (name) => {
   }
 };
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const Counter = ({ value, suffix = "" }) => {
   const count = useMotionValue(0);
@@ -154,20 +170,51 @@ const Counter = ({ value, suffix = "" }) => {
   return <span>{displayValue}{suffix}</span>;
 };
 
-import armietLogo from '../assets/h2u logos/armiet_logo.jpeg';
-import pillaiLogo from '../assets/h2u logos/dr-pillai-global-academy.png';
-import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
-import somaiyaLogo from '../assets/h2u logos/somaiya_college.png';
-import uudaanLogo from '../assets/h2u logos/uudaan-montessori-preschool.jpg';
-import newHorizonLogo from '../assets/h2u logos/New-Horizon-logo.png';
-import dnyanGangaLogo from '../assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp';
-import gsgsLogo from '../assets/h2u logos/GSGS-logo@4x (1).png';
-import ulweLogo from '../assets/h2u logos/Ulwe-logo (1).png';
-import vsignLogo from '../assets/h2u logos/V-Sign-logo.png';
+import logo01 from '../assets/h2u logos/470d6319b7e082b743eebb72679dd576-e1757952610616.jpg';
+import logo02 from '../assets/h2u logos/DG-bed-logo (1).png';
+import logo03 from '../assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp';
+import logo04 from '../assets/h2u logos/GSGS-logo@4x (1).png';
+import logo05 from '../assets/h2u logos/New-Horizon-logo.png';
+import logo06 from '../assets/h2u logos/New-Project.png';
+import logo07 from '../assets/h2u logos/RNP_Logo-1.webp';
+import logo08 from '../assets/h2u logos/Ulwe-logo (1).png';
+import logo09 from '../assets/h2u logos/V-Sign-logo.png';
+import logo10 from '../assets/h2u logos/Vertices-Partners_logo (1).svg';
+import logo11 from '../assets/h2u logos/ardent_tutorials_thane.png';
+import logo12 from '../assets/h2u logos/armiet_logo.jpeg';
+import logo13 from '../assets/h2u logos/av-solution-logo.png';
+import logo14 from '../assets/h2u logos/bms-kiddds (1).png';
+import logo15 from '../assets/h2u logos/dr-pillai-global-academy.png';
+import logo16 from '../assets/h2u logos/euro_kids.jpeg';
+import logo17 from '../assets/h2u logos/host2new-FOOTER-LOGO-02.png';
+import logo18 from '../assets/h2u logos/host2new-FOOTER-LOGO-03.png';
+import logo19 from '../assets/h2u logos/host2new-FOOTER-LOGO-04.png';
+import logo20 from '../assets/h2u logos/host2new-FOOTER-LOGO-05.png';
+import logo21 from '../assets/h2u logos/host2new-FOOTER-LOGO-07.png';
+import logo22 from '../assets/h2u logos/i3globle-logo.png';
+import logo23 from '../assets/h2u logos/international-travel-tour-co-logo.png';
+import logo24 from '../assets/h2u logos/law-college-logo_03-logo-and-name-m2Wqob7oxVH14090 (1).avif';
+import logo25 from '../assets/h2u logos/lotusleafentertainment-logo.png';
+import logo26 from '../assets/h2u logos/new-horizon-International-school-Rodas.png';
+import logo27 from '../assets/h2u logos/new-horizon-public-school-airoli-Sector-19.png';
+import logo28 from '../assets/h2u logos/new-horizon-public-school-airoli-Sector-3.png';
+import logo29 from '../assets/h2u logos/new-horizon-public-school-panvel.png';
+import logo30 from '../assets/h2u logos/new-horizon-scholars-school-Rodas-Kolshet.png';
+import logo31 from '../assets/h2u logos/new-horizon-scholars-school-Vasant-Lawns (1).png';
+import logo32 from '../assets/h2u logos/new-horizon-scholars-school-airoli-sector-13.png';
+import logo33 from '../assets/h2u logos/new-horizon-scholars-school-kavesar-thane.png';
+import logo34 from '../assets/h2u logos/pillai-logo.png';
+import logo35 from '../assets/h2u logos/rl-int-1.jpg';
+import logo36 from '../assets/h2u logos/skytech-logo.png';
+import logo37 from '../assets/h2u logos/somaiya_college.png';
+import logo38 from '../assets/h2u logos/swami_vivekananda.jpg';
+import logo39 from '../assets/h2u logos/uudaan-montessori-preschool.jpg';
 
 const clientLogos = [
-  armietLogo, pillaiLogo, euroKidsLogo, somaiyaLogo, uudaanLogo,
-  newHorizonLogo, dnyanGangaLogo, gsgsLogo, ulweLogo, vsignLogo
+  logo01, logo02, logo03, logo04, logo05, logo06, logo07, logo08, logo09, logo10,
+  logo11, logo12, logo13, logo14, logo15, logo16, logo17, logo18, logo19, logo20,
+  logo21, logo22, logo23, logo24, logo25, logo26, logo27, logo28, logo29, logo30,
+  logo31, logo32, logo33, logo34, logo35, logo36, logo37, logo38, logo39
 ];
 
 const staticWhyChooseUsData = [
@@ -199,16 +246,22 @@ const staticWhyChooseUsData = [
 
 const staticServicesPreview = [
   {
-    title: 'Digital Marketing',
-    desc: 'Data-driven SEO, Google & Meta Ads, and comprehensive multi-channel digital campaigns designed to increase conversions and brand growth.'
+    title: 'Digital Marketing & Lead Gen',
+    desc: 'Data-driven SEO, Google & Meta Ads, and comprehensive multi-channel digital campaigns designed to increase conversions and admission growth.',
+    image: 'https://host2unlimited.com/wp-content/uploads/2025/10/host2u-SERVICES-page-01.png',
+    tag: 'DIGITAL MARKETING'
   },
   {
-    title: 'Social Media Marketing',
-    desc: 'Organic social media management, strategic content updates, visual post designs, and follower engagement campaigns.'
+    title: 'Social Media & Brand Building',
+    desc: 'Organic social media management, strategic content updates, visual post designs, and follower engagement campaigns.',
+    image: 'https://host2unlimited.com/wp-content/uploads/2025/10/host2u-SERVICES-page-02.png',
+    tag: 'SOCIAL MEDIA'
   },
   {
-    title: 'Event Management',
-    desc: 'Seamless campus event coverage, real-time storytelling, live updates, media setups, and student engagement campaigns.'
+    title: 'Video Storytelling & Event Coverage',
+    desc: 'Seamless campus event coverage, real-time storytelling, live video reels, media setups, and student engagement campaigns.',
+    image: 'https://host2unlimited.com/wp-content/uploads/2025/10/host2u-SERVICES-page-06-2.png',
+    tag: 'VIDEO & EVENTS'
   }
 ];
 
@@ -351,13 +404,13 @@ const Home = () => {
       <section 
         className="section-padding" 
         style={{ 
-          paddingTop: '175px', 
-          paddingBottom: '40px',
+          paddingTop: '65px', 
+          paddingBottom: '15px',
           position: 'relative', 
           overflow: 'hidden',
           background: 'linear-gradient(135deg, #021235 0%, #061a40 50%, #3f4f13 100%)',
           color: '#ffffff',
-          minHeight: '100vh',
+          minHeight: '70vh',
           display: 'flex',
           alignItems: 'center',
           boxSizing: 'border-box'
@@ -416,16 +469,15 @@ const Home = () => {
               {/* Huge Titles */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', textAlign: 'left' }}>
                 <h1 style={{ 
-                  fontSize: 'clamp(24px, 5.5vw, 48px)', 
-                  fontWeight: 900, 
-                  lineHeight: 1.15, 
+                  fontSize: 'clamp(20px, 4.2vw, 44px)', 
+                  fontWeight: 700, 
+                  lineHeight: 1.05, 
                   margin: 0, 
                   letterSpacing: '-0.5px', 
                   color: '#ffffff',
                   fontFamily: 'system-ui, -apple-system, sans-serif',
                   textAlign: 'left',
-                  wordBreak: 'break-word',
-                  overflowWrap: 'break-word'
+                  whiteSpace: 'nowrap'
                 }}>
                   DIGITAL PROMOTION PARTNERS
                 </h1>
@@ -438,15 +490,14 @@ const Home = () => {
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.4 }}
                     style={{ 
-                      fontSize: 'clamp(20px, 4.5vw, 42px)', 
-                      fontWeight: 900, 
-                      margin: '5px 0 0 0', 
-                      color: '#fef08a', // Yellow color matching screenshot
+                      fontSize: 'clamp(18px, 3.8vw, 38px)', 
+                      fontWeight: 700, 
+                      margin: '4px 0 0 0', 
+                      color: '#fef08a',
                       letterSpacing: '-0.5px',
                       fontFamily: 'system-ui, -apple-system, sans-serif',
                       textAlign: 'left',
-                      wordBreak: 'break-word',
-                      overflowWrap: 'break-word'
+                      lineHeight: 1.1
                     }}
                   >
                     {topicSlides[currentSlide].category}
@@ -455,13 +506,13 @@ const Home = () => {
               </div>
 
               {/* WE PLAN AND EXECUTE Checklist */}
-              <div style={{ marginTop: '10px', textAlign: 'left' }}>
+              <div style={{ marginTop: '4px', textAlign: 'left' }}>
                 <h3 style={{ 
-                  fontSize: '14px', 
-                  fontWeight: 800, 
+                  fontSize: '13.5px', 
+                  fontWeight: 700, 
                   letterSpacing: '1px', 
                   color: '#ffffff', 
-                  marginBottom: '12px',
+                  marginBottom: '6px',
                   fontFamily: 'Georgia, serif',
                   textTransform: 'uppercase',
                   textAlign: 'left'
@@ -471,19 +522,21 @@ const Home = () => {
 
                 <div className="hero-checklist-grid" style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: '1fr 1.1fr', 
-                  gap: '10px 18px',
-                  maxWidth: '600px'
+                  gridTemplateColumns: '1.05fr 1fr', 
+                  gap: '3px 14px',
+                  maxWidth: '680px'
                 }}>
                   {heroChecklist.map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: '#fef08a', fontWeight: 900, fontSize: '16px', flexShrink: 0 }}>✓</span>
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ color: '#fef08a', fontWeight: 900, fontSize: '15px', flexShrink: 0 }}>✓</span>
                       <span style={{ 
-                        fontSize: '14.5px', 
-                        fontWeight: 700, 
+                        fontSize: '13px', 
+                        fontWeight: 600, 
                         color: '#ffffff', 
-                        letterSpacing: '0.4px',
-                        textAlign: 'left'
+                        letterSpacing: '0.3px',
+                        textAlign: 'left',
+                        whiteSpace: 'nowrap',
+                        lineHeight: 1.25
                       }}>
                         {item}
                       </span>
@@ -544,12 +597,8 @@ const Home = () => {
         </div>
       </section>
 
-
-
-
-
       {/* 2nd Section: Brand Video Presentation (Youtube) */}
-      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--bg-primary)' }}>
+      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#0b0f19', color: '#ffffff' }}>
         <div style={{
           position: 'absolute',
           top: '50%',
@@ -557,7 +606,7 @@ const Home = () => {
           transform: 'translate(-50%, -50%)',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%)',
           zIndex: 0,
           pointerEvents: 'none'
         }} />
@@ -565,24 +614,13 @@ const Home = () => {
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div className="video-section-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '50px', alignItems: 'center' }}>
             <div className="video-content-block" style={{ textAlign: 'left' }}>
-              <span style={{ 
-                display: 'inline-block', 
-                backgroundColor: 'var(--primary-light)', 
-                color: 'var(--primary)', 
-                padding: '6px 16px', 
-                borderRadius: '20px', 
-                fontWeight: 600, 
-                fontSize: '13px',
-                marginBottom: '16px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>
+              <span className="badge" style={{ marginBottom: '16px' }}>
                 Journey
               </span>
-              <h2 style={{ fontSize: '36px', marginBottom: '20px', fontWeight: 800, lineHeight: 1.25, textAlign: 'left' }}>
+              <h2 style={{ fontSize: '36px', marginBottom: '20px', fontWeight: 800, lineHeight: 1.25, textAlign: 'left', color: '#ffffff' }}>
                 See How We Elevate Educational Brands
               </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '24px' }}>
+              <p style={{ color: '#cbd5e1', fontSize: '15.5px', lineHeight: 1.6, marginBottom: '24px' }}>
                 Take a look inside our mission, campus activations, and client success stories in this short video presentation. Learn how we structure campaigns that drive admissions and branding.
               </p>
               
@@ -592,8 +630,8 @@ const Home = () => {
                   'High-Impact Video Storytelling & Production',
                   'Full-Funnel SEO & Digital Reputation Management'
                 ].map((item, index) => (
-                  <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: 'var(--text-primary)', fontWeight: 500 }}>
-                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', flexShrink: 0, fontWeight: 'bold' }}>✓</span>
+                  <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14.5px', color: '#f8fafc', fontWeight: 500 }}>
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', flexShrink: 0, fontWeight: 'bold' }}>✓</span>
                     {item}
                   </li>
                 ))}
@@ -639,16 +677,7 @@ const Home = () => {
       <section className="section-padding" style={{ position: 'relative' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '60px' }}>
-            <span style={{ 
-              display: 'inline-block', 
-              backgroundColor: 'var(--primary-light)', 
-              color: 'var(--primary)', 
-              padding: '6px 16px', 
-              borderRadius: '20px', 
-              fontWeight: 600, 
-              fontSize: '14px',
-              marginBottom: '16px'
-            }}>
+            <span className="badge" style={{ marginBottom: '16px' }}>
               Building Partnerships for Future.
             </span>
             <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>Major Educational Institutions We Work With</h2>
@@ -660,66 +689,112 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="institutions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+          <div className="institutions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
             {institutionsData.slice(0, 3).map((inst, idx) => (
               <motion.a 
                 key={idx}
                 href={inst.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="card-glass"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                whileHover={{ y: -10, scale: 1.03, boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.22)', borderColor: 'var(--primary)' }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                whileHover={{ y: -8 }}
                 style={{ 
-                  textAlign: 'center', 
                   display: 'flex', 
                   flexDirection: 'column', 
                   justifyContent: 'space-between',
                   height: '100%',
                   textDecoration: 'none',
                   cursor: 'pointer',
-                  border: '1px solid var(--border-color)',
-                  background: 'var(--bg-primary)',
-                  padding: '32px 28px',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  backgroundColor: 'var(--bg-secondary)',
                   borderRadius: '20px',
                   position: 'relative',
                   overflow: 'hidden',
-                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
+                className="institution-card-item"
               >
-                {/* Accent top gradient line */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '4px',
-                  background: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 100%)'
-                }} />
+                {/* Top Image Card Header */}
+                {inst.image && (
+                  <div style={{ width: '100%', height: '185px', overflow: 'hidden', position: 'relative' }}>
+                    <img 
+                      src={inst.image} 
+                      alt={inst.title} 
+                      loading="lazy"
+                      className="inst-card-img"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} 
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(11, 15, 25, 0.9) 0%, rgba(11, 15, 25, 0.2) 60%, transparent 100%)'
+                    }} />
+                    <span style={{
+                      position: 'absolute',
+                      top: '14px',
+                      left: '14px',
+                      backgroundColor: 'rgba(2, 132, 199, 0.9)',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      letterSpacing: '0.8px',
+                      textTransform: 'uppercase',
+                      backdropFilter: 'blur(4px)'
+                    }}>
+                      Education Sector
+                    </span>
 
-                <div>
-                  <div className="card-icon-container" style={{ 
-                    width: '56px', 
-                    height: '56px', 
-                    borderRadius: '16px', 
-                    margin: '0 auto 22px auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%)',
-                    color: 'var(--primary)'
-                  }}>
-                    {getIconComponent(inst.iconName)}
+                    {/* Floating Institute Brand Logo Badge */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '12px',
+                      right: '14px',
+                      backgroundColor: '#ffffff',
+                      width: '68px',
+                      height: '68px',
+                      borderRadius: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '7px',
+                      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.45)',
+                      border: '2px solid rgba(255, 255, 255, 0.95)',
+                      zIndex: 2
+                    }}>
+                      {inst.logo ? (
+                        <img 
+                          src={inst.logo} 
+                          alt={inst.title} 
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                        />
+                      ) : (
+                        getIconComponent(inst.iconName)
+                      )}
+                    </div>
                   </div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '12px', color: 'var(--text-primary)', textAlign: 'center', letterSpacing: '-0.3px' }}>
-                    {inst.title}
-                  </h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '14.5px', lineHeight: 1.6, marginBottom: 0, textAlign: 'center' }}>
-                    {inst.desc}
-                  </p>
+                )}
+
+                {/* Card Content */}
+                <div style={{ padding: '22px 24px 26px 24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', gap: '16px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '19px', fontWeight: 800, marginBottom: '10px', color: 'var(--text-primary)', textAlign: 'left', letterSpacing: '-0.3px', lineHeight: 1.35 }}>
+                      {inst.title}
+                    </h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.6, marginBottom: 0, textAlign: 'left' }}>
+                      {inst.desc}
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#0284c7', fontWeight: 700, fontSize: '14px', marginTop: '6px' }}>
+                    <span>Explore Digital Strategy</span>
+                    <ArrowRight size={16} />
+                  </div>
                 </div>
               </motion.a>
             ))}
@@ -733,22 +808,18 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4th Section: Core Services Highlight Section */}
-      <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+      {/* 4th Section: Digital Growth Solutions for Educational Institutes */}
+      <section className="section-padding" style={{ backgroundColor: '#0f172a', color: '#ffffff', borderTop: '1px solid rgba(255, 255, 255, 0.1)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '60px', flexWrap: 'wrap', gap: '20px' }} className="service-header-flex">
-            <div style={{ textAlign: 'left' }}>
-              <h2 style={{ fontSize: '38px', marginBottom: '16px', textAlign: 'left' }}>{homepageData.services.title}</h2>
-              <p style={{ maxWidth: '550px', color: 'var(--text-secondary)', fontSize: '16px', textAlign: 'left' }}>
-                {homepageData.services.description}
-              </p>
-            </div>
-            <Link to="/services" className="btn btn-primary">
-              All Services <ArrowRight size={16} />
-            </Link>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <span className="badge" style={{ marginBottom: '12px', display: 'inline-block' }}>Digital Growth Solutions</span>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px', color: '#ffffff' }}>{homepageData.services.title}</h2>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '16px' }}>
+              {homepageData.services.description}
+            </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
             {staticServicesPreview.map((service, idx) => (
               <motion.div 
                 key={idx} 
@@ -759,65 +830,50 @@ const Home = () => {
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
                 whileHover={{ 
                   y: -10, 
-                  scale: 1.03, 
-                  boxShadow: '0 20px 40px -10px rgba(37, 99, 235, 0.22)',
-                  borderColor: 'var(--primary)' 
+                  scale: 1.02, 
+                  boxShadow: '0 25px 50px -10px rgba(37, 99, 235, 0.35)'
                 }}
                 style={{ 
-                  backgroundColor: 'var(--bg-primary)', 
-                  textAlign: 'center',
-                  padding: '32px 28px',
+                  backgroundColor: 'rgba(30, 41, 59, 0.75)', 
+                  textAlign: 'left',
                   borderRadius: '20px',
-                  border: '1px solid var(--border-color)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
                   position: 'relative',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
+                  transition: 'all 0.3s ease'
                 }}
               >
-                {/* Top vibrant gradient line */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '4px',
-                  background: idx === 0 
-                    ? 'linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%)' 
-                    : idx === 1 
-                    ? 'linear-gradient(90deg, #8b5cf6 0%, #ec4899 100%)' 
-                    : 'linear-gradient(90deg, #10b981 0%, #3b82f6 100%)'
-                }} />
-
-                <div>
-                  <div 
-                    className="card-icon-container" 
-                    style={{ 
-                      width: '56px', 
-                      height: '56px', 
-                      borderRadius: '16px', 
-                      margin: '0 auto 24px auto',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: idx === 0 
-                        ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%)' 
-                        : idx === 1 
-                        ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%)' 
-                        : 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%)',
-                      border: '1px solid var(--border-color)'
-                    }}
-                  >
-                    {idx === 0 ? <Zap size={26} /> : idx === 1 ? <Share2 size={26} /> : <Camera size={26} />}
+                {/* Header Image */}
+                <div style={{ position: 'relative', width: '100%', height: '165px', overflow: 'hidden' }}>
+                  <img 
+                    src={service.image} 
+                    alt={service.title} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: '14px',
+                    left: '14px',
+                    backgroundColor: 'rgba(37, 99, 235, 0.9)',
+                    color: '#ffffff',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    letterSpacing: '0.8px'
+                  }}>
+                    {service.tag}
                   </div>
-                  
-                  <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '14px', textAlign: 'center', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>
+                </div>
+
+                <div style={{ padding: '18px 22px 20px 22px', display: 'flex', flexDirection: 'column' }}>
+                  <h3 style={{ fontSize: '19px', fontWeight: 800, marginBottom: '8px', color: '#ffffff', lineHeight: 1.3 }}>
                     {service.title}
                   </h3>
                   
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginBottom: 0, lineHeight: 1.6, textAlign: 'center' }}>
+                  <p style={{ color: '#cbd5e1', fontSize: '14px', marginBottom: 0, lineHeight: 1.55 }}>
                     {service.desc}
                   </p>
                 </div>
@@ -825,9 +881,9 @@ const Home = () => {
             ))}
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <Link to="/services" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px', fontSize: '15px', fontWeight: 600 }}>
-              View All Services <ArrowRight size={16} />
+          <div style={{ textAlign: 'center', marginTop: '50px' }}>
+            <Link to="/services" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', fontSize: '15px', fontWeight: 700 }}>
+              View All Digital Growth Solutions <ArrowRight size={16} />
             </Link>
           </div>
         </div>
@@ -845,16 +901,7 @@ const Home = () => {
               transition={{ duration: 0.6 }}
               style={{ textAlign: 'left' }}
             >
-              <span style={{ 
-                display: 'inline-block', 
-                backgroundColor: 'var(--primary-light)', 
-                color: 'var(--primary)', 
-                padding: '6px 16px', 
-                borderRadius: '20px', 
-                fontWeight: 600, 
-                fontSize: '14px',
-                marginBottom: '16px'
-              }}>
+              <span className="badge" style={{ marginBottom: '16px' }}>
                 On-Campus Partnership
               </span>
               <h2 style={{ fontSize: '38px', fontWeight: 800, lineHeight: 1.2, marginBottom: '20px', textAlign: 'left' }}>
@@ -926,23 +973,14 @@ const Home = () => {
       </section>
 
       {/* 6th Section: Plan & Execute Marketing Process Section */}
-      <section className="section-padding" style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+      <section className="section-padding" style={{ backgroundColor: '#0b0f19', color: '#ffffff', borderTop: '1px solid rgba(255, 255, 255, 0.1)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '60px' }}>
-            <span style={{ 
-              display: 'inline-block', 
-              backgroundColor: 'var(--primary-light)', 
-              color: 'var(--primary)', 
-              padding: '6px 16px', 
-              borderRadius: '20px', 
-              fontWeight: 600, 
-              fontSize: '14px',
-              marginBottom: '16px'
-            }}>
+            <span className="badge" style={{ marginBottom: '16px' }}>
               Marketing Operations
             </span>
-            <h2 style={{ fontSize: '38px', marginBottom: '16px' }}>How We Plan and Execute</h2>
-            <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px' }}>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px', color: '#ffffff' }}>How We Plan and Execute</h2>
+            <p style={{ maxWidth: '600px', margin: '0 auto', color: '#cbd5e1', fontSize: '16px' }}>
               We design and execute integrated digital strategies that scale enrollment and elevate institutional brand images.
             </p>
           </div>
@@ -1114,25 +1152,16 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden' }}>
+      <section className="section-padding" style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#0f172a', color: '#ffffff', borderTop: '1px solid rgba(255, 255, 255, 0.1)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
         <div className="container">
           <div className="text-center" style={{ marginBottom: '50px' }}>
-            <span style={{ 
-              display: 'inline-block', 
-              backgroundColor: 'var(--primary-light)', 
-              color: 'var(--primary)', 
-              padding: '6px 16px', 
-              borderRadius: '20px', 
-              fontWeight: 600, 
-              fontSize: '14px',
-              marginBottom: '16px'
-            }}>
+            <span className="badge" style={{ marginBottom: '16px' }}>
               Client Reviews & Google Ratings
             </span>
-            <h2 style={{ fontSize: '38px', marginBottom: '16px', textAlign: 'center' }}>
+            <h2 style={{ fontSize: '38px', marginBottom: '16px', textAlign: 'center', color: '#ffffff' }}>
               What Educational Leaders Say About Host2Unlimited
             </h2>
-            <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-secondary)', fontSize: '16px', textAlign: 'center' }}>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#cbd5e1', fontSize: '16px', textAlign: 'center' }}>
               Real reviews from school heads, trustees, and institute directors across Maharashtra.
             </p>
           </div>
@@ -1141,29 +1170,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Client Logos Section */}
-      <section style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', padding: '40px 0' }}>
-        <div className="container">
-          <p style={{ textAlign: 'center', fontSize: '15px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '24px', letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Trusted by Educational Institutes & Brands Across Maharashtra
-          </p>
-          <div className="carousel-track-container" style={{ overflow: 'hidden', padding: '15px 0' }}>
-            <div className="carousel-track">
-              {clientLogos.concat(clientLogos).map((logo, idx) => (
-                <div key={idx} className="carousel-logo" style={{ display: 'flex', alignItems: 'center', height: '80px', padding: '0 30px' }}>
-                  <img 
-                    src={logo} 
-                    alt="Partner Logo" 
-                    style={{ height: '75px', maxWidth: '180px', objectFit: 'contain', opacity: 0.9, transition: 'all 0.3s ease' }} 
-                    onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1.08)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'scale(1)'; }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Bottom CTA Banner */}
       <section className="section-padding" style={{ padding: '80px 0', position: 'relative' }}>

@@ -40,12 +40,67 @@ const upload = multer({
   }
 });
 
+// GET blog configuration (items per page setting)
+router.get('/config', async (req, res) => {
+  try {
+    const db = getPool();
+    const [rows] = await db.query('SELECT content_data FROM cms_pages WHERE id = ?', ['blog_config']);
+    if (rows && rows.length > 0) {
+      const parsed = JSON.parse(rows[0].content_data);
+      return res.json({ items_per_page: Number(parsed.items_per_page) || 6 });
+    }
+    res.json({ items_per_page: 6 });
+  } catch (error) {
+    res.json({ items_per_page: 6 });
+  }
+});
+
+// POST blog configuration (update items per page setting)
+router.post('/config', async (req, res) => {
+  try {
+    const db = getPool();
+    const { items_per_page } = req.body;
+    const countLimit = Math.max(1, parseInt(items_per_page || '6', 10));
+
+    const contentData = JSON.stringify({ items_per_page: countLimit });
+
+    // Use INSERT INTO ... ON DUPLICATE KEY UPDATE / ON CONFLICT
+    await db.query(
+      `INSERT INTO cms_pages (id, content_data) VALUES (?, ?) ON DUPLICATE KEY UPDATE content_data = ?`,
+      ['blog_config', contentData, contentData]
+    );
+
+    cacheInvalidate('/api/blogs');
+    if (global.broadcastSSE) {
+      global.broadcastSSE({ type: 'blog_update' });
+    }
+
+    res.json({ message: 'Blog items per page setting updated successfully.', items_per_page: countLimit });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // GET all blogs with search, filter, and pagination
 router.get('/', async (req, res) => {
   try {
     const db = getPool();
     const page = parseInt(req.query.page || '1', 10);
-    const limit = parseInt(req.query.limit || '6', 10);
+    
+    let defaultLimit = 6;
+    if (!req.query.limit) {
+      try {
+        const [configRows] = await db.query('SELECT content_data FROM cms_pages WHERE id = ?', ['blog_config']);
+        if (configRows && configRows.length > 0) {
+          const parsed = JSON.parse(configRows[0].content_data);
+          if (parsed.items_per_page) defaultLimit = Number(parsed.items_per_page);
+        }
+      } catch (e) {
+        defaultLimit = 6;
+      }
+    }
+
+    const limit = parseInt(req.query.limit || defaultLimit, 10);
     const offset = (page - 1) * limit;
 
     const { category, search, status } = req.query;

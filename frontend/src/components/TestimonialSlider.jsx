@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote, CheckCircle } from 'lucide-react';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const staticTestimonials = [
   {
@@ -258,18 +258,7 @@ const TestimonialSlider = () => {
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
           >
-            <Quote 
-              size={50} 
-              style={{ 
-                position: 'absolute', 
-                top: '16px', 
-                right: '16px', 
-                opacity: 0.05, 
-                color: 'var(--primary)' 
-              }} 
-            />
-
-            {/* Profile Header: Photo (Increased size), Name, Designation & Company, Yellow Stars */}
+            {/* Profile Header: Photo, Name, Designation & Company, Yellow Stars */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <img 
                 src={testimony.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150'} 
@@ -309,11 +298,10 @@ const TestimonialSlider = () => {
                 lineHeight: 1.65, 
                 color: 'var(--text-primary)', 
                 fontWeight: 500, 
-                fontStyle: 'italic',
                 margin: 0,
-                textAlign: 'justify'
+                textAlign: 'left'
               }}>
-                "{testimony.review}"
+                {testimony.review}
               </p>
             </div>
           </div>

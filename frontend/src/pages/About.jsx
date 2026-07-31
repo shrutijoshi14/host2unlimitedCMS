@@ -6,12 +6,12 @@ import * as Icons from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
 import founderImg from '../assets/h2u/RAM-SIR-01-1.png';
-import aboutHeroBg from '../assets/hero_bg/about_hero_art.svg';
+import aboutHeroBg from '../assets/hero_bg/about_hero_clean.png';
 import visionImg from '../assets/about/vision.png';
 import missionImg from '../assets/about/mission.png';
 import valuesImg from '../assets/about/values.png';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const staticValues = [
   {
@@ -223,7 +223,7 @@ const About = () => {
   const breadcrumbs = [{ name: 'About Us', path: '/about' }];
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
         title="About Us | Host2Unlimited"
         description="Founded in 2010 in Mumbai, we are the leading digital marketing partner of educational institutions like schools, colleges, and campuses in Maharashtra."
@@ -235,25 +235,25 @@ const About = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ 
+          position: 'relative', 
+          height: '210px', 
+          minHeight: '210px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          overflow: 'hidden', 
+          backgroundColor: '#0b0f19'
+        }}
       >
         <img 
           src={aboutHeroBg} 
           alt="About Hero Background" 
-          style={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover', 
-            objectPosition: 'center center',
-            zIndex: 1, 
-            pointerEvents: 'none' 
-          }} 
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1, pointerEvents: 'none' }}
         />
-        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          <div style={{ maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>
@@ -487,12 +487,12 @@ const About = () => {
                   <motion.div
                     key={member.id || idx}
                     className="card-glass"
-                    whileHover={{ y: -8, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 12px 30px rgba(37, 99, 235, 0.15)' }}
+                    whileHover={{ y: -8, scale: 1.02, borderColor: 'var(--primary)', boxShadow: '0 15px 35px rgba(37, 99, 235, 0.2)' }}
                     style={{ 
-                      flex: '0 0 240px',
+                      flex: '0 0 290px',
                       scrollSnapAlign: 'start',
-                      padding: '24px 20px', 
-                      borderRadius: '16px',
+                      padding: 0, 
+                      borderRadius: '20px',
                       border: '1px solid var(--border-color)', 
                       backgroundColor: 'var(--bg-secondary)',
                       textAlign: 'center', 
@@ -504,54 +504,42 @@ const About = () => {
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    <div style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '4px',
-                      background: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 100%)'
-                    }} />
-
-                    <div style={{ 
-                      width: '90px', 
-                      height: '90px', 
-                      borderRadius: '50%', 
-                      overflow: 'hidden',
-                      margin: '10px auto 16px auto',
-                      padding: '3px',
-                      background: 'linear-gradient(135deg, var(--primary) 0%, #06b6d4 100%)',
-                      boxShadow: '0 8px 20px rgba(0,0,0,0.12)'
-                    }}>
-                      <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', backgroundColor: 'var(--bg-primary)' }}>
-                        {(member.image || member.image_url) ? (
-                          <img 
-                            src={member.image || member.image_url} 
-                            alt={member.name} 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                          />
-                        ) : (
-                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', fontSize: '22px', fontWeight: 700 }}>
-                            {member.name ? member.name.split(' ').map(n => n[0]).join('') : 'TM'}
-                          </div>
-                        )}
-                      </div>
+                    {/* Big Team Member Photo Container */}
+                    <div style={{ width: '100%', height: '320px', overflow: 'hidden', position: 'relative', backgroundColor: 'var(--bg-primary)' }}>
+                      {(member.image || member.image_url) ? (
+                        <img 
+                          src={member.image || member.image_url} 
+                          alt={member.name} 
+                          loading="lazy"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s ease' }} 
+                        />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', fontSize: '32px', fontWeight: 800 }}>
+                          {member.name ? member.name.split(' ').map(n => n[0]).join('') : 'TM'}
+                        </div>
+                      )}
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'linear-gradient(to top, rgba(11, 15, 25, 0.85) 0%, rgba(11, 15, 25, 0.1) 60%, transparent 100%)'
+                      }} />
                     </div>
 
-                    <h4 style={{ fontSize: '17px', fontWeight: 800, marginBottom: '6px', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>{member.name}</h4>
-                    
-                    <span style={{
-                      display: 'inline-block',
-                      backgroundColor: 'var(--primary-light)',
-                      color: 'var(--primary)',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      padding: '4px 12px',
-                      borderRadius: '20px',
-                      marginTop: '4px'
-                    }}>
-                      {member.role}
-                    </span>
+                    <div style={{ padding: '18px 16px 20px 16px', width: '100%', textAlign: 'center' }}>
+                      <h4 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '6px', color: 'var(--text-primary)', letterSpacing: '-0.3px' }}>{member.name}</h4>
+                      
+                      <span style={{
+                        display: 'inline-block',
+                        backgroundColor: 'var(--primary-light)',
+                        color: 'var(--primary)',
+                        fontSize: '12.5px',
+                        fontWeight: 700,
+                        padding: '4px 14px',
+                        borderRadius: '20px'
+                      }}>
+                        {member.role}
+                      </span>
+                    </div>
                   </motion.div>
                 ))}
               </div>

@@ -4,9 +4,13 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User, Clock, Tag } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import blogHeroBg from '../assets/hero_bg/blog_hero_art.svg';
+import blogHeroBg from '../assets/hero_bg/blog_hero_clean.png';
 
-const API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+import { staticArticles } from '../data/staticBlogs';
+
+const API_BASE = process.env.NODE_ENV === 'production'
+  ? (window.location.origin.includes('localhost') ? 'http://localhost:5000' : 'https://host2unlimitedcms-backend.onrender.com')
+  : 'http://localhost:5000';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -18,29 +22,51 @@ const BlogPost = () => {
     const fetchBlogPost = async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await fetch(`${API_BASE}/api/blogs/${slug}`);
-        if (!response.ok) {
-          throw new Error('Article not found.');
-        }
-        const data = await response.ok ? await response.json() : null;
-        if (data) {
-          setBlog(data);
-          
-          // Set SEO metadata dynamically
-          document.title = data.seo_title || `${data.title} | Host2Unlimited`;
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) {
-            metaDesc.setAttribute('content', data.meta_description || data.title);
-          } else {
-            const meta = document.createElement('meta');
-            meta.name = 'description';
-            meta.content = data.meta_description || data.title;
-            document.head.appendChild(meta);
+        if (response.ok) {
+          const data = await response.json();
+          if (data) {
+            setBlog(data);
+            return;
           }
         }
+        
+        // Fallback to static articles
+        const foundStatic = staticArticles.find(a => a.slug === slug || a.id === slug);
+        if (foundStatic) {
+          setBlog({
+            title: foundStatic.title,
+            category: foundStatic.category,
+            author: foundStatic.author,
+            read_time: foundStatic.readTime,
+            image_url: foundStatic.image,
+            content: foundStatic.content,
+            published_at: foundStatic.created_at,
+            seo_title: `${foundStatic.title} | Host2Unlimited`,
+            meta_description: foundStatic.desc
+          });
+        } else {
+          setError('Article not found.');
+        }
       } catch (err) {
-        console.error('Error fetching blog post:', err);
-        setError(err.message);
+        console.warn('Error fetching blog post, attempting static fallback:', err.message);
+        const foundStatic = staticArticles.find(a => a.slug === slug || a.id === slug);
+        if (foundStatic) {
+          setBlog({
+            title: foundStatic.title,
+            category: foundStatic.category,
+            author: foundStatic.author,
+            read_time: foundStatic.readTime,
+            image_url: foundStatic.image,
+            content: foundStatic.content,
+            published_at: foundStatic.created_at,
+            seo_title: `${foundStatic.title} | Host2Unlimited`,
+            meta_description: foundStatic.desc
+          });
+        } else {
+          setError('Article not found.');
+        }
       } finally {
         setLoading(false);
       }

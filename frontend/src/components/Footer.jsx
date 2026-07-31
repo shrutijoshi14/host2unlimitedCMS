@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Briefcase, GraduationCap, TrendingUp, Headphones, ArrowRight, Globe } from 'lucide-react';
 
 import logoPng from '../assets/logo.png';
+import TrustedBrands from './TrustedBrands';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -47,7 +48,9 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer style={{ backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', padding: '80px 0 30px 0', position: 'relative' }}>
+    <>
+      <TrustedBrands />
+      <footer className="footer-dark-blue" style={{ backgroundColor: '#091227', borderTop: '1px solid rgba(255, 255, 255, 0.1)', padding: '80px 0 30px 0', position: 'relative', color: '#94a3b8' }}>
       <div className="container">
         
         {/* ================= SECTION 1: IDENTITY, CONTACT & LOCATION (3 Columns) ================= */}
@@ -222,6 +225,17 @@ const Footer = () => {
       </div>
 
       <style>{`
+        .footer-dark-blue {
+          --bg-primary: #0f1c3f !important;
+          --bg-secondary: #091227 !important;
+          --bg-tertiary: #132247 !important;
+          --text-primary: #ffffff !important;
+          --text-secondary: #94a3b8 !important;
+          --text-muted: #64748b !important;
+          --border-color: rgba(255, 255, 255, 0.1) !important;
+          --primary-light: rgba(37, 99, 235, 0.25) !important;
+          color-scheme: dark;
+        }
         .footer-top-section {
           display: grid;
           grid-template-columns: 1.2fr 1.4fr 1.4fr;
@@ -267,14 +281,14 @@ const Footer = () => {
         .footer-header {
           font-size: 14px;
           font-weight: 800;
-          color: var(--text-primary);
+          color: #ffffff !important;
           margin-bottom: 20px;
           text-transform: uppercase;
           letter-spacing: 0.8px;
           position: relative;
           display: inline-block;
           padding-bottom: 6px;
-          border-bottom: 2px solid var(--border-color);
+          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
           align-self: flex-start;
         }
         .footer-header::after {
@@ -284,16 +298,16 @@ const Footer = () => {
           bottom: -2px;
           width: 24px;
           height: 2px;
-          background: var(--primary);
+          background: #3b82f6;
           border-radius: 2px;
         }
         .footer-link {
           transition: all var(--transition-fast);
-          color: var(--text-secondary);
+          color: #94a3b8 !important;
           display: inline-block;
         }
         .footer-link:hover {
-          color: var(--primary) !important;
+          color: #60a5fa !important;
           transform: translateX(4px);
         }
         .social-icon {
@@ -301,33 +315,33 @@ const Footer = () => {
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          background-color: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
+          background-color: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           align-items: center;
           justify-content: center;
-          color: var(--text-secondary);
+          color: #94a3b8;
           transition: all var(--transition-fast);
         }
         .social-icon:hover {
-          background-color: var(--primary) !important;
+          background-color: #2563eb !important;
           color: white !important;
-          border-color: var(--primary) !important;
+          border-color: #2563eb !important;
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
         .footer-contact-card {
           display: flex;
           gap: 12px;
           align-items: flex-start;
-          background-color: var(--bg-primary);
-          border: 1px solid var(--border-color);
+          background-color: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           padding: 12px 14px;
           border-radius: 10px;
           transition: all var(--transition-fast);
         }
         .footer-contact-card:hover {
-          border-color: var(--primary);
-          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+          border-color: #3b82f6;
+          box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15);
           transform: translateY(-1.5px);
         }
         .contact-icon {
@@ -337,12 +351,12 @@ const Footer = () => {
           width: 26px;
           height: 26px;
           border-radius: 6px;
-          background-color: var(--primary-light);
-          color: var(--primary);
+          background-color: rgba(59, 130, 246, 0.2);
+          color: #60a5fa;
           flex-shrink: 0;
         }
         .contact-card-title {
-          color: var(--text-primary);
+          color: #ffffff !important;
           display: block;
           font-size: 11px;
           text-transform: uppercase;
@@ -352,11 +366,11 @@ const Footer = () => {
         .contact-card-link {
           display: block;
           font-size: 13px;
-          color: var(--text-secondary);
+          color: #94a3b8 !important;
           transition: color var(--transition-fast);
         }
         .contact-card-link:hover {
-          color: var(--primary);
+          color: #60a5fa !important;
         }
         
         @media (max-width: 992px) {
@@ -376,6 +390,7 @@ const Footer = () => {
         }
       `}</style>
     </footer>
+    </>
   );
 };
 

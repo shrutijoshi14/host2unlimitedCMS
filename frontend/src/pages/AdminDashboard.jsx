@@ -4,14 +4,17 @@ import { useLeads } from '../context/LeadContext';
 import { useTheme } from '../context/ThemeContext';
 import { 
   Shield, Trash2, ClipboardCheck, Briefcase, LogOut,
-  Settings, FileText, Plus, Edit, Upload, Eye, EyeOff, Search,
+  Settings, FileText, Plus, Edit, Upload, Eye, EyeOff, Search, Image as ImageIcon,
   Bold, Italic, Underline, Heading2, Heading3, Quote, List, ListOrdered,
   ChevronLeft, ChevronRight, Check, X, AlertCircle
 } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import logoPng from '../assets/logo.png';
+import { staticArticles } from '../data/staticBlogs';
 
-const ACTIVE_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const ACTIVE_API_BASE = process.env.NODE_ENV === 'production'
+  ? (window.location.origin.includes('localhost') ? 'http://localhost:5000' : 'https://host2unlimitedcms-backend.onrender.com')
+  : 'http://localhost:5000';
 
 const formatDateForInput = (dateVal) => {
   if (!dateVal) return '';
@@ -67,6 +70,8 @@ const ALL_DEFAULT_MODULES = [
   { id: 'solutions', name: 'Solutions Management', enabled: 1 },
   { id: 'portfolio', name: 'Portfolio Management', enabled: 1 },
   { id: 'case_studies', name: 'Case Studies Management', enabled: 1 },
+  { id: 'case_study_details', name: 'Case Study Details Management', enabled: 1 },
+  { id: 'educational_institutes', name: 'Educational Institutes Management', enabled: 1 },
   { id: 'pricing', name: 'Pricing Management', enabled: 1 },
   { id: 'careers', name: 'Careers Management', enabled: 1 },
   { id: 'about', name: 'About Us Management', enabled: 1 },
@@ -90,6 +95,7 @@ const ALL_DEFAULT_MODULES = [
   const [blogsLimit] = useState(5);
   const [blogsTotalPages, setBlogsTotalPages] = useState(1);
   const [blogSearch, setBlogSearch] = useState('');
+  const [websiteBlogLimit, setWebsiteBlogLimit] = useState(6);
 
   // Services Management State
   const [services, setServices] = useState([]);
@@ -112,11 +118,44 @@ const ALL_DEFAULT_MODULES = [
   const [author, setAuthor] = useState('Host2Unlimited Admin');
   const [status, setStatus] = useState('Draft');
   const [readTime, setReadTime] = useState('5 min read');
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const uploadImageFile = async (file, onSuccess) => {
+    if (!file) return;
+    try {
+      setUploadingImage(true);
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await fetch(`${ACTIVE_API_BASE}/api/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.url) {
+          onSuccess(data.url);
+          triggerToast('Image uploaded successfully to server!', 'success');
+          return;
+        }
+      }
+      throw new Error('Upload endpoint un-reachable');
+    } catch (err) {
+      console.warn('Backend file upload failed, using local Data URL preview fallback:', err);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        onSuccess(e.target.result);
+        triggerToast('Image loaded as local preview!', 'info');
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
   const [publishedAt, setPublishedAt] = useState('');
   
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [editorPreviewMode, setEditorPreviewMode] = useState(false);
 
   // Service Form State
@@ -196,6 +235,104 @@ const ALL_DEFAULT_MODULES = [
     }, 4500); // slightly longer duration to let user read
   }, []);
 
+const DEFAULT_PAGES_MAP = {
+  banner: {
+    about: { title: 'About Host2Unlimited', subtitle: 'Our Background', desc: 'We are a dedicated team of software developers, database managers, systems architects, and digital marketing consultants who help brands scale their systems.' },
+    services: { title: 'Our Services & Solutions', subtitle: 'Capabilities', desc: 'We offer robust custom website design, cloud database configuration, Google organic search SEO sprints, and scalable VPS architectures.' },
+    careers: { title: 'Careers at Host2Unlimited', subtitle: 'Join Our Team', desc: 'Explore opportunities to build scalable portals, launch digital marketing campaigns, and craft visual graphics with our collaborative engineering desk.' },
+    portfolio: { title: 'Selected Projects & Portfolios', subtitle: 'Our Work', desc: 'Explore our track record of custom e-commerce engines, public sector portals, compliance directories, and interactive software suites.' },
+    case_studies: { title: 'Success Metrics & Case Studies', subtitle: 'Client Outcomes', desc: 'Real-world blueprints detailing how our systems engineers scale database transactions, improve page loads, and cut cloud hosting overheads.' }
+  },
+  seo: {
+    homepage: { meta_title: 'Host2Unlimited | Digital Innovation & Technology Solutions', meta_desc: 'We are your digital marketing partner for educational institutes and modern businesses, providing professional website development, secure cloud hosting, and custom ERP databases.', keywords: 'Website Development, Cloud Hosting, SEO, ERP databases, Education Portal', canonical_url: 'https://host2unlimited.com/', og_image: '/assets/school_marketing_hero.png' },
+    about: { meta_title: 'About Us | Host2Unlimited Technologies', meta_desc: 'Learn about our corporate journey, team coordinates, and values transparency.', keywords: 'Host2Unlimited about, software architects team, corporate values', canonical_url: 'https://host2unlimited.com/about', og_image: '' },
+    services: { meta_title: 'Our Capabilities & Services | Host2Unlimited', meta_desc: 'Browse our full suite of professional services including custom software programming, technical SEO audits, and managed AWS cloud instances.', keywords: 'technical SEO, custom software development, managed hosting AWS', canonical_url: 'https://host2unlimited.com/services', og_image: '' },
+    careers: { meta_title: 'Careers & Positions | Host2Unlimited Team', meta_desc: 'Explore open engineering job listings and submit dynamic resume links to join our collaborative technical desk.', keywords: 'hiring software engineers, developer jobs remote, UI designer vacancy', canonical_url: 'https://host2unlimited.com/careers', og_image: '' },
+    portfolio: { meta_title: 'Selected Client Portfolios | Host2Unlimited', meta_desc: 'Explore our track record of custom e-commerce apps, compliance public directories, and interactive platforms.', keywords: 'our projects, SaaS catalog portfolio, e-commerce case study', canonical_url: 'https://host2unlimited.com/portfolio', og_image: '' }
+  },
+  solutions: [
+    { icon_name: 'Building2', title: 'Enterprise Digitalization', subtitle: 'For Large Companies & Organizations', desc: 'Scale legacy architectures into high-performance web systems. We construct customized integrations to automate operational pipelines and secure data stores.', bulletTitle: 'Key Focus Areas:', bullets: ['Legacy Systems Migration & Modernization', 'Custom ERP & CRM software engineering', 'Military-grade database encryption', 'Automated reporting dashboards', 'RESTful API developer environments'] },
+    { icon_name: 'Rocket', title: 'Startup Scale Accelerator', subtitle: 'For Early-stage & Venture Backed Teams', desc: 'Build, deploy, and validate your MVP platforms rapidly. We deploy lightweight, high-performance web applications using robust React and secure databases.', bulletTitle: 'Key Focus Areas:', bullets: ['MVP scoping and modular designs', 'High-conversion SaaS landing pages', 'Continuous integration (CI/CD) pipelines', 'Scalable hosting deployments', 'Product analytics & heatmaps tracking'] },
+    { icon_name: 'ShoppingBag', title: 'E-Commerce Infrastructure', subtitle: 'For Retailers & Digital Brands', desc: 'Boost conversion rates, eliminate payment friction, and sync product inventories across channels. We build secure online stores handling high peak volumes.', bulletTitle: 'Key Focus Areas:', bullets: ['Optimized checkout page funnels', 'Multi-channel inventory management', 'Localized payment API modules', 'Personalized buyer dashboards', 'Automated receipt and email tracking'] },
+    { icon_name: 'GraduationCap', title: 'Public Sector & Academics', subtitle: 'For Schools, Colleges, and Organizations', desc: 'Deploy secure portal portals supporting high concurrent users. We align systems with WCAG accessibility guidelines and secure student databases.', bulletTitle: 'Key Focus Areas:', bullets: ['WCAG Accessibility compliant layouts', 'Student management systems (SMS)', 'Secure login & roles databases', 'Interactive resource centers', 'Server load optimization for exam events'] }
+  ],
+  pricing: [
+    { name: 'Starter Website Package', price: '₹15,000 – ₹25,000', desc: 'Perfect for small businesses and startups seeking a professional landing page or online brochure.', features: 'Up to 5 Pages development, Fully Mobile Responsive, Secure Contact Form, Basic SEO & Metadata config, SSL Certificate Setup, 1 Month Support', popular: false },
+    { name: 'Business Website Package', price: '₹35,000 – ₹60,000', desc: 'Designed for scaling companies needing custom layout mockups, blogs, and marketing connections.', features: 'Up to 15 Pages development, Custom UI/UX & Animations, Blog Engine Integration, Lead Management Dashboard, Advanced Technical SEO, Google Analytics setup, 3 Months Dedicated Support', popular: true },
+    { name: 'Enterprise / Custom Software', price: 'Custom Quote', desc: 'Tailored for high-scale organizations needing custom ERP portals, SaaS platforms, or mobile apps.', features: 'Unlimited Pages / Custom Modules, Dedicated Cloud Architecture, Multi-role RBAC security, API & Webhooks integration, SLA 99.9% Uptime Guarantee, Dedicated Project Manager, 24/7 Priority Support', popular: false }
+  ],
+  careers: [
+    { title: 'Senior Full Stack Engineer', department: 'Engineering', type: 'Full-time', location: 'Thane / Remote', desc: 'Build scalable web applications, API microservices, and high-performance user interfaces using React, Node.js, and cloud databases.' },
+    { title: 'Digital Marketing & SEO Manager', department: 'Marketing', type: 'Full-time', location: 'Thane, Mumbai', desc: 'Lead strategic organic search optimization campaigns, lead generation funnels, and performance marketing for educational & enterprise clients.' }
+  ],
+  educational_institutes: [
+    {
+      id: 'preschools',
+      title: 'Preschools & Daycare Centers',
+      desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.',
+      image: '/assets/preschool_hero_clean.png',
+      logo: '/assets/h2u logos/euro_kids.jpeg',
+      icon_name: 'Baby'
+    },
+    {
+      id: 'primary-secondary',
+      title: 'Primary & Secondary Schools',
+      desc: 'Reputation built with impactful stories and updates — engage your audience with content.',
+      image: '/assets/school_building_clean.png',
+      logo: '/assets/h2u logos/New-Horizon-logo.png',
+      icon_name: 'BookOpen'
+    },
+    {
+      id: 'international',
+      title: 'International Schools (CBSE / ICSE / IB)',
+      desc: 'Boost student engagement by highlighting academic excellence and achievements.',
+      image: '/assets/international_school_campus.png',
+      logo: '/assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp',
+      icon_name: 'Globe'
+    },
+    {
+      id: 'coaching',
+      title: 'Private Coaching Institutions',
+      desc: 'Promote innovative and personalized coaching methods, proven results, and approach.',
+      image: '/assets/coaching_classroom_learning.png',
+      logo: '/assets/h2u logos/ardent_tutorials_thane.png',
+      icon_name: 'GraduationCap'
+    },
+    {
+      id: 'colleges',
+      title: 'Junior and Degree Colleges',
+      desc: 'Empowering students at Junior and Degree Colleges to achieve academic excellence.',
+      image: '/assets/campus_hero_clean.png',
+      logo: '/assets/h2u logos/somaiya_college.png',
+      icon_name: 'School'
+    },
+    {
+      id: 'engineering',
+      title: 'Institutes of Engineering & Technology',
+      desc: 'Future engineers with innovative learning and hands-on experience.',
+      image: '/assets/university_hero_clean.png',
+      logo: '/assets/h2u logos/armiet_logo.jpeg',
+      icon_name: 'Cpu'
+    },
+    {
+      id: 'management',
+      title: 'Institutes of Management Studies',
+      desc: 'Future leaders with practical knowledge, strategic thinking, and a global perspective.',
+      image: '/assets/management_college_clean.png',
+      logo: '/assets/h2u logos/dr-pillai-global-academy.png',
+      icon_name: 'Briefcase'
+    },
+    {
+      id: 'universities',
+      title: 'Public / Private / Deemed Universities',
+      desc: 'Private educational institutions striving continuously to attract the right students.',
+      image: '/assets/university_hero_clean.png',
+      logo: '/assets/h2u logos/GSGS-logo@4x (1).png',
+      icon_name: 'Award'
+    }
+  ]
+};
+
   const fetchPageContent = useCallback(async (pageId) => {
     // Instant 0ms cache display if data was loaded previously
     if (pageCacheRef.current[pageId]) {
@@ -210,29 +347,18 @@ const ALL_DEFAULT_MODULES = [
         const data = await response.json();
         pageCacheRef.current[pageId] = data;
         setPageContent(data);
-      } else if (pageId === 'banner') {
-        const fallbackBanner = {
-          about: { title: 'About Host2Unlimited', subtitle: 'Our Background', desc: 'We are a dedicated team of software developers, database managers, systems architects, and digital marketing consultants who help brands scale their systems.' },
-          services: { title: 'Our Services & Solutions', subtitle: 'Capabilities', desc: 'We offer robust custom website design, cloud database configuration, Google organic search SEO sprints, and scalable VPS architectures.' },
-          careers: { title: 'Careers at Host2Unlimited', subtitle: 'Join Our Team', desc: 'Explore opportunities to build scalable portals, launch digital marketing campaigns, and craft visual graphics with our collaborative engineering desk.' },
-          portfolio: { title: 'Selected Projects & Portfolios', subtitle: 'Our Work', desc: 'Explore our track record of custom e-commerce engines, public sector portals, compliance directories, and interactive software suites.' },
-          case_studies: { title: 'Success Metrics & Case Studies', subtitle: 'Client Outcomes', desc: 'Real-world blueprints detailing how our systems engineers scale database transactions, improve page loads, and cut cloud hosting overheads.' }
-        };
-        pageCacheRef.current[pageId] = fallbackBanner;
-        setPageContent(fallbackBanner);
-      } else if (pageId === 'seo') {
-        const fallbackSeo = {
-          homepage: { meta_title: 'Host2Unlimited | Digital Innovation & Technology Solutions', meta_desc: 'We are your digital marketing partner for educational institutes and modern businesses, providing professional website development, secure cloud hosting, and custom ERP databases.', keywords: 'Website Development, Cloud Hosting, SEO, ERP databases, Education Portal', canonical_url: 'https://host2unlimited.com/', og_image: '/assets/school_marketing_hero.png' },
-          about: { meta_title: 'About Us | Host2Unlimited Technologies', meta_desc: 'Learn about our corporate journey, team coordinates, and values transparency.', keywords: 'Host2Unlimited about, software architects team, corporate values', canonical_url: 'https://host2unlimited.com/about', og_image: '' },
-          services: { meta_title: 'Our Capabilities & Services | Host2Unlimited', meta_desc: 'Browse our full suite of professional services including custom software programming, technical SEO audits, and managed AWS cloud instances.', keywords: 'technical SEO, custom software development, managed hosting AWS', canonical_url: 'https://host2unlimited.com/services', og_image: '' },
-          careers: { meta_title: 'Careers & Positions | Host2Unlimited Team', meta_desc: 'Explore open engineering job listings and submit dynamic resume links to join our collaborative technical desk.', keywords: 'hiring software engineers, developer jobs remote, UI designer vacancy', canonical_url: 'https://host2unlimited.com/careers', og_image: '' },
-          portfolio: { meta_title: 'Selected Client Portfolios | Host2Unlimited', meta_desc: 'Explore our track record of custom e-commerce apps, compliance public directories, and interactive platforms.', keywords: 'our projects, SaaS catalog portfolio, e-commerce case study', canonical_url: 'https://host2unlimited.com/portfolio', og_image: '' }
-        };
-        pageCacheRef.current[pageId] = fallbackSeo;
-        setPageContent(fallbackSeo);
+      } else if (DEFAULT_PAGES_MAP[pageId]) {
+        const fallback = DEFAULT_PAGES_MAP[pageId];
+        pageCacheRef.current[pageId] = fallback;
+        setPageContent(fallback);
       }
     } catch (err) {
-      console.error('Error fetching page content:', err);
+      console.error(`Error fetching page content for ${pageId}:`, err);
+      if (DEFAULT_PAGES_MAP[pageId]) {
+        const fallback = DEFAULT_PAGES_MAP[pageId];
+        pageCacheRef.current[pageId] = fallback;
+        setPageContent(fallback);
+      }
     } finally {
       setPageContentLoading(false);
     }
@@ -560,20 +686,98 @@ const ALL_DEFAULT_MODULES = [
     try {
       setBlogsLoading(true);
       const response = await fetch(
-        `${ACTIVE_API_BASE}/api/blogs?page=${blogsPage}&limit=${blogsLimit}&search=${blogSearch}`
+        `${ACTIVE_API_BASE}/api/blogs?page=1&limit=100`
       );
+      
+      let dbBlogs = [];
       if (response.ok) {
         const data = await response.json();
-        setBlogs(data.blogs);
-        setBlogsTotal(data.total);
-        setBlogsTotalPages(data.totalPages);
+        dbBlogs = data.blogs || [];
       }
+
+      // Seamlessly merge staticArticles fallback if database has missing entries
+      const existingSlugs = new Set(dbBlogs.map(b => b.slug));
+      staticArticles.forEach(s => {
+        if (!existingSlugs.has(s.slug)) {
+          dbBlogs.push({
+            id: s.id,
+            title: s.title,
+            slug: s.slug,
+            category: s.category,
+            tags: 'digital marketing, education, strategy',
+            image_url: s.image,
+            author: s.author || 'Host2Unlimited Team',
+            status: 'Published',
+            read_time: s.readTime || '5 min read',
+            published_at: s.created_at || new Date().toISOString(),
+            created_at: s.created_at || new Date().toISOString(),
+            meta_description: s.desc,
+            seo_title: `${s.title} | Host2Unlimited`,
+            content: s.content
+          });
+        }
+      });
+
+      // Filter locally if admin types a search query
+      if (blogSearch) {
+        const sLower = blogSearch.toLowerCase();
+        dbBlogs = dbBlogs.filter(b => 
+          b.title.toLowerCase().includes(sLower) || 
+          (b.category && b.category.toLowerCase().includes(sLower)) ||
+          (b.author && b.author.toLowerCase().includes(sLower))
+        );
+      }
+
+      setBlogs(dbBlogs);
+      setBlogsTotal(dbBlogs.length);
+      setBlogsTotalPages(1);
     } catch (err) {
-      console.error('Error fetching blogs:', err);
+      console.warn('Error fetching blogs from API, loading static fallback list:', err);
+      let fallbackList = staticArticles.map(s => ({
+        id: s.id,
+        title: s.title,
+        slug: s.slug,
+        category: s.category,
+        tags: 'digital marketing, education, strategy',
+        image_url: s.image,
+        author: s.author || 'Host2Unlimited Team',
+        status: 'Published',
+        read_time: s.readTime || '5 min read',
+        published_at: s.created_at || new Date().toISOString(),
+        created_at: s.created_at || new Date().toISOString(),
+        meta_description: s.desc,
+        seo_title: `${s.title} | Host2Unlimited`,
+        content: s.content
+      }));
+
+      if (blogSearch) {
+        const sLower = blogSearch.toLowerCase();
+        fallbackList = fallbackList.filter(b => 
+          b.title.toLowerCase().includes(sLower) || 
+          (b.category && b.category.toLowerCase().includes(sLower))
+        );
+      }
+
+      setBlogs(fallbackList);
+      setBlogsTotal(fallbackList.length);
+      setBlogsTotalPages(1);
     } finally {
       setBlogsLoading(false);
     }
-  }, [blogsPage, blogsLimit, blogSearch]);
+  }, [blogSearch]);
+
+const DEFAULT_SERVICES_LIST = [
+  { id: 1, title: 'Website Development', slug: 'website-development', description: 'Custom responsive website design, React web apps, CMS portals, and e-commerce platforms.', icon_name: 'Globe', banner_image_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600' },
+  { id: 2, title: 'Search Engine Optimization (SEO)', slug: 'search-engine-optimization', description: 'Technical SEO audits, local Google Business Map rankings, keyword strategies, and organic traffic growth.', icon_name: 'Search', banner_image_url: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=600' },
+  { id: 3, title: 'Social Media Marketing', slug: 'social-media-marketing', description: 'Instagram Reels, Facebook campaigns, YouTube Shorts, LinkedIn corporate branding, and community management.', icon_name: 'Share2', banner_image_url: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&q=80&w=600' },
+  { id: 4, title: 'Brand Strategy & Digital Identity', slug: 'brand-strategy-identity', description: 'Logo design, visual brand guidelines, tone of voice, corporate typography, and reputation management.', icon_name: 'Award', banner_image_url: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=600' },
+  { id: 5, title: 'Performance Marketing & PPC Ads', slug: 'performance-marketing-ppc', description: 'High-converting Meta Ads, Google Search Ads, retargeting funnels, and ROI-driven ad management.', icon_name: 'TrendingUp', banner_image_url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600' },
+  { id: 6, title: 'Educational Admission Marketing', slug: 'educational-admission-marketing', description: 'Specialized lead funnels for schools, colleges, and institutes to drive 300+ parent inquiries per campaign.', icon_name: 'GraduationCap', banner_image_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600' },
+  { id: 7, title: 'Content Marketing & Copywriting', slug: 'content-marketing-copywriting', description: 'High-authority blog articles, eBooks, press releases, landing page copy, and newsletter campaigns.', icon_name: 'FileText', banner_image_url: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' },
+  { id: 8, title: 'Graphic Design & Video Production', slug: 'graphic-design-video-production', description: 'Social media creatives, campus walkthrough videos, event reels, motion graphics, and print assets.', icon_name: 'Video', banner_image_url: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=600' },
+  { id: 9, title: 'Cloud Infrastructure & Managed Hosting', slug: 'cloud-infrastructure-hosting', description: 'Scalable cloud hosting, SSL security certificates, database backup automation, and 99.9% uptime SLA.', icon_name: 'Server', banner_image_url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=600' },
+  { id: 10, title: 'Public Relations & Event Management', slug: 'public-relations-event-management', description: 'Press distribution, media coverage, institutional event branding, and corporate sponsorship management.', icon_name: 'Megaphone', banner_image_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600' }
+];
 
   // Fetch services list
   const fetchServices = useCallback(async () => {
@@ -582,10 +786,25 @@ const ALL_DEFAULT_MODULES = [
       const response = await fetch(`${ACTIVE_API_BASE}/api/services?search=${servicesSearch}`);
       if (response.ok) {
         const data = await response.json();
-        setServices(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setServices(data);
+          return;
+        }
       }
+      let filtered = DEFAULT_SERVICES_LIST;
+      if (servicesSearch) {
+        const s = servicesSearch.toLowerCase();
+        filtered = filtered.filter(item => item.title.toLowerCase().includes(s) || item.description.toLowerCase().includes(s));
+      }
+      setServices(filtered);
     } catch (err) {
-      console.error('Error fetching services:', err);
+      console.warn('Error fetching services, loading default list:', err);
+      let filtered = DEFAULT_SERVICES_LIST;
+      if (servicesSearch) {
+        const s = servicesSearch.toLowerCase();
+        filtered = filtered.filter(item => item.title.toLowerCase().includes(s) || item.description.toLowerCase().includes(s));
+      }
+      setServices(filtered);
     } finally {
       setServicesLoading(false);
     }
@@ -607,14 +826,46 @@ const ALL_DEFAULT_MODULES = [
     }
   }, []);
 
+  // Fetch blog config (items per page setting)
+  const fetchBlogConfig = useCallback(async () => {
+    try {
+      const response = await fetch(`${ACTIVE_API_BASE}/api/blogs/config`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.items_per_page) {
+          setWebsiteBlogLimit(Number(data.items_per_page));
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching blog config:', err);
+    }
+  }, []);
+
+  const handleSaveBlogConfig = async (val) => {
+    const targetLimit = Number(val);
+    try {
+      const response = await fetch(`${ACTIVE_API_BASE}/api/blogs/config`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items_per_page: targetLimit })
+      });
+      if (response.ok) {
+        triggerToast(`Cards per page updated to ${targetLimit}! Website pagination updated.`, 'success');
+      }
+    } catch (err) {
+      triggerToast('Failed to update cards per page setting.', 'error');
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchModules();
       fetchBlogs();
       fetchServices();
       fetchTeam();
+      fetchBlogConfig();
     }
-  }, [isAuthenticated, blogsPage, blogSearch, servicesSearch, fetchModules, fetchBlogs, fetchServices, fetchTeam]);
+  }, [isAuthenticated, blogsPage, blogSearch, servicesSearch, fetchModules, fetchBlogs, fetchServices, fetchTeam, fetchBlogConfig]);
 
   // Refetch team when team tab becomes active
   useEffect(() => {
@@ -1805,6 +2056,48 @@ const ALL_DEFAULT_MODULES = [
             </button>
           )}
 
+          {isModuleEnabled('case_studies') && (
+            <button 
+              onClick={() => setActiveTab('case_study_details')}
+              style={{
+                padding: '10px 20px',
+                borderRadius: 'var(--radius-sm)',
+                border: 'none',
+                backgroundColor: activeTab === 'case_study_details' ? 'var(--primary-light)' : 'transparent',
+                color: activeTab === 'case_study_details' ? 'var(--primary)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: '14.5px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all var(--transition-fast)'
+              }}
+            >
+              <Icons.FileSpreadsheet size={16} /> Case Study Details CMS
+            </button>
+          )}
+
+          <button 
+            onClick={() => setActiveTab('educational_institutes')}
+            style={{
+              padding: '10px 20px',
+              borderRadius: 'var(--radius-sm)',
+              border: 'none',
+              backgroundColor: activeTab === 'educational_institutes' ? 'var(--primary-light)' : 'transparent',
+              color: activeTab === 'educational_institutes' ? 'var(--primary)' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '14.5px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            <Icons.GraduationCap size={16} /> Educational Institutes CMS
+          </button>
+
           {isModuleEnabled('pricing') && (
             <button 
               onClick={() => setActiveTab('pricing')}
@@ -2236,13 +2529,60 @@ const ALL_DEFAULT_MODULES = [
                 )}
               </div>
 
-              <button 
-                onClick={openCreateModal}
-                className="btn btn-primary"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', height: '42px' }}
-              >
-                <Plus size={16} /> Create Article
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '8px', 
+                  padding: '6px 14px', 
+                  borderRadius: '8px', 
+                  border: darkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(15, 23, 42, 0.1)',
+                  backgroundColor: darkMode ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
+                  height: '42px' 
+                }}>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                    Creatives Per Page on Website:
+                  </span>
+                  <select 
+                    value={websiteBlogLimit} 
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setWebsiteBlogLimit(val);
+                      handleSaveBlogConfig(val);
+                    }}
+                    style={{ 
+                      padding: '4px 10px', 
+                      fontSize: '13px', 
+                      borderRadius: '6px', 
+                      border: darkMode ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(15, 23, 42, 0.15)', 
+                      background: darkMode ? '#0f172a' : '#ffffff', 
+                      color: darkMode ? '#ffffff' : '#000000', 
+                      cursor: 'pointer', 
+                      fontWeight: 700 
+                    }}
+                  >
+                    <option value={3}>3 Creatives / Page</option>
+                    <option value={4}>4 Creatives / Page</option>
+                    <option value={6}>6 Creatives / Page</option>
+                    <option value={8}>8 Creatives / Page</option>
+                    <option value={9}>9 Creatives / Page</option>
+                    <option value={10}>10 Creatives / Page</option>
+                    <option value={12}>12 Creatives / Page</option>
+                    <option value={15}>15 Creatives / Page</option>
+                    <option value={18}>18 Creatives / Page</option>
+                    <option value={24}>24 Creatives / Page</option>
+                    <option value={30}>30 Creatives / Page</option>
+                  </select>
+                </div>
+
+                <button 
+                  onClick={openCreateModal}
+                  className="btn btn-primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', height: '42px' }}
+                >
+                  <Plus size={16} /> Create Article
+                </button>
+              </div>
             </div>
 
             {/* Blogs Table/List */}
@@ -2259,6 +2599,7 @@ const ALL_DEFAULT_MODULES = [
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14.5px' }}>
                   <thead>
                     <tr style={{ borderBottom: '2px solid var(--border-color)', color: 'var(--text-primary)' }}>
+                      <th style={{ textAlign: 'center', padding: '12px 16px', fontWeight: 700, width: '70px' }}>Cover</th>
                       <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Title</th>
                       <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Category</th>
                       <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Author</th>
@@ -2270,6 +2611,15 @@ const ALL_DEFAULT_MODULES = [
                   <tbody>
                     {blogs.map((blog) => (
                       <tr key={blog.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background-color var(--transition-fast)' }} className="table-row-hover">
+                        <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                          <div style={{ width: '48px', height: '48px', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+                            {blog.image_url ? (
+                              <img src={blog.image_url.startsWith('http') ? blog.image_url : `${ACTIVE_API_BASE}${blog.image_url}`} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            ) : (
+                              <ImageIcon size={18} style={{ color: 'var(--text-muted)' }} />
+                            )}
+                          </div>
+                        </td>
                         <td style={{ padding: '16px', fontWeight: 600, color: 'var(--text-primary)', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {blog.title}
                         </td>
@@ -2408,6 +2758,7 @@ const ALL_DEFAULT_MODULES = [
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14.5px' }}>
                   <thead>
                     <tr style={{ borderBottom: '2px solid var(--border-color)', color: 'var(--text-primary)' }}>
+                      <th style={{ textAlign: 'center', padding: '12px 16px', fontWeight: 700, width: '70px' }}>Banner</th>
                       <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Icon</th>
                       <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>Title</th>
                       <th style={{ textAlign: 'left', padding: '12px 16px', fontWeight: 700 }}>URL Path Slug</th>
@@ -2419,8 +2770,18 @@ const ALL_DEFAULT_MODULES = [
                   <tbody>
                     {services.map((srv) => {
                       const SrvIcon = Icons[srv.icon_name] || Icons.Globe;
+                      const bannerUrl = srv.banner_image_url || srv.banner;
                       return (
                         <tr key={srv.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background-color var(--transition-fast)' }} className="table-row-hover">
+                          <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                            <div style={{ width: '48px', height: '36px', borderRadius: '6px', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+                              {bannerUrl ? (
+                                <img src={bannerUrl.startsWith('http') ? bannerUrl : `${ACTIVE_API_BASE}${bannerUrl}`} alt={srv.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              ) : (
+                                <ImageIcon size={16} style={{ color: 'var(--text-muted)' }} />
+                              )}
+                            </div>
+                          </td>
                           <td style={{ padding: '16px', color: 'var(--primary)' }}>
                             <div style={{ display: 'inline-flex', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--primary-light)', alignItems: 'center', justifyContent: 'center' }}>
                               <SrvIcon size={18} />
@@ -2582,12 +2943,12 @@ const ALL_DEFAULT_MODULES = [
         )}
 
         {/* -------------------- UNIVERSAL CMS PAGES -------------------- */}
-        {['solutions', 'portfolio', 'case_studies', 'pricing', 'careers', 'testimonials'].includes(activeTab) && (
+        {['solutions', 'portfolio', 'case_studies', 'case_study_details', 'educational_institutes', 'pricing', 'careers', 'testimonials'].includes(activeTab) && (
           <div className="card-glass" style={{ padding: '30px', textAlign: 'left' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '20px' }}>
               <div>
                 <h3 style={{ fontSize: '20px', fontWeight: 800, textTransform: 'capitalize' }}>
-                  {activeTab.replace('_', ' ')} CMS Editor
+                  {activeTab.replace(/_/g, ' ')} CMS Editor
                 </h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', marginTop: '4px' }}>
                   Manage the dynamic records that display on the public website {activeTab} section.
@@ -2648,11 +3009,58 @@ const ALL_DEFAULT_MODULES = [
 
                       {activeTab === 'case_studies' && (
                         <div>
+                          {(item.logo || item.image || item.clientLogo) && (
+                            <div style={{ height: '90px', borderRadius: '6px', overflow: 'hidden', marginBottom: '10px', border: '1px solid var(--border-color)', backgroundColor: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px' }}>
+                              <img src={(item.logo || item.image || item.clientLogo).startsWith('http') ? (item.logo || item.image || item.clientLogo) : `${ACTIVE_API_BASE}${(item.logo || item.image || item.clientLogo)}`} alt={item.title || item.client} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                            </div>
+                          )}
                           <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: 'var(--primary-light)', color: 'var(--primary)', padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase' }}>
                             {item.client}
                           </span>
                           <h4 style={{ fontSize: '18px', fontWeight: 700, marginTop: '8px', marginBottom: '8px' }}>{item.title}</h4>
                           <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.4 }}>{item.challenge?.substring(0, 100)}...</p>
+                        </div>
+                      )}
+
+                      {activeTab === 'case_study_details' && (
+                        <div>
+                          {(item.logo || item.image || item.heroImage) && (
+                            <div style={{ height: '90px', borderRadius: '6px', overflow: 'hidden', marginBottom: '10px', border: '1px solid var(--border-color)', backgroundColor: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px' }}>
+                              <img src={(item.logo || item.image || item.heroImage).startsWith('http') ? (item.logo || item.image || item.heroImage) : `${ACTIVE_API_BASE}${(item.logo || item.image || item.heroImage)}`} alt={item.name || item.title} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                            </div>
+                          )}
+                          <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: 'var(--primary-light)', color: 'var(--primary)', padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase' }}>
+                            {item.category || 'Education'} • {item.location || 'Maharashtra'}
+                          </span>
+                          <h4 style={{ fontSize: '18px', fontWeight: 700, marginTop: '8px', marginBottom: '4px' }}>{item.name || item.title}</h4>
+                          <span style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 600, display: 'block', marginBottom: '6px' }}>{item.tagline}</span>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.4 }}>{item.subHeadline || item.challenge?.substring(0, 100)}</p>
+                        </div>
+                      )}
+
+                      {activeTab === 'educational_institutes' && (
+                        <div>
+                          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
+                            {item.logo && (
+                              <img 
+                                src={item.logo.startsWith('http') || item.logo.startsWith('/') ? item.logo : `${ACTIVE_API_BASE}${item.logo}`} 
+                                alt={item.title} 
+                                style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'contain', border: '1px solid var(--border-color)', backgroundColor: '#fff', padding: '2px' }} 
+                              />
+                            )}
+                            <div>
+                              <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', padding: '2px 8px', borderRadius: '4px' }}>
+                                Sector ID: {item.id}
+                              </span>
+                            </div>
+                          </div>
+                          {item.image && (
+                            <div style={{ height: '120px', borderRadius: '6px', overflow: 'hidden', marginBottom: '10px', border: '1px solid var(--border-color)' }}>
+                              <img src={item.image.startsWith('http') || item.image.startsWith('/') ? item.image : `${ACTIVE_API_BASE}${item.image}`} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                          )}
+                          <h4 style={{ fontSize: '18px', fontWeight: 700, marginTop: '4px', marginBottom: '4px' }}>{item.title}</h4>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '13px', lineHeight: 1.4 }}>{item.desc}</p>
                         </div>
                       )}
 
@@ -4934,13 +5342,28 @@ const ALL_DEFAULT_MODULES = [
                     </div>
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Avatar / Photo URL</label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', margin: 0 }}>Avatar / Photo URL</label>
+                      <label style={{ fontSize: '11px', color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Upload size={12} /> {uploadingImage ? 'Uploading...' : 'Browse File...'}
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          style={{ display: 'none' }} 
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              uploadImageFile(e.target.files[0], (url) => setPageItemData(prev => ({ ...prev, photo: url })));
+                            }
+                          }} 
+                        />
+                      </label>
+                    </div>
                     <input 
                       type="text" 
                       value={pageItemData.photo || ''} 
                       onChange={(e) => setPageItemData({ ...pageItemData, photo: e.target.value })} 
                       className="form-control" 
-                      placeholder="e.g. https://images.unsplash.com/... or /uploads/avatar.jpg (User display profile photo)"
+                      placeholder="e.g. Upload photo file above or paste web URL..."
                     />
                   </div>
                   <div>
@@ -4952,6 +5375,176 @@ const ALL_DEFAULT_MODULES = [
                       style={{ minHeight: '80px' }}
                       placeholder="Enter the detailed review/quote testimonial text from the customer client..."
                       required 
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* case_study_details */}
+              {activeTab === 'case_study_details' && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '15px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Institution Name *</label>
+                      <input 
+                        type="text" 
+                        value={pageItemData.name || pageItemData.title || ''} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, name: e.target.value, title: e.target.value })} 
+                        className="form-control" 
+                        placeholder="e.g. PODDAR BRIO SCHOOL"
+                        required 
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>URL Slug *</label>
+                      <input 
+                        type="text" 
+                        value={pageItemData.slug || ''} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, slug: e.target.value })} 
+                        className="form-control" 
+                        placeholder="e.g. poddar-brio-school"
+                        required 
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Category *</label>
+                      <input 
+                        type="text" 
+                        value={pageItemData.category || 'Education'} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, category: e.target.value })} 
+                        className="form-control" 
+                        placeholder="e.g. Education / Higher Education / Preschool"
+                        required 
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Location *</label>
+                      <input 
+                        type="text" 
+                        value={pageItemData.location || ''} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, location: e.target.value })} 
+                        className="form-control" 
+                        placeholder="e.g. Badlapur, Maharashtra"
+                        required 
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Tagline Headline *</label>
+                    <input 
+                      type="text" 
+                      value={pageItemData.tagline || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, tagline: e.target.value })} 
+                      className="form-control" 
+                      placeholder="e.g. Developing a Truly Holistic Learning Brand"
+                      required 
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Sub-Headline Summary</label>
+                    <textarea 
+                      value={pageItemData.subHeadline || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, subHeadline: e.target.value })} 
+                      className="form-control" 
+                      style={{ minHeight: '60px' }}
+                      placeholder="Short description summary appearing under callout header..."
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Challenge Statement *</label>
+                    <textarea 
+                      value={pageItemData.challenge || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, challenge: e.target.value })} 
+                      className="form-control" 
+                      style={{ minHeight: '60px' }}
+                      placeholder="Main operational or admission marketing challenge faced..."
+                      required 
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Solution Implemented *</label>
+                    <textarea 
+                      value={pageItemData.solution || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, solution: e.target.value })} 
+                      className="form-control" 
+                      style={{ minHeight: '60px' }}
+                      placeholder="Digital strategy, dedicated campus coordinator, and ad funnels deployed..."
+                      required 
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* educational_institutes */}
+              {activeTab === 'educational_institutes' && (
+                <>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Sector ID *</label>
+                      <input 
+                        type="text" 
+                        value={pageItemData.id || ''} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, id: e.target.value })} 
+                        className="form-control" 
+                        placeholder="e.g. preschools / primary-secondary / international / coaching / engineering"
+                        required 
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Sector Title *</label>
+                      <input 
+                        type="text" 
+                        value={pageItemData.title || ''} 
+                        onChange={(e) => setPageItemData({ ...pageItemData, title: e.target.value })} 
+                        className="form-control" 
+                        placeholder="e.g. Preschools & Daycare Centers"
+                        required 
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-muted)' }}>Description *</label>
+                    <textarea 
+                      value={pageItemData.desc || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, desc: e.target.value })} 
+                      className="form-control" 
+                      style={{ minHeight: '60px' }}
+                      placeholder="Overview description of digital marketing strategy for this sector..."
+                      required 
+                    />
+                  </div>
+
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                      <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', margin: 0 }}>Header Image / Logo URL</label>
+                      <label style={{ fontSize: '11px', color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Upload size={12} /> {uploadingImage ? 'Uploading...' : 'Browse File...'}
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          style={{ display: 'none' }} 
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              uploadImageFile(e.target.files[0], (url) => setPageItemData(prev => ({ ...prev, image: url, logo: url })));
+                            }
+                          }} 
+                        />
+                      </label>
+                    </div>
+                    <input 
+                      type="text" 
+                      value={pageItemData.image || pageItemData.logo || ''} 
+                      onChange={(e) => setPageItemData({ ...pageItemData, image: e.target.value, logo: e.target.value })} 
+                      className="form-control" 
+                      placeholder="Upload file above or paste image URL..."
                     />
                   </div>
                 </>

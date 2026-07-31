@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Shield, Zap, Globe, Server, Award, ChevronDown, ChevronUp, AlertCircle, Users, HardDrive } from 'lucide-react';
 import SEOMeta from '../../components/SEOMeta';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import pricingHeroBg from '../../assets/hero_bg/pricing_hero_art.svg';
+import pricingHeroBg from '../../assets/hero_bg/pricing_hero_clean.png';
 
 const SharedHosting = () => {
   const [openFaq, setOpenFaq] = useState(null);

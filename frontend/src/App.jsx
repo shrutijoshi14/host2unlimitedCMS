@@ -8,6 +8,7 @@ import Services from './pages/Services';
 import Solutions from './pages/Solutions';
 import Portfolio from './pages/Portfolio';
 import CaseStudies from './pages/CaseStudies';
+import CaseStudyDetail from './pages/CaseStudyDetail';
 import Pricing from './pages/Pricing';
 import Blog from './pages/Blog';
 import About from './pages/About';
@@ -84,7 +85,7 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+    const apiBase = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
     const fetchSettings = async () => {
       try {
         const response = await fetch(`${apiBase}/api/pages/website_settings`);
@@ -113,7 +114,7 @@ function AppContent() {
   useEffect(() => {
     const applySEO = async () => {
       try {
-        const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+        const apiBase = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
         const response = await fetch(`${apiBase}/api/pages/seo`);
         if (response.ok) {
           const seoData = await response.json();
@@ -197,7 +198,9 @@ function AppContent() {
 
   // Server-Sent Events subscriber for real-time updates across all open browsers without refresh
   useEffect(() => {
-    const apiBase = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+    const apiBase = process.env.NODE_ENV === 'production'
+      ? (window.location.origin.includes('localhost') ? 'http://localhost:5000' : 'https://host2unlimitedcms-backend.onrender.com')
+      : 'http://localhost:5000';
     
     let eventSource = null;
     let reconnectTimer = null;
@@ -339,6 +342,33 @@ function AppContent() {
               <Route path="/solutions" element={<AnimatedPage><Solutions /></AnimatedPage>} />
               <Route path="/portfolio" element={<AnimatedPage><Portfolio /></AnimatedPage>} />
               <Route path="/case-studies" element={<AnimatedPage><CaseStudies /></AnimatedPage>} />
+              <Route path="/case-studies/:id" element={<AnimatedPage><CaseStudyDetail /></AnimatedPage>} />
+
+              {/* Direct Case Study Landing Page Routes */}
+              <Route path="/poddar-brio-school" element={<AnimatedPage><CaseStudyDetail defaultId="5" /></AnimatedPage>} />
+              <Route path="/poddar-brio-school/*" element={<AnimatedPage><CaseStudyDetail defaultId="5" /></AnimatedPage>} />
+              <Route path="/dr-pillai-global-academy-panvel" element={<AnimatedPage><CaseStudyDetail defaultId="7" /></AnimatedPage>} />
+              <Route path="/dr-pillai-global-academy-panvel/*" element={<AnimatedPage><CaseStudyDetail defaultId="7" /></AnimatedPage>} />
+              <Route path="/royal-international-cbse-school" element={<AnimatedPage><CaseStudyDetail defaultId="9" /></AnimatedPage>} />
+              <Route path="/royal-international-cbse-school/*" element={<AnimatedPage><CaseStudyDetail defaultId="9" /></AnimatedPage>} />
+              <Route path="/armiet-engineering-and-mgmt-college" element={<AnimatedPage><CaseStudyDetail defaultId="10" /></AnimatedPage>} />
+              <Route path="/armiet-engineering-and-mgmt-college/*" element={<AnimatedPage><CaseStudyDetail defaultId="10" /></AnimatedPage>} />
+              <Route path="/gautam-singhania-global-school-dombiali" element={<AnimatedPage><CaseStudyDetail defaultId="13" /></AnimatedPage>} />
+              <Route path="/gautam-singhania-global-school-dombiali/*" element={<AnimatedPage><CaseStudyDetail defaultId="13" /></AnimatedPage>} />
+              <Route path="/poddar-brio-kids" element={<AnimatedPage><CaseStudyDetail defaultId="14" /></AnimatedPage>} />
+              <Route path="/poddar-brio-kids/*" element={<AnimatedPage><CaseStudyDetail defaultId="14" /></AnimatedPage>} />
+              <Route path="/dg-international-cbse-school" element={<AnimatedPage><CaseStudyDetail defaultId="15" /></AnimatedPage>} />
+              <Route path="/dg-international-cbse-school/*" element={<AnimatedPage><CaseStudyDetail defaultId="15" /></AnimatedPage>} />
+              <Route path="/shivajirao-s-jondhle-college-of-engineering-technology" element={<AnimatedPage><CaseStudyDetail defaultId="16" /></AnimatedPage>} />
+              <Route path="/shivajirao-s-jondhle-college-of-engineering-technology/*" element={<AnimatedPage><CaseStudyDetail defaultId="16" /></AnimatedPage>} />
+              <Route path="/uudaan-montessori" element={<AnimatedPage><CaseStudyDetail defaultId="19" /></AnimatedPage>} />
+              <Route path="/uudaan-montessori/*" element={<AnimatedPage><CaseStudyDetail defaultId="19" /></AnimatedPage>} />
+              <Route path="/dr-shivajirao-s-jondhle-international-school" element={<AnimatedPage><CaseStudyDetail defaultId="20" /></AnimatedPage>} />
+              <Route path="/dr-shivajirao-s-jondhle-international-school/*" element={<AnimatedPage><CaseStudyDetail defaultId="20" /></AnimatedPage>} />
+              <Route path="/ardent-tutorials" element={<AnimatedPage><CaseStudyDetail defaultId="22" /></AnimatedPage>} />
+              <Route path="/ardent-tutorials/*" element={<AnimatedPage><CaseStudyDetail defaultId="22" /></AnimatedPage>} />
+              <Route path="/royal-junior-degree-college" element={<AnimatedPage><CaseStudyDetail defaultId="23" /></AnimatedPage>} />
+              <Route path="/royal-junior-degree-college/*" element={<AnimatedPage><CaseStudyDetail defaultId="23" /></AnimatedPage>} />
               <Route path="/pricing" element={<AnimatedPage><Pricing /></AnimatedPage>} />
               <Route path="/blog" element={<AnimatedPage><Blog /></AnimatedPage>} />
               <Route path="/blog/:slug" element={<AnimatedPage><BlogPost /></AnimatedPage>} />
@@ -347,6 +377,16 @@ function AppContent() {
               <Route path="/careers" element={<AnimatedPage><Careers /></AnimatedPage>} />
               <Route path="/educational-institutes" element={<AnimatedPage><EducationalInstitutes /></AnimatedPage>} />
               <Route path="/educational-institutes/:id" element={<AnimatedPage><EducationalInstituteDetail /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-preschools" element={<AnimatedPage><EducationalInstituteDetail defaultId="preschools" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-primary-secondary-schools" element={<AnimatedPage><EducationalInstituteDetail defaultId="primary-secondary" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-international-schools-cbse-icse-ib" element={<AnimatedPage><EducationalInstituteDetail defaultId="international" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-private-coaching-institutions" element={<AnimatedPage><EducationalInstituteDetail defaultId="coaching" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-private-coaching-institutions/*" element={<AnimatedPage><EducationalInstituteDetail defaultId="coaching" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-private-coaching-institutes" element={<AnimatedPage><EducationalInstituteDetail defaultId="coaching" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-private-coaching-institutes/*" element={<AnimatedPage><EducationalInstituteDetail defaultId="coaching" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-junior-and-degree-colleges" element={<AnimatedPage><EducationalInstituteDetail defaultId="colleges" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-institutes-of-engineering-management-studies" element={<AnimatedPage><EducationalInstituteDetail defaultId="engineering" /></AnimatedPage>} />
+              <Route path="/digital-marketing-partner-for-public-private-deemed-universities" element={<AnimatedPage><EducationalInstituteDetail defaultId="universities" /></AnimatedPage>} />
               <Route path="/admin" element={<AnimatedPage><AdminDashboard /></AnimatedPage>} />
             </Routes>
           </AnimatePresence>

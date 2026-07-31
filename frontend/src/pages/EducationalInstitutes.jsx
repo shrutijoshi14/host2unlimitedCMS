@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLeads } from '../context/LeadContext';
@@ -8,56 +8,88 @@ import {
 } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import educationalHeroBg from '../assets/hero_bg/educational_hero_art.svg';
+import educationalHeroBg from '../assets/hero_bg/educational_hero_clean.png';
+import schoolBuildingHero from '../assets/school_building_clean.png';
+import universityHero from '../assets/university_hero_clean.png';
+import campusHero from '../assets/campus_hero_clean.png';
+import managementCollegeHero from '../assets/management_college_clean.png';
+import preschoolHero from '../assets/preschool_hero_clean.png';
+import internationalSchoolCampus from '../assets/international_school_campus.png';
+import coachingClassroom from '../assets/coaching_classroom_learning.png';
+
+import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
+import newHorizonLogo from '../assets/h2u logos/New-Horizon-logo.png';
+import dnyanGangaLogo from '../assets/h2u logos/DNYAN_GANGA_EDUCATION_TRUST_S-removebg-preview-e1750267686501 (1).webp';
+import ardentLogo from '../assets/h2u logos/ardent_tutorials_thane.png';
+import somaiyaLogo from '../assets/h2u logos/somaiya_college.png';
+import armietLogo from '../assets/h2u logos/armiet_logo.jpeg';
+import pillaiLogo from '../assets/h2u logos/dr-pillai-global-academy.png';
+import gsgsLogo from '../assets/h2u logos/GSGS-logo@4x (1).png';
 
 const sectors = [
   {
     id: 'preschools',
     icon: Baby,
     title: 'Preschools & Daycare Centers',
-    desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.'
+    desc: 'Enrolments ensured with highly effective custom digital campaigns, driving engagement.',
+    image: preschoolHero,
+    logo: euroKidsLogo
   },
   {
     id: 'primary-secondary',
     icon: BookOpen,
     title: 'Primary & Secondary Schools',
-    desc: 'Reputation built with impactful stories and updates — engage your audience with content.'
+    desc: 'Reputation built with impactful stories and updates — engage your audience with content.',
+    image: schoolBuildingHero,
+    logo: newHorizonLogo
   },
   {
     id: 'international',
     icon: Globe,
     title: 'International Schools (CBSE / ICSE / IB)',
-    desc: 'Boost student engagement by highlighting academic excellence and achievements.'
+    desc: 'Boost student engagement by highlighting academic excellence and achievements.',
+    image: internationalSchoolCampus,
+    logo: dnyanGangaLogo
   },
   {
     id: 'coaching',
     icon: GraduationCap,
     title: 'Private Coaching Institutions',
-    desc: 'Promote innovative and personalized coaching methods, proven results, and approach.'
+    desc: 'Promote innovative and personalized coaching methods, proven results, and approach.',
+    image: coachingClassroom,
+    logo: ardentLogo
   },
   {
     id: 'colleges',
     icon: School,
     title: 'Junior and Degree Colleges',
-    desc: 'Empowering students at Junior and Degree Colleges to achieve academic excellence.'
+    desc: 'Empowering students at Junior and Degree Colleges to achieve academic excellence.',
+    image: campusHero,
+    logo: somaiyaLogo
   },
   {
     id: 'engineering',
     icon: Cpu,
     title: 'Institutes of Engineering & Technology',
-    desc: 'Future engineers with innovative learning and hands-on experience.'
+    desc: 'Future engineers with innovative learning and hands-on experience.',
+    image: universityHero,
+    logo: armietLogo
   },
   {
     id: 'management',
     icon: Briefcase,
     title: 'Institutes of Management Studies',
-    desc: 'Future leaders with practical knowledge, strategic thinking, and a global perspective.'
+    desc: 'Future leaders with practical knowledge, strategic thinking, and a global perspective.',
+    image: managementCollegeHero,
+    logo: pillaiLogo
   },
   {
     id: 'universities',
     icon: Award,
     title: 'Public / Private / Deemed Universities',
-    desc: 'Private educational institutions striving continuously to attract the right students.'
+    desc: 'Private educational institutions striving continuously to attract the right students.',
+    image: universityHero,
+    logo: gsgsLogo
   }
 ];
 
@@ -129,6 +161,7 @@ const faqs = [
 
 const EducationalInstitutes = () => {
   const { addLead } = useLeads();
+  const [sectorList, setSectorList] = useState(sectors);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -139,6 +172,38 @@ const EducationalInstitutes = () => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchInstitutes = async () => {
+      try {
+        const CURRENT_API_BASE = process.env.NODE_ENV === 'production'
+          ? (window.location.origin.includes('localhost') ? 'http://localhost:5000' : 'https://host2unlimitedcms-backend.onrender.com')
+          : 'http://localhost:5000';
+        const response = await fetch(`${CURRENT_API_BASE}/api/pages/educational_institutes`);
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0 && isMounted) {
+            // Merge with local icons
+            const merged = data.map(item => {
+              const def = sectors.find(s => s.id === item.id);
+              return {
+                ...item,
+                icon: def?.icon || GraduationCap,
+                image: item.image || def?.image || educationalHeroBg,
+                logo: item.logo || def?.logo || euroKidsLogo
+              };
+            });
+            setSectorList(merged);
+          }
+        }
+      } catch (err) {
+        console.warn('Backend fetch for educational_institutes fallback to static:', err.message);
+      }
+    };
+    fetchInstitutes();
+    return () => { isMounted = false; };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,11 +231,10 @@ const EducationalInstitutes = () => {
   const breadcrumbs = [{ name: 'Educational Institutes', path: '/educational-institutes' }];
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
-        title="Educational Institutes Digital Marketing Partner | Host2Unlimited"
-        description="We partner with Preschools, Schools, Junior Colleges, and Universities across Maharashtra to boost admissions and build a magnificent online brand presence."
-        keywords="educational marketing, school branding, digital partner schools, junior college lead generation"
+        title="Educational Institutes Digital Marketing & Growth Partner | Host2Unlimited"
+        description="Empowering schools, junior colleges, degree colleges, engineering institutes, management institutes, and universities across Maharashtra."
         canonical="https://host2unlimited.com/educational-institutes"
         breadcrumbPaths={breadcrumbs}
       />
@@ -178,25 +242,25 @@ const EducationalInstitutes = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ 
+          position: 'relative', 
+          height: '210px', 
+          minHeight: '210px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          overflow: 'hidden', 
+          backgroundColor: '#0b0f19'
+        }}
       >
         <img 
           src={educationalHeroBg} 
           alt="Educational Institutes Hero Background" 
-          style={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover', 
-            objectPosition: 'center center',
-            zIndex: 1, 
-            pointerEvents: 'none' 
-          }} 
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1, pointerEvents: 'none' }}
         />
-        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          <div style={{ maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>
@@ -215,181 +279,141 @@ const EducationalInstitutes = () => {
         </div>
 
         {/* Sectors Index Directory Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '60px' }}>
-          {sectors.map((sector, idx) => {
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px', marginBottom: '60px' }}>
+          {sectorList.map((sector, idx) => {
             const Icon = sector.icon;
             return (
               <Link
                 key={idx}
                 to={`/educational-institutes/${sector.id}`}
-                className="card-glass"
                 style={{ 
                   textAlign: 'left', 
-                  border: '1px solid var(--glass-border)', 
-                  padding: '24px', 
+                  border: '1px solid rgba(255, 255, 255, 0.12)', 
+                  backgroundColor: 'var(--bg-secondary)',
+                  borderRadius: '20px',
+                  overflow: 'hidden',
                   cursor: 'pointer', 
-                  transition: 'all 0.3s ease',
-                  display: 'block',
-                  textDecoration: 'none'
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  textDecoration: 'none',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)'
                 }}
               >
-                <div className="card-icon-container" style={{ width: '40px', height: '40px', borderRadius: '10px', marginBottom: '16px' }}>
-                  <Icon size={20} />
+                {/* Top Photographic Campus Image Header */}
+                {sector.image && (
+                  <div style={{ width: '100%', height: '170px', overflow: 'hidden', position: 'relative' }}>
+                    <img 
+                      src={sector.image} 
+                      alt={sector.title} 
+                      loading="lazy"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(11, 15, 25, 0.9) 0%, rgba(11, 15, 25, 0.1) 60%, transparent 100%)'
+                    }} />
+                    
+                    {/* Floating Brand Logo Box Badge */}
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '12px',
+                      right: '14px',
+                      backgroundColor: '#ffffff',
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '6px',
+                      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.45)',
+                      border: '2px solid rgba(255, 255, 255, 0.95)',
+                      zIndex: 2
+                    }}>
+                      {sector.logo ? (
+                        <img 
+                          src={sector.logo} 
+                          alt={sector.title} 
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+                        />
+                      ) : (
+                        <Icon size={24} color="#0284c7" />
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Card Body Content */}
+                <div style={{ padding: '22px 24px 24px 24px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', gap: '14px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '8px', color: 'var(--text-primary)', textAlign: 'left', lineHeight: 1.35 }}>
+                      {sector.title}
+                    </h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: 1.6, marginBottom: 0, textAlign: 'left' }}>
+                      {sector.desc}
+                    </p>
+                  </div>
+
+                  <div 
+                    className="btn btn-primary"
+                    style={{ 
+                      marginTop: '8px', 
+                      padding: '10px 18px', 
+                      fontSize: '13.5px', 
+                      fontWeight: 700, 
+                      borderRadius: '10px', 
+                      textAlign: 'center',
+                      width: '100%',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)'
+                    }}
+                  >
+                    View Custom Strategy
+                  </div>
                 </div>
-                <h3 style={{ fontSize: '15.5px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)', textAlign: 'left' }}>{sector.title}</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '12.5px', lineHeight: 1.4, marginBottom: 0, textAlign: 'left' }}>{sector.desc}</p>
               </Link>
             );
           })}
         </div>
 
-        {/* Form and FAQ Section Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '50px', marginBottom: '80px', textAlign: 'left' }} className="form-faq-grid">
-          
-          {/* FAQ block */}
-          <div>
-            <h2 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '24px' }}>Frequently Asked Questions</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {faqs.map((faq, idx) => (
-                <div 
-                  key={idx} 
-                  className="card-glass" 
-                  style={{ padding: '16px 20px', cursor: 'pointer', transition: 'all var(--transition-fast)' }}
-                  onClick={() => toggleFaq(idx)}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h4 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>{faq.q}</h4>
-                    {openFaq === idx ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                  </div>
-                  {openFaq === idx && (
-                    <p style={{ marginTop: '12px', fontSize: '14px', color: 'var(--text-secondary)', borderTop: '1px solid var(--border-color)', paddingTop: '12px', lineHeight: 1.5 }}>
-                      {faq.a}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Training Course Enquiry Form */}
-          <div className="card-glass" style={{ alignSelf: 'start' }}>
-            <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>Start Your Digital Journey</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', marginBottom: '24px' }}>
-              Submit an enquiry to launch admissions marketing campaigns or register for our professional training program.
-            </p>
-
-            {submitted ? (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={{ textAlign: 'center', padding: '30px 0' }}
+        {/* FAQ Section */}
+        <div style={{ maxWidth: '850px', margin: '0 auto 80px auto', textAlign: 'left' }}>
+          <h2 style={{ fontSize: '28px', fontWeight: 800, marginBottom: '24px', textAlign: 'center' }}>Frequently Asked Questions</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {faqs.map((faq, idx) => (
+              <div 
+                key={idx} 
+                className="card-glass" 
+                style={{ padding: '16px 20px', cursor: 'pointer', transition: 'all var(--transition-fast)' }}
+                onClick={() => toggleFaq(idx)}
               >
-                <div style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10b981', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                  <CheckCircle2 size={28} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>{faq.q}</h4>
+                  {openFaq === idx ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </div>
-                <h4 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>Enquiry Dispatched!</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
-                  Thank you for connecting. Our academic coordinator will contact you shortly.
-                </p>
-                <button onClick={() => setSubmitted(false)} className="btn btn-secondary" style={{ width: '100%' }}>
-                  Submit Another Inquiry
-                </button>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Full Name *</label>
-                  <input 
-                    type="text" 
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="Enter your name..."
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Email Address *</label>
-                  <input 
-                    type="email" 
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="Enter your email..."
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Phone Number *</label>
-                  <input 
-                    type="tel" 
-                    name="phone"
-                    required
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="Enter phone number..."
-                  />
-                </div>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }} className="form-row-2">
-                  <div>
-                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Select Program</label>
-                    <select 
-                      name="program"
-                      value={formData.program}
-                      onChange={handleChange}
-                      className="form-control"
-                      style={{ height: '40px' }}
-                    >
-                      <option value="6-Month Program">6-Month Program</option>
-                      <option value="3-Month Program">3-Month Program</option>
-                      <option value="Admission Marketing Enquiry">Admissions Enquiry</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Last Qualification</label>
-                    <select 
-                      name="qualification"
-                      value={formData.qualification}
-                      onChange={handleChange}
-                      className="form-control"
-                      style={{ height: '40px' }}
-                    >
-                      <option value="10th">10th</option>
-                      <option value="12th">12th</option>
-                      <option value="Graduation">Graduation</option>
-                      <option value="Master">Master</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ marginBottom: '8px' }}>
-                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>Message / Requirements</label>
-                  <textarea 
-                    name="details"
-                    value={formData.details}
-                    onChange={handleChange}
-                    className="form-control"
-                    placeholder="Describe your requirements or questions..."
-                    style={{ minHeight: '100px', padding: '12px' }}
-                  />
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="btn btn-primary"
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', marginTop: '10px' }}
-                >
-                  <Send size={14} /> Submit Inquiry
-                </button>
-              </form>
-            )}
+                {openFaq === idx && (
+                  <p style={{ marginTop: '12px', fontSize: '14px', color: 'var(--text-secondary)', borderTop: '1px solid var(--border-color)', paddingTop: '12px', lineHeight: 1.5 }}>
+                    {faq.a}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
 
+          <div className="card-glass" style={{ marginTop: '40px', padding: '30px', textAlign: 'center', backgroundColor: 'var(--bg-secondary)' }}>
+            <h3 style={{ fontSize: '22px', fontWeight: 700, marginBottom: '10px' }}>Ready to Scale Your Institute's Admissions?</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '20px' }}>
+              Connect with our specialized education marketing team today to receive a tailored digital roadmap.
+            </p>
+            <Link to="/contact" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 28px' }}>
+              Contact Our Team <Send size={16} />
+            </Link>
+          </div>
         </div>
 
       </div>

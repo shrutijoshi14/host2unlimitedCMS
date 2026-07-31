@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { Building2, GraduationCap, Scale, Stethoscope, ShoppingBag, Globe, ArrowRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_art.svg';
+import caseStudiesHeroBg from '../assets/hero_bg/case_studies_hero_clean.png';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 // ── Logo images ──────────────────────────────────────────────
 import newHorizonPanvel from '../assets/h2u logos/new-horizon-public-school-panvel.png';
@@ -32,302 +32,371 @@ import rnpLogo from '../assets/h2u logos/RNP_Logo-1.webp';
 import skytechLogo from '../assets/h2u logos/skytech-logo.png';
 import lotusLogo from '../assets/h2u logos/lotusleafentertainment-logo.png';
 import verticesLogo from '../assets/h2u logos/Vertices-Partners_logo (1).svg';
+import euroKidsLogo from '../assets/h2u logos/euro_kids.jpeg';
+import newHorizonLogo from '../assets/h2u logos/New-Horizon-logo.png';
 
 // ── Detailed clients with description and target link ──────────────────────────
 const detailedClients = [
   {
     id: 1,
-    name: 'PODDAR BRIO SCHOOL',
+    name: 'NEW HORIZON PUBLIC SCHOOL, PANVEL',
+    logo: newHorizonPanvel,
     category: 'Education',
     icon: GraduationCap,
-    color: '#2563eb',
-    link: '/educational-institutes/international',
-    description: 'PODDAR BRIO International School is a leading CBSE educational institution in Badlapur that provides schooling from kindergarten to higher secondary levels. The school emphasizes academic excellence blended with global teaching standards and Indian cultural values. It focuses on digital learning, co-curricular growth.'
+    color: '#0284c7',
+    description: 'New Horizon Public School, Panvel is a premier CBSE institution dedicated to academic excellence, innovation, and holistic student growth. Equipped with modern digital classrooms and state-of-the-art facilities.'
   },
   {
     id: 2,
+    name: 'NEW HORIZON INTERNATIONAL SCHOOL, RODAS',
+    logo: newHorizonRodasInt,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#7c3aed',
+    description: 'New Horizon International School, Rodas delivers world-class international education, combining global curricula with strong value systems and advanced digital learning environments.'
+  },
+  {
+    id: 3,
+    name: 'RAMSHETH THAKUR PUBLIC SCHOOL, ULWE',
+    logo: ulweLogo,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#059669',
+    description: 'Ramsheth Thakur Public School, Ulwe is a leading educational landmark in Navi Mumbai, offering excellent academic programs, sports infrastructure, and comprehensive co-curricular activities.'
+  },
+  {
+    id: 4,
+    name: 'NEW HORIZON SCHOLARS SCHOOL, KAVESAR, THANE',
+    logo: newHorizonKavesar,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#2563eb',
+    description: 'New Horizon Scholars School, Kavesar, Thane provides top-tier education with emphasis on STEM learning, creative arts, leadership development, and digital parent-teacher engagement.'
+  },
+  {
+    id: 5,
+    slug: 'poddar-brio-school',
+    name: 'PODDAR BRIO SCHOOL',
+    logo: euroKidsLogo,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#2563eb',
+    description: 'PODDAR BRIO International School is a leading CBSE educational institution in Badlapur that provides schooling from kindergarten to higher secondary levels. The school emphasizes academic excellence blended with global teaching standards and Indian cultural values. It focuses on digital learning, co-curricular growth.'
+  },
+  {
+    id: 6,
+    name: 'NEW HORIZON SCHOLARS SCHOOL, AIROLI (SECTOR 13)',
+    logo: newHorizonAiroli13,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#d97706',
+    description: 'New Horizon Scholars School, Airoli (Sector 13) empowers young minds through quality CBSE education, interactive digital teaching methods, and outstanding co-curricular opportunities.'
+  },
+  {
+    id: 7,
+    slug: 'dr-pillai-global-academy-panvel',
     name: 'DR. PILLAI GLOBAL ACADEMY PANVEL',
     logo: drPillaiLogo,
     category: 'Education',
     icon: GraduationCap,
     color: '#7c3aed',
-    link: '/educational-institutes/international',
     description: 'The Dr. Pillai Global Academy Panvel is a well-planned initiative from the Mahatma Education Society, a trust committed to provide meaningful education with tangible results. It is the brainchild and the enterprise of Dr. K. M. Vasudevan Pillai, an educator with 40 years experience.'
   },
   {
-    id: 3,
+    id: 8,
+    name: 'NEW HORIZON PUBLIC SCHOOL, AIROLI (SECTOR 3)',
+    logo: newHorizonAiroli3,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#0891b2',
+    description: 'New Horizon Public School, Airoli (Sector 3) is a distinguished CBSE school known for producing top academic rankers, sports champions, and well-rounded global citizens.'
+  },
+  {
+    id: 9,
+    slug: 'royal-international-cbse-school',
     name: 'ROYAL INTERNATIONAL CBSE SCHOOL',
+    logo: newHorizonLogo,
     category: 'Education',
     icon: GraduationCap,
     color: '#dc2626',
-    link: '/educational-institutes/international',
     description: 'At Royal International School, we believe in providing excellent learning with the best infrastructure and academic performance. Experience quality facilities and a superior study environment for your children\'s success!'
   },
   {
-    id: 4,
+    id: 10,
+    slug: 'armiet-engineering-and-mgmt-college',
     name: 'ARMIET ENGINEERING & MGMT COLLEGE',
     logo: armietLogo,
     category: 'Higher Education',
     icon: GraduationCap,
     color: '#059669',
-    link: '/educational-institutes/engineering',
     description: 'ARMIET (Alamuri Ratnamala Institute of Engineering and Technology) is a reputed engineering and management institute in Asangaon offering diploma, degree, and postgraduate programs. The college focuses on practical, industry-based learning, innovation, and overall student development. It is known for its advanced infrastructure, research-driven education.'
   },
   {
-    id: 5,
+    id: 11,
+    name: 'NEW HORIZON SCHOLARS SCHOOL, VASANT LAWNS',
+    logo: newHorizonVasant,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#4f46e5',
+    description: 'New Horizon Scholars School, Vasant Lawns offers an enriched educational journey with modern digital learning aids, sports complexes, and vibrant extracurricular programs.'
+  },
+  {
+    id: 12,
+    name: 'NEW HORIZON PUBLIC SCHOOL, AIROLI (SECTOR 19)',
+    logo: newHorizonAiroli19,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#0284c7',
+    description: 'New Horizon Public School, Airoli (Sector 19) is an established center of educational excellence, fostering critical thinking, sportsmanship, and moral values.'
+  },
+  {
+    id: 13,
+    slug: 'gautam-singhania-global-school-dombiali',
     name: 'GAUTAM SINGHANIA GLOBAL SCHOOL DOMBIVALI',
     logo: gsgsLogo,
     category: 'Education',
     icon: GraduationCap,
     color: '#d97706',
-    link: '/educational-institutes/international',
     description: 'Innovate & Thrive – A New Era of Education, transforming learning. Gautam Singhania Global School is a dynamic and inclusive learning community with a global perspective, dedicated to shaping future-ready individuals. We believe in nurturing lifelong learners who are not only academically strong but also socially responsible and emotionally intelligent.'
   },
   {
-    id: 6,
+    id: 14,
+    slug: 'poddar-brio-kids',
     name: 'PODDAR BRIO KIDS',
+    logo: euroKidsLogo,
     category: 'Preschool',
     icon: GraduationCap,
     color: '#ec4899',
-    link: '/educational-institutes/preschools',
     description: 'Poddar Brio Kids is a leading preschool chain offering a nurturing environment focused on early childhood development. The website is designed to engage parents through detailed program information, activity highlights, and an easy inquiry process. Built with a child-friendly visual theme and simplified navigation, it ensures accessibility and strong brand presence online.'
   },
   {
-    id: 7,
+    id: 15,
+    slug: 'dg-international-cbse-school',
     name: 'DG INTERNATIONAL CBSE SCHOOL',
+    logo: dnyanGangaLogo,
     category: 'Education',
     icon: GraduationCap,
     color: '#0891b2',
-    link: '/educational-institutes/international',
     description: 'DG International CBSE School is a leading educational institution in Thane that provides schooling from kindergarten to higher secondary levels. The school emphasizes academic excellence blended with global teaching standards and Indian cultural values. It focuses on digital learning, co-curricular growth, and strong parent–teacher communication.'
   },
   {
-    id: 8,
+    id: 16,
+    slug: 'shivajirao-s-jondhle-college-of-engineering-technology',
     name: 'SHIVAJIRAO S. JONDHLE COLLEGE OF ENGINEERING & TECHNOLOGY',
     category: 'Higher Education',
     icon: GraduationCap,
     color: '#7c3aed',
-    link: '/educational-institutes/engineering',
     description: 'Shivajirao S. Jondhle College of Engineering & Technology is a leading institution offering diploma, degree, and postgraduate programs in engineering and technology. The website highlights the institute\'s academic strength, departmental structure, and placement support through a technically robust layout integrated with Smart School MIS for online student and admission management.'
   },
   {
-    id: 9,
+    id: 17,
+    name: 'NEW HORIZON SCHOLARS SCHOOL RODAS, KOLSHET',
+    logo: newHorizonRodasKolshet,
+    category: 'Education',
+    icon: GraduationCap,
+    color: '#2563eb',
+    description: 'New Horizon Scholars School Rodas, Kolshet provides high-standard schooling with state-of-the-art facilities, experimental science labs, and holistic sports coaching.'
+  },
+  {
+    id: 18,
     name: 'PILLAI INSTITUTE PANVEL',
     logo: pillaiLogo,
     category: 'Higher Education',
     icon: GraduationCap,
     color: '#6d28d9',
-    link: '/educational-institutes/universities',
     description: 'At PIL, we facilitate immersive study abroad experiences, allowing you to fully embrace a new language and culture. Take your education beyond borders and create memories that will last a lifetime. Learning a foreign language enhances critical thinking, problem-solving, and creativity. We recognize the tremendous personal growth that language learning brings.'
   },
   {
-    id: 10,
+    id: 19,
+    slug: 'uudaan-montessori',
     name: 'UUDAAN MONTESSORI',
     logo: uudaanLogo,
     category: 'Preschool',
     icon: GraduationCap,
     color: '#f59e0b',
-    link: '/educational-institutes/preschools',
     description: 'Uudaan Montessori Preschool and Daycare, is headquartered at Thane, in the heart of the city, Mumbai; maintaining a high-quality learning atmosphere for Young-Minds for the age between 2 years to 6 years. Our core focus is on exercises that develop each individual to concentrate, be self-disciplined, self-motivated and follow a system of order.'
   },
   {
-    id: 11,
+    id: 20,
+    slug: 'dr-shivajirao-s-jondhle-international-school',
     name: 'DR SHIVAJIRAO S JONDHLE INTERNATIONAL SCHOOL',
     category: 'Education',
     icon: GraduationCap,
     color: '#10b981',
-    link: '/educational-institutes/international',
     description: 'Dr. Shivajirao S. Jondhle International School is a reputed CBSE educational institution committed to delivering quality learning through modern teaching methodologies and digital integration. The school website focuses on providing easy access to essential information such as admissions, academics, and facilities while integrating Smart School MIS for seamless student management.'
   },
   {
-    id: 12,
+    id: 21,
     name: 'DPGA GORAI',
+    logo: drPillaiLogo,
     category: 'Education',
     icon: GraduationCap,
     color: '#7c3aed',
-    link: '/educational-institutes/international',
     description: 'The DPGA Borivali is a well-planned initiative from the Mahatma Education Society, a trust committed to provide meaningful education with tangible results. It is the brainchild and the enterprise of Dr. K. M. Vasudevan Pillai, an educator with 40 years experience.'
   },
   {
-    id: 13,
+    id: 22,
+    slug: 'ardent-tutorials',
     name: 'ARDENT TUTORIALS',
     logo: ardentLogo,
     category: 'Coaching',
     icon: GraduationCap,
     color: '#2563eb',
-    link: '/educational-institutes/coaching',
     description: 'Premier Commerce Tutorials in Thane. Certified Online Coaching for 11th & 12th Commerce, CA & CS Foundation.'
   },
   {
-    id: 14,
+    id: 23,
+    slug: 'royal-junior-degree-college',
     name: 'ROYAL JUNIOR & DEGREE COLLEGE',
     category: 'Higher Education',
     icon: GraduationCap,
     color: '#dc2626',
-    link: '/educational-institutes/colleges',
     description: 'Royal Junior and Degree College, Dombivli, is a renowned higher education institution offering a wide range of undergraduate and postgraduate programs in arts, science, and commerce.'
   },
   {
-    id: 15,
+    id: 24,
     name: 'GAUTAM SINGHANIA GLOBAL SCHOOL THANE',
     logo: gsgsLogo,
     category: 'Education',
     icon: GraduationCap,
     color: '#d97706',
-    link: '/educational-institutes/international',
-    description: 'Innovate & Thrive – A New Era of Education, transforming learning. Gautam Singhania Global School is a dynamic and inclusive learning community with a global perspective, dedicated to shaping future-ready individuals who are academically strong, socially responsible and emotionally intelligent.'
+    description: 'Innovate & Thrive – A New Era of Education, transforming learning, Gautam Singhania Global School is a dynamic and inclusive learning community with a global perspective, dedicated to shaping future-ready individuals who are academically strong, socially responsible and emotionally intelligent.'
   },
   {
-    id: 16,
+    id: 25,
     name: 'SWAMI VIVEKANAND EDUCATION SOCIETY',
     category: 'Education',
     icon: GraduationCap,
     color: '#f97316',
-    link: '/educational-institutes/primary-secondary',
     description: 'Swami Vivekanand Education Society is a reputed educational group offering comprehensive learning from school to higher education. The website consolidates information across its institutions, including programs, admissions, and events, through a technically efficient and well-structured framework.'
   },
   {
-    id: 17,
+    id: 26,
     name: 'DGET TRUST BED COLLEGE',
     category: 'Higher Education',
     icon: GraduationCap,
     color: '#0284c7',
-    link: '/educational-institutes/colleges',
     description: 'DGET Trust BEd College is an educational hub delivering quality education from KG to PG in Thane. Determined to run institutions professionally, adopting modern advancements in academics and technology to shape individuals into truly global citizens with Indian values.'
   },
   {
-    id: 18,
+    id: 27,
     name: 'PODDAR BRIO COLLEGE OF LAW',
     category: 'Higher Education',
     icon: Scale,
     color: '#1e3a8a',
-    link: '/educational-institutes/universities',
     description: 'The college website features detailed information about 3-year LL.B and 5-year B.A. LL.B programs, admission process, and infrastructure details like library, moot court, and classrooms. The platform promotes academic excellence, legal education facilities, and student resources with a focus on enrollment and communication through enquiry options.'
   },
   {
-    id: 19,
+    id: 28,
     name: 'DNYAN GANGA COLLEGE OF PHARMACY',
     logo: dnyanGangaLogo,
     category: 'Higher Education',
     icon: GraduationCap,
     color: '#059669',
-    link: '/educational-institutes/universities',
     description: 'The website provides complete academic details including D.Pharm and B.Pharm programs, admission guidelines, faculty and committees info, exam notifications, and syllabus downloads. It also highlights infrastructure, labs, library, campus events, and includes AICTE, PCI, and DTE links for accreditation compliance.'
   },
   {
-    id: 20,
+    id: 29,
     name: 'NAVODAYA ENGLISH HIGH SCHOOL & JUNIOR COLLEGE',
     category: 'Education',
     icon: GraduationCap,
     color: '#dc2626',
-    link: '/educational-institutes/primary-secondary',
     description: 'Well-designed education system is a blessing of Indian culture. Navodaya Kannada Seva Sangha, the conductors of Navodaya English High School & Junior College, move on with total commitment, enabling to sculpt better citizens, a better society.'
   },
   {
-    id: 21,
+    id: 30,
     name: 'HOLY CROSS ENGLISH MEDIUM SCHOOL',
     category: 'Education',
     icon: GraduationCap,
     color: '#4f46e5',
-    link: '/educational-institutes/primary-secondary',
-    description: 'Holy Cross English Medium School, Dombivili, Thane: An English-medium co-educational school offering classes from pre-primary through higher levels. Holy Cross focuses on holistic development in a nurturing environment, emphasizing identifying a child\'s unique strengths via activity-based learning, fostering social, emotional, intellectual, and physical growth.'
+    description: 'Holy Cross English Medium School, Dombivili, Thane: An English-medium co-educational school offering classes from pre-primary through higher levels, Holy Cross focuses on holistic development in a nurturing environment, emphasizing identifying a child\'s unique strengths via activity-based learning.'
   },
   {
-    id: 22,
+    id: 31,
     name: 'THE LEARNING CURVE INDIA',
     category: 'Preschool',
     icon: GraduationCap,
     color: '#ec4899',
-    link: '/educational-institutes/preschools',
-    description: 'The Learning Curve India specializes in early childhood education with a structured preschool and daycare program. The curriculum focuses on cognitive, social, and emotional development through activity-based learning and play-centric pedagogy. The schools are equipped with safe, child-friendly classrooms, learning aids, and digital learning tools.'
+    description: 'The Learning Curve India specializes in early childhood education with a structured preschool and daycare program. The curriculum focuses on cognitive, social, and emotional development through activity-based learning and play-centric pedagogy.'
   },
   {
-    id: 23,
+    id: 32,
     name: 'I3R GLOBAL',
     logo: i3rLogo,
     category: 'Business',
     icon: Globe,
     color: '#0891b2',
-    link: '/contact?service=business-solutions',
-    description: 'i3R Global\'s core expertise lies in identifying opportunities, emerging market trends, and leveraging cutting-edge technologies. We facilitate meaningful professional networking and knowledge sharing through face-to-face meetings via live events, digital and hybrid formats, ensuring our clients and customers connect effectively.'
+    description: 'i3R Global\'s core expertise lies in identifying opportunities, emerging market trends, and leveraging cutting-edge technologies. We facilitate meaningful professional networking and knowledge sharing through face-to-face meetings via live events, digital and hybrid formats.'
   },
   {
-    id: 24,
+    id: 33,
     name: 'AV SOLUTIONS INDIA',
     logo: avLogo,
     category: 'Technology',
     icon: Building2,
     color: '#1e40af',
-    link: '/contact?service=av-solutions',
-    description: 'AV Solutions is a leading System Integrator for customized and personalized Audio Video, Home Automation and Control Solutions. AV Solutions has catered its HNI Clients and Educational Institutes with Cinema like Auditorium Experience into their Schools. Our mission is high end delivery of sophisticated and affordable tools to Control.'
+    description: 'AV Solutions is a leading System Integrator for customized and personalized Audio Video, Home Automation and Control Solutions. AV Solutions has catered its HNI Clients and Educational Institutes with Cinema like Auditorium Experience into their Schools.'
   },
   {
-    id: 25,
+    id: 34,
     name: 'RNP SYDNEY',
     logo: rnpLogo,
     category: 'Real Estate',
     icon: Building2,
     color: '#0f766e',
-    link: '/contact?service=real-estate-solutions',
-    description: 'RNP Sydney is a real estate and property development company in Australia offering professional services in property buying, selling, and project consulting. It specializes in home and land packages and end-to-end real estate solutions. The firm is known for reliability, transparency, and expertise in Sydney\'s competitive property market.'
+    description: 'RNP Sydney is a real estate and property development company in Australia offering professional services in property buying, selling, and project consulting. It specializes in home and land packages and end-to-end real estate solutions.'
   },
   {
-    id: 26,
+    id: 35,
     name: 'SMILES ROYALE',
     category: 'Healthcare',
     icon: Stethoscope,
     color: '#059669',
-    link: '/contact?service=healthcare-branding',
-    description: 'We at Smiles Royale are committed to provide our patients with the most innovative and pleasant experience possible. Our team of extremely experienced and knowledgeable doctors believe in creating the right and healthy atmosphere for our esteemed patients through innovative techniques and advanced methods.'
+    description: 'We at Smiles Royale are committed to provide our patients with the most innovative and pleasant experience possible. Our team of extremely experienced and knowledgeable doctors believe in creating the right and healthy atmosphere for our patients.'
   },
   {
-    id: 27,
+    id: 36,
     name: "V'SIGN",
     logo: vsignLogo,
     category: 'E-Commerce',
     icon: ShoppingBag,
     color: '#7c3aed',
-    link: '/contact?service=ecommerce-solutions',
-    description: 'The official website of VSign Pen serves as an e-commerce platform showcasing premium fountain pens, ball pens, and roller pens. It provides detailed product listings with specifications, nib types, and ink-filling mechanisms. The site features cart, wishlist, and secure checkout functionalities, ensuring a smooth shopping experience.'
+    description: 'The official website of VSign Pen serves as an e-commerce platform showcasing premium fountain pens, ball pens, and roller pens. It provides detailed product listings with specifications, nib types, and ink-filling mechanisms.'
   },
   {
-    id: 28,
+    id: 37,
     name: 'SKYTECH INDIA',
     logo: skytechLogo,
     category: 'Technology',
     icon: Building2,
     color: '#0369a1',
-    link: '/contact?service=tech-branding',
-    description: 'Established in 1993, Skytech Systems (I) Pvt Ltd stands as a pioneering force in the field of analytical instrument distribution in India. We deliver not just products, but comprehensive solutions that empower researchers, analysts, innovators to push the boundaries of knowledge and discovery.'
+    description: 'Established in 1993, Skytech Systems (I) Pvt Ltd stands as a pioneering force in the field of analytical instrument distribution in India. We deliver comprehensive solutions that empower researchers and analysts to push the boundaries of knowledge.'
   },
   {
-    id: 29,
+    id: 38,
     name: 'LOTUS LEAF ENTERTAINMENT',
     logo: lotusLogo,
     category: 'Entertainment',
     icon: Globe,
     color: '#db2777',
-    link: '/contact?service=event-branding',
-    description: 'Lotus Leaf Entertainment is the dream child of Meenakshi Khosla. Meenakshi had a strong desire to have a one stop solution for all entertainment events. With her personal experience in finding the right kind of agency to organise a perfect event, she decided to come up with one answer to such questions herself.'
+    description: 'Lotus Leaf Entertainment is the dream child of Meenakshi Khosla. Meenakshi had a strong desire to have a one stop solution for all entertainment events, delivering seamless event organization and management.'
   },
   {
-    id: 30,
+    id: 39,
     name: 'GOEL AND SONS',
     category: 'Transport',
     icon: Building2,
     color: '#15803d',
-    link: '/contact?service=logistics-branding',
-    description: 'Welcome to our website. Our bus services was started in April 2006 and we are located in Mulund West, Mumbai. We bring along an experience of 18 brilliant years of bus services to the school kids.'
+    description: 'Welcome to our website. Our bus services was started in April 2006 and we are located in Mulund West, Mumbai. We bring along an experience of 18 brilliant years of bus services to school kids.'
   },
   {
-    id: 31,
+    id: 40,
     name: 'VERTICES PARTNERS',
     logo: verticesLogo,
     category: 'Legal',
     icon: Scale,
     color: '#1e3a8a',
-    link: '/contact?service=legal-branding',
-    description: 'Vertices Partners is a full-service law firm providing legal solutions in Corporate & Commercial Law, M&A, Private Equity, Venture Capital, Dispute Resolution, and Regulatory Affairs. The website showcases detailed practice areas, partner profiles, client testimonials, and recent transactions, reflecting the firm\'s credibility and expertise.'
+    description: 'Vertices Partners is a full-service law firm providing legal solutions in Corporate & Commercial Law, M&A, Private Equity, Venture Capital, Dispute Resolution, and Regulatory Affairs.'
   }
 ];
 
@@ -416,14 +485,14 @@ const CaseStudies = () => {
     };
   });
 
-  const allCombinedClients = dynamicStudies.length > 0 ? mappedDynamic : detailedClients;
+  const allCombinedClients = detailedClients;
 
   const filtered = activeCategory === 'All'
     ? allCombinedClients
     : allCombinedClients.filter(c => c.category === activeCategory);
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
         title="Client Case Studies & Success Stories | Host2Unlimited"
         description="Discover Host2Unlimited's partnerships with 35+ educational institutes, colleges, schools, and businesses across Maharashtra. Real results, real growth."
@@ -432,18 +501,28 @@ const CaseStudies = () => {
         breadcrumbPaths={breadcrumbs}
       />
 
-      {/* Hero Banner */}
+      {/* Hero Banner Section */}
       <section
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ 
+          position: 'relative', 
+          height: '210px', 
+          minHeight: '210px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          overflow: 'hidden', 
+          backgroundColor: '#0b0f19'
+        }}
       >
         <img
           src={caseStudiesHeroBg}
           alt="Case Studies Hero Background"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', zIndex: 1, pointerEvents: 'none' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1, pointerEvents: 'none' }}
         />
-        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2 }}>
-          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto' }}>
+        
+        <div className="container hero-content-wrapper" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          <div style={{ maxWidth: '850px', margin: '0 auto' }}>
             <Breadcrumbs paths={breadcrumbs} />
           </div>
         </div>
@@ -510,89 +589,87 @@ const CaseStudies = () => {
           ))}
         </div>
 
-        {/* Detailed Client Cards Grid - Entire Card Clickable */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '28px', marginBottom: '80px' }}>
+        {/* Clean Modern Premium Case Study Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '28px', marginBottom: '80px' }}>
           {filtered.map((client, idx) => {
             const Icon = client.icon || Building2;
-            const accentColor = client.color || categoryColors[client.category] || 'var(--primary)';
             return (
               <motion.div
                 key={client.id}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: (idx % 6) * 0.07 }}
-                whileHover={{ y: -8, boxShadow: `0 22px 50px -10px ${accentColor}35` }}
-                style={{ borderRadius: '18px', overflow: 'hidden' }}
+                transition={{ duration: 0.35, delay: (idx % 6) * 0.06 }}
+                style={{ height: '100%' }}
               >
-                <Link
-                  to={client.link}
-                  className="card-glass"
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
-                    padding: '0',
-                    borderRadius: '18px',
-                    overflow: 'hidden',
-                    border: '1px solid var(--border-color)',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  {/* Top accent bar */}
-                  <div style={{ height: '4px', background: `linear-gradient(90deg, ${accentColor}, ${accentColor}88)` }} />
+                <div className="case-study-card">
+                  {/* Top 4px gradient accent line */}
+                  <div style={{
+                    height: '4px',
+                    width: '100%',
+                    background: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 100%)'
+                  }} />
 
-                  <div style={{ padding: '26px 26px 22px 26px', flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    {/* Logo or icon */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      {client.logo ? (
-                        <div style={{ width: '56px', height: '56px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-color)', backgroundColor: '#fff', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}>
-                          <img src={client.logo} alt={client.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                        </div>
-                      ) : (
-                        <div style={{ width: '56px', height: '56px', borderRadius: '12px', backgroundColor: `${accentColor}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Icon size={26} color={accentColor} />
-                        </div>
-                      )}
-                      <div>
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: accentColor, textTransform: 'uppercase', letterSpacing: '0.8px', backgroundColor: `${accentColor}15`, padding: '3px 10px', borderRadius: '20px', display: 'inline-block', marginBottom: '5px' }}>
-                          {client.category}
-                        </span>
-                        <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', margin: 0, lineHeight: 1.3 }}>
-                          {client.name}
-                        </h3>
+                  {/* Circle Logo Badge */}
+                  <div className="case-study-logo-circle">
+                    {client.logo ? (
+                      <img 
+                        src={client.logo} 
+                        alt={client.name} 
+                        style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} 
+                      />
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                        <Icon size={30} />
                       </div>
-                    </div>
-
-                    {/* Description */}
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', lineHeight: 1.65, margin: 0, flexGrow: 1 }}>
-                      {client.description}
-                    </p>
+                    )}
                   </div>
 
-                  {/* CTA Footer */}
-                  <div style={{ padding: '0 26px 22px 26px' }}>
-                    <div
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        color: accentColor,
-                        borderTop: '1px solid var(--border-color)',
-                        paddingTop: '16px',
-                        width: '100%',
-                        transition: 'gap 0.2s ease'
-                      }}
-                    >
-                      Know More <ArrowRight size={14} />
+                  {/* Card Content Body */}
+                  <div style={{ padding: '0 24px 24px 24px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'center' }}>
+                    <div>
+                      {/* Category Pill */}
+                      <span className="case-study-card-badge">
+                        {client.category || 'Education Sector'}
+                      </span>
+
+                      {/* Card Title */}
+                      <h3 style={{ 
+                        fontSize: '17px', 
+                        fontWeight: 800, 
+                        color: 'var(--text-primary)',
+                        marginBottom: '10px', 
+                        lineHeight: 1.35,
+                        textAlign: 'center'
+                      }}>
+                        {client.name}
+                      </h3>
+
+                      {/* Description */}
+                      <p style={{ 
+                        color: 'var(--text-secondary)', 
+                        fontSize: '13.5px', 
+                        lineHeight: 1.6, 
+                        margin: '0 0 16px 0', 
+                        textAlign: 'center'
+                      }}>
+                        {client.description}
+                      </p>
                     </div>
+
+                    {/* Clean Bootstrap-Style Vice Versa Outline CTA Button */}
+                    {client.hasDetailPage !== false && (
+                      <div style={{ paddingTop: '16px', borderTop: '1px solid var(--border-color)', marginTop: 'auto', textAlign: 'center' }}>
+                        <Link 
+                          to={client.slug ? `/${client.slug}` : `/case-studies/${client.id}`}
+                          className="case-study-btn-outline"
+                        >
+                          Read Full Case Study
+                        </Link>
+                      </div>
+                    )}
                   </div>
-                </Link>
+                </div>
               </motion.div>
             );
           })}

@@ -4,9 +4,9 @@ import { useLeads } from '../context/LeadContext';
 import { Briefcase, MapPin, Clock, Send, CheckCircle2, ChevronRight } from 'lucide-react';
 import SEOMeta from '../components/SEOMeta';
 import Breadcrumbs from '../components/Breadcrumbs';
-import careersHeroBg from '../assets/hero_bg/careers_hero_art.svg';
+import careersHeroBg from '../assets/hero_bg/careers_hero_clean.png';
 
-const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5050' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
+const CURRENT_API_BASE = import.meta.env.DEV ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL || 'https://host2unlimitedcms-backend.onrender.com').replace(/\/+$/, '');
 
 const staticPositions = [
   {
@@ -181,7 +181,7 @@ const Careers = () => {
   const breadcrumbs = [{ name: 'Careers', path: '/careers' }];
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div style={{ paddingTop: '0px' }}>
       <SEOMeta
         title="Careers & Open Job Openings | Host2Unlimited"
         description="Join the team at Host2Unlimited. Explore open positions in web design, system engineering, digital marketing, and software developers."
@@ -193,7 +193,7 @@ const Careers = () => {
       {/* Hero Banner Section */}
       <section 
         className="page-hero-banner"
-        style={{ position: 'relative', height: '280px', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
+        style={{ position: 'relative', height: '190px', minHeight: '190px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', backgroundColor: '#0b0f19' }}
       >
         <img 
           src={careersHeroBg} 

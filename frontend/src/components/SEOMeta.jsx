@@ -136,12 +136,20 @@ const SEOMeta = ({
       const breadcrumbListSchema = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
-        'itemListElement': breadcrumbPaths.map((pathItem, idx) => ({
-          '@type': 'ListItem',
-          'position': idx + 1,
-          'name': pathItem.name,
-          'item': pathItem.path.startsWith('http') ? pathItem.path : `https://host2unlimited.com${pathItem.path}`
-        }))
+        'itemListElement': breadcrumbPaths.map((pathItem, idx) => {
+          const itemPath = pathItem?.path || pathItem?.url || '';
+          const itemName = pathItem?.name || pathItem?.label || 'Page';
+          const fullUrl = itemPath.startsWith('http') 
+            ? itemPath 
+            : `https://host2unlimited.com${itemPath.startsWith('/') ? '' : '/'}${itemPath}`;
+          
+          return {
+            '@type': 'ListItem',
+            'position': idx + 1,
+            'name': itemName,
+            'item': fullUrl
+          };
+        })
       };
       schemaScripts.push(breadcrumbListSchema);
     }
