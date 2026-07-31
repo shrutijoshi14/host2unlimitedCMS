@@ -184,14 +184,15 @@ const EducationalInstitutes = () => {
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0 && isMounted) {
-            // Merge with local icons
-            const merged = data.map(item => {
-              const def = sectors.find(s => s.id === item.id);
+            // Merge API content safely over sectors baseline
+            const merged = sectors.map(def => {
+              const apiItem = data.find(item => item.id === def.id || item.slug === def.id);
               return {
-                ...item,
-                icon: def?.icon || GraduationCap,
-                image: item.image || def?.image || educationalHeroBg,
-                logo: item.logo || def?.logo || euroKidsLogo
+                ...def,
+                title: apiItem?.title || apiItem?.name || def.title,
+                desc: apiItem?.desc || apiItem?.description || def.desc,
+                image: (apiItem?.image && apiItem.image.length > 5 && !apiItem.image.includes('unsplash')) ? apiItem.image : def.image,
+                logo: (apiItem?.logo && apiItem.logo.length > 5 && !apiItem.logo.includes('wp-content')) ? apiItem.logo : def.logo
               };
             });
             setSectorList(merged);
